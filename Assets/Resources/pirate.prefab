@@ -14,7 +14,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!136 &1931214427
 CapsuleCollider:
@@ -289,6 +289,7 @@ MonoBehaviour:
   localIndex: 0
   photonView: {fileID: 0}
   networkIndex: 0
+  cameraRotationSpeed: 2
 --- !u!114 &9129555913177731982
 MonoBehaviour:
   m_ObjectHideFlags: 0

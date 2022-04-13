@@ -1,5 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
+    Assembly-CSharp-Editor.dll:
+    - PunSceneSettings
     Assembly-CSharp.dll:
     - AudioRpc
     - CameraTracker
@@ -55,7 +57,6 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
-    - UnityEngine.UI.HorizontalLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
     - UnityEngine.UI.Shadow
@@ -119,8 +120,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11242}
     - Class: 114
-      Script: {instanceID: 11244}
-    - Class: 114
       Script: {instanceID: 11246}
     - Class: 114
       Script: {instanceID: 11248}
@@ -151,75 +150,75 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11588}
     - Class: 114
-      Script: {instanceID: 11636}
+      Script: {instanceID: 11590}
     - Class: 114
-      Script: {instanceID: 11818}
+      Script: {instanceID: 11638}
     - Class: 114
-      Script: {instanceID: 11882}
+      Script: {instanceID: 11820}
     - Class: 114
-      Script: {instanceID: 11886}
+      Script: {instanceID: 11884}
     - Class: 114
-      Script: {instanceID: 11976}
+      Script: {instanceID: 11888}
     - Class: 114
-      Script: {instanceID: 12022}
+      Script: {instanceID: 11978}
     - Class: 114
-      Script: {instanceID: 12138}
+      Script: {instanceID: 12024}
     - Class: 114
-      Script: {instanceID: 12238}
+      Script: {instanceID: 12140}
     - Class: 114
-      Script: {instanceID: 12260}
+      Script: {instanceID: 12240}
     - Class: 114
-      Script: {instanceID: 12318}
+      Script: {instanceID: 12262}
     - Class: 114
-      Script: {instanceID: 12360}
+      Script: {instanceID: 12320}
     - Class: 114
-      Script: {instanceID: 12368}
+      Script: {instanceID: 12362}
     - Class: 114
-      Script: {instanceID: 12488}
+      Script: {instanceID: 12370}
     - Class: 114
-      Script: {instanceID: 12542}
+      Script: {instanceID: 12490}
     - Class: 114
-      Script: {instanceID: 12552}
+      Script: {instanceID: 12544}
     - Class: 114
-      Script: {instanceID: 12616}
+      Script: {instanceID: 12554}
     - Class: 114
-      Script: {instanceID: 12652}
+      Script: {instanceID: 12618}
     - Class: 114
       Script: {instanceID: 12654}
     - Class: 114
-      Script: {instanceID: 12812}
+      Script: {instanceID: 12656}
     - Class: 114
-      Script: {instanceID: 12838}
+      Script: {instanceID: 12814}
     - Class: 114
-      Script: {instanceID: 12848}
+      Script: {instanceID: 12840}
     - Class: 114
-      Script: {instanceID: 12860}
+      Script: {instanceID: 12850}
     - Class: 114
-      Script: {instanceID: 12940}
+      Script: {instanceID: 12862}
     - Class: 114
-      Script: {instanceID: 12982}
+      Script: {instanceID: 12942}
     - Class: 114
-      Script: {instanceID: 12992}
+      Script: {instanceID: 12984}
     - Class: 114
-      Script: {instanceID: 13008}
+      Script: {instanceID: 12994}
     - Class: 114
-      Script: {instanceID: 13028}
+      Script: {instanceID: 13010}
     - Class: 114
-      Script: {instanceID: 13192}
+      Script: {instanceID: 13030}
     - Class: 114
-      Script: {instanceID: 13212}
+      Script: {instanceID: 13194}
     - Class: 114
-      Script: {instanceID: 13260}
+      Script: {instanceID: 13214}
     - Class: 114
-      Script: {instanceID: 13274}
+      Script: {instanceID: 13262}
     - Class: 114
-      Script: {instanceID: 13336}
+      Script: {instanceID: 13276}
     - Class: 114
-      Script: {instanceID: 13408}
+      Script: {instanceID: 13338}
     - Class: 114
-      Script: {instanceID: 13452}
+      Script: {instanceID: 13410}
     - Class: 114
-      Script: {instanceID: 23760}
+      Script: {instanceID: 13454}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -281,8 +280,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 83
       Script: {instanceID: 0}
-    - Class: 90
-      Script: {instanceID: 0}
     - Class: 95
       Script: {instanceID: 0}
     - Class: 104
@@ -292,28 +289,18 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11442}
     - Class: 114
-      Script: {instanceID: 12260}
+      Script: {instanceID: 11590}
     - Class: 114
-      Script: {instanceID: 12266}
+      Script: {instanceID: 12262}
     - Class: 114
-      Script: {instanceID: 12318}
+      Script: {instanceID: 12268}
     - Class: 114
-      Script: {instanceID: 12652}
+      Script: {instanceID: 12320}
     - Class: 114
-      Script: {instanceID: 12812}
+      Script: {instanceID: 12908}
     - Class: 114
-      Script: {instanceID: 12906}
-    - Class: 114
-      Script: {instanceID: 13336}
-    - Class: 114
-      Script: {instanceID: 23760}
+      Script: {instanceID: 13338}
     - Class: 115
-      Script: {instanceID: 0}
-    - Class: 136
-      Script: {instanceID: 0}
-    - Class: 137
-      Script: {instanceID: 0}
-    - Class: 143
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -576,6 +563,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MaterialPerOwner
+  - hash:
+      serializedVersion: 2
+      Hash: 2f33c97c0f6e50c4f646b0ef2fb1d613
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PaintController
   - hash:
       serializedVersion: 2
       Hash: 7ab0e790220bdca831fdd886b339039d
@@ -1430,10 +1423,28 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   - hash:
       serializedVersion: 2
-      Hash: 2f33c97c0f6e50c4f646b0ef2fb1d613
+      Hash: 325144449d27b7ceeb3db6eaf78f3c3c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: PaintController
+    className: SkyboxChanger
+  - hash:
+      serializedVersion: 2
+      Hash: 2d143e103df2247787ec7ae04cb6eb28
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FPSWalkerEnhanced
+  - hash:
+      serializedVersion: 2
+      Hash: 5111780fd6e841a48fa1fc53d36de3e6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SkyboxRotator
+  - hash:
+      serializedVersion: 2
+      Hash: c6d94e38a727101dd467b56d57d9c12f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SmoothMouseLook
   platform: 5
   scenePathNames:
   - Assets/Scenes/Lobby.unity

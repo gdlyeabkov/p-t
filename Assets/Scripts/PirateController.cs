@@ -18,6 +18,9 @@ public class PirateController : MonoBehaviour
     public int networkIndex = 0;
     private PhotonPlayer currentPlayer;
     private Rigidbody rb;
+    private float pitch = 0.0f;
+    private float yaw = 0.0f;
+    public float cameraRotationSpeed = 2f;
 
     void Start ()
     {
@@ -124,6 +127,11 @@ public class PirateController : MonoBehaviour
                             }
                         }
                     }
+                    yaw += cameraRotationSpeed * Input.GetAxis("Mouse X");
+                    pitch -= cameraRotationSpeed * Input.GetAxis("Mouse Y");
+                    Vector3 cameraRotation = new Vector3(pitch, yaw, transform.eulerAngles.z);
+                    Camera.main.transform.eulerAngles = cameraRotation;
+                    rb.MoveRotation(Quaternion.Euler(cameraRotation.x, cameraRotation.y, cameraRotation.z));
                 }
             }
         }
@@ -149,8 +157,9 @@ public class PirateController : MonoBehaviour
                 }
                 Vector3 m_Input = new Vector3(horizontalDelta, 0, verticalDelta);
                 Vector3 currentPosition = rb.position;
-                rb.MovePosition(currentPosition + m_Input * speed);
-                rb.MovePosition(currentPosition + m_Input * speed);
+                Vector3 boostMotion = m_Input * speed;
+                Vector3 updatedPosition = currentPosition + boostMotion;
+                rb.MovePosition(updatedPosition);
             }
         }
     }
