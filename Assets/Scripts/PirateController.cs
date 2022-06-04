@@ -47,6 +47,12 @@ public class PirateController : MonoBehaviour
             cameraTracker.Target = transform;
             StartCoroutine(InitOffset());
         }
+
+        if (networkIndex == localIndex)
+        {
+            gameManager.localPirate = gameObject;
+        }
+
     }
 
     void Update()
@@ -263,6 +269,9 @@ public class PirateController : MonoBehaviour
             if (isGameOver)
             {
                 gameManager.ShowWin(localIndex, networkIndex);
+
+                GetComponent<Animator>().Play("Victory");
+
             }
         }
     }

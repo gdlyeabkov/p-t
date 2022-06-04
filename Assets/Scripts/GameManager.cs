@@ -19,6 +19,7 @@ public class GameManager : PunBehaviour
     public int globalNetworkIndex = 0;
     private Camera mainCamera;
     private AudioSource mainCameraAudio;
+    public GameObject localPirate;
 
     void Start()
     {
@@ -88,7 +89,6 @@ public class GameManager : PunBehaviour
             {
                 Receivers = ReceiverGroup.All
             });
-
         }
 
     }
@@ -132,6 +132,9 @@ public class GameManager : PunBehaviour
                 {
                     mainCameraAudio.clip = looseSound;
                     mainCameraAudio.Play();
+
+                    localPirate.GetComponent<Animator>().Play("Loose");
+
                 }
                 else
                 {
