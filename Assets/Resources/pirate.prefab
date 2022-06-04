@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92c4680a8397c854d9d66bc20c2db4a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.05
+  speed: 2
   isCrossFound: 0
   gameManager: {fileID: 0}
   isHavePaint: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
   localIndex: 0
   photonView: {fileID: 0}
   networkIndex: 0
-  cameraRotationSpeed: 2
+  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &9129555913177731982
 MonoBehaviour:
   m_ObjectHideFlags: 0

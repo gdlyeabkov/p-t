@@ -20,12 +20,14 @@ public class PirateController : MonoBehaviour
     private Rigidbody rb;
     private float pitch = 0.0f;
     private float yaw = 0.0f;
-    public float cameraRotationSpeed = 2f;
+    private float cameraRotationSpeed = 2f;
+    public Vector3 offset = Vector3.zero;
+    private Camera mainCamera;
 
-    void Start ()
+    void Start()
     {
 
-        Camera mainCamera = Camera.main;
+        mainCamera = Camera.main;
         GameObject rawMainCamera = mainCamera.gameObject;
         CameraTracker cameraTracker = rawMainCamera.GetComponent<CameraTracker>();
         photonView = GetComponent<PhotonView>();
@@ -43,6 +45,7 @@ public class PirateController : MonoBehaviour
         if (isLocalPirate)
         {
             cameraTracker.Target = transform;
+            StartCoroutine(InitOffset());
         }
     }
 
@@ -74,7 +77,7 @@ public class PirateController : MonoBehaviour
                                 GameObject rawFoundedCross = foundedCross.gameObject;
                                 AudioSource foundedCrossAudio = rawFoundedCross.GetComponent<AudioSource>();
                                 foundedCrossAudio.Play();
-                                object[]  networkData = new object[] { };
+                                object[] networkData = new object[] { };
                                 PhotonNetwork.RaiseEvent(198, networkData, true, new RaiseEventOptions
                                 {
                                     Receivers = ReceiverGroup.All
@@ -127,11 +130,30 @@ public class PirateController : MonoBehaviour
                             }
                         }
                     }
-                    yaw += cameraRotationSpeed * Input.GetAxis("Mouse X");
-                    pitch -= cameraRotationSpeed * Input.GetAxis("Mouse Y");
-                    Vector3 cameraRotation = new Vector3(pitch, yaw, transform.eulerAngles.z);
-                    Camera.main.transform.eulerAngles = cameraRotation;
-                    rb.MoveRotation(Quaternion.Euler(cameraRotation.x, cameraRotation.y, cameraRotation.z));
+
+                    float mouseXDelta = Input.GetAxis("Mouse X");
+                    float yawDelta = cameraRotationSpeed * mouseXDelta;
+                    yaw += yawDelta;
+                    float mouseYDelta = Input.GetAxis("Mouse Y");
+                    float pitchDelta = cameraRotationSpeed * mouseYDelta;
+                    pitch -= pitchDelta;
+                    Vector3 currentCameraRotation = transform.eulerAngles;
+                    float currentCameraZRotation = currentCameraRotation.z;
+                    Vector3 cameraRotation = new Vector3(pitch, yaw, currentCameraZRotation);
+                    Transform mainCameraTransform = mainCamera.transform;
+                    mainCameraTransform.eulerAngles = cameraRotation;
+                    float cameraXRotation = cameraRotation.x;
+                    float cameraYRotation = cameraRotation.y;
+                    float cameraZRotation = cameraRotation.z;
+                    rb.MoveRotation(Quaternion.Euler(cameraXRotation, cameraYRotation, cameraZRotation));
+                    Vector3 forwardDirection = Vector3.up;
+                    Quaternion aroundRotation = Quaternion.AngleAxis(yawDelta, forwardDirection);
+                    offset = aroundRotation * offset;
+                    Vector3 piratePosition = transform.position;
+                    Vector3 offsetPosition = piratePosition + offset;
+                    Vector3 currentMainCameraTransformPosition = mainCameraTransform.position;
+                    mainCameraTransform.position = Vector3.Lerp(currentMainCameraTransformPosition, offsetPosition, 0.25f);
+
                 }
             }
         }
@@ -143,7 +165,7 @@ public class PirateController : MonoBehaviour
         if (isGo)
         {
             bool isIndexesMatches = networkIndex == localIndex;
-		    if (isIndexesMatches)
+            if (isIndexesMatches)
             {
                 float horizontalDelta = Input.GetAxis("Horizontal");
                 float verticalDelta = Input.GetAxis("Vertical");
@@ -154,17 +176,21 @@ public class PirateController : MonoBehaviour
                 {
                     int networkId = currentPlayer.ID;
                     photonView.TransferOwnership(networkId);
+
+                    Vector3 m_Input = new Vector3(horizontalDelta, 0, verticalDelta);
+                    Vector3 currentPosition = rb.position;
+                    Vector3 forwardDirection = Vector3.forward;
+                    Vector3 speedforwardDirection = forwardDirection * speed;
+                    Vector3 boostMotion = speedforwardDirection * Time.fixedDeltaTime;
+                    Vector3 localOffset = transform.TransformDirection(boostMotion);
+                    Vector3 updatedPosition = currentPosition + localOffset;
+                    rb.MovePosition(updatedPosition);
                 }
-                Vector3 m_Input = new Vector3(horizontalDelta, 0, verticalDelta);
-                Vector3 currentPosition = rb.position;
-                Vector3 boostMotion = m_Input * speed;
-                Vector3 updatedPosition = currentPosition + boostMotion;
-                rb.MovePosition(updatedPosition);
             }
         }
     }
 
-    public void OnTriggerEnter (Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         GameObject detectedObject = other.gameObject;
         string detectedObjectTag = detectedObject.tag;
@@ -254,6 +280,15 @@ public class PirateController : MonoBehaviour
                 Debug.Log(photonError);
             }
         }
+    }
+
+    public IEnumerator InitOffset()
+    {
+        yield return new WaitForSeconds(2f);
+        Transform mainCameraTransform = mainCamera.transform;
+        Vector3 mainCameraTransformPosition = mainCameraTransform.position;
+        Vector3 piratePosition = transform.position;
+        offset = mainCameraTransformPosition - piratePosition;
     }
 
 }

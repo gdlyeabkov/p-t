@@ -69,7 +69,7 @@ public class GameManager : PunBehaviour
                 float randomCoordZ = Random.Range(-45, 45);
                 Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 Quaternion baseRotation = Quaternion.identity;
-                PhotonNetwork.Instantiate("pirate", randomPosition, baseRotation, 0);
+                PhotonNetwork.Instantiate("custom_pirate", randomPosition, baseRotation, 0);
             }
         }
 
