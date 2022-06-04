@@ -87,6 +87,15 @@ public class PirateController : MonoBehaviour
                             else
                             {
                                 progressCoroutine = StartCoroutine(AddProgressCoroutine());
+
+                                AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                                bool isAlreadyDig = animatorStateInfo.IsName("Dig");
+                                bool isDoDig = !isAlreadyDig;
+                                if (isDoDig)
+                                {
+                                    GetComponent<Animator>().Play("Dig");
+                                }
+
                             }
                         }
                         isStopped = true;
@@ -106,6 +115,9 @@ public class PirateController : MonoBehaviour
                             GameObject crossTrapInst = PhotonNetwork.Instantiate("cross_trap", crossTrapPosition, baseRotation, 0);
                             CrossController crossController = crossTrapInst.GetComponent<CrossController>();
                             crossController.isOwner = true;
+
+                            GetComponent<Animator>().Play("Paint");
+
                         }
                     }
                     else if (isEKeyUp)
@@ -116,6 +128,9 @@ public class PirateController : MonoBehaviour
                             StopCoroutine(progressCoroutine);
                         }
                         isStopped = false;
+
+                        GetComponent<Animator>().Play("Walk");
+
                     }
                     else if (isEKey)
                     {
@@ -174,17 +189,27 @@ public class PirateController : MonoBehaviour
                 bool isMotion = isHorizontalMotion || isVerticalMotion;
                 if (isMotion)
                 {
-                    int networkId = currentPlayer.ID;
-                    photonView.TransferOwnership(networkId);
 
-                    Vector3 m_Input = new Vector3(horizontalDelta, 0, verticalDelta);
-                    Vector3 currentPosition = rb.position;
-                    Vector3 forwardDirection = Vector3.forward;
-                    Vector3 speedforwardDirection = forwardDirection * speed;
-                    Vector3 boostMotion = speedforwardDirection * Time.fixedDeltaTime;
-                    Vector3 localOffset = transform.TransformDirection(boostMotion);
-                    Vector3 updatedPosition = currentPosition + localOffset;
-                    rb.MovePosition(updatedPosition);
+                    AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                    bool isPaint = animatorStateInfo.IsName("Paint");
+                    bool isDoWalk = !isPaint;
+                    if (isDoWalk)
+                    {
+
+                        int networkId = currentPlayer.ID;
+                        photonView.TransferOwnership(networkId);
+
+                        Vector3 m_Input = new Vector3(horizontalDelta, 0, verticalDelta);
+                        Vector3 currentPosition = rb.position;
+                        Vector3 forwardDirection = Vector3.forward;
+                        Vector3 speedforwardDirection = forwardDirection * speed;
+                        Vector3 boostMotion = speedforwardDirection * Time.fixedDeltaTime;
+                        Vector3 localOffset = transform.TransformDirection(boostMotion);
+                        Vector3 updatedPosition = currentPosition + localOffset;
+                        rb.MovePosition(updatedPosition);
+
+                    }
+
                 }
             }
         }
@@ -267,6 +292,9 @@ public class PirateController : MonoBehaviour
                     Vector3 treasurePosition = new Vector3(coordX, coordY, coordZ);
                     Quaternion baseRotation = Quaternion.identity;
                     PhotonNetwork.Instantiate("treasure", treasurePosition, baseRotation, 0);
+
+                    GetComponent<Animator>().Play("Walk");
+
                 }
             }
             catch (System.InvalidCastException e)
