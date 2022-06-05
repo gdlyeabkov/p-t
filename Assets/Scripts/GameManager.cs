@@ -47,16 +47,18 @@ public class GameManager : PunBehaviour
             float randomCoordX = Random.Range(-45, 45);
             Transform crossTransform = cross.transform;
             Vector3 crossTransformPosition = crossTransform.position;
-            float coordY = crossTransformPosition.y;
+            
+            // float coordY = crossTransformPosition.y;
+            float coordY = 4.107f;
+
             float randomCoordZ = Random.Range(-45, 45);
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
 
             // cross.transform.Translate(crossPosition);
             // cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), 20);
-            float randomRotation = Random.Range(-45, 45);
+            float randomRotation = Random.Range(-15, 15);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
             cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
-
         }
         int countPaints = Random.Range(0, 5);
         for (int i = 0; i < countPaints; i++)
@@ -120,14 +122,26 @@ public class GameManager : PunBehaviour
     public IEnumerator GeneratePaint ()
     {
         yield return new WaitForSeconds(5f);
-        float randomCoordX = Random.Range(-45, 45);
-        float coordY = 1f;
-        float randomCoordZ = Random.Range(-45, 45);
+        
+        // float randomCoordX = Random.Range(-45, 45);
+        float randomCoordX = Random.Range(-15, 15);
+
+        // float coordY = 1f;
+        float coordY = 4.10f;
+
+        // float randomCoordZ = Random.Range(-45, 45);
+        float randomCoordZ = Random.Range(-15, 15);
+        
         Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
         Quaternion paintRotation = Quaternion.Euler(270f, 0f, 0f);
         GameObject paintGo = PhotonNetwork.Instantiate("paint", randomPosition, paintRotation, 0);
         PaintController paintController = paintGo.GetComponent<PaintController>();
         paintController.isOwner = true;
+
+        float randomRotation = Random.Range(-15, 15);
+        Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+        paintGo.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
+
     }
 
     public void OnEvent(byte eventCode, object content, int senderId)
