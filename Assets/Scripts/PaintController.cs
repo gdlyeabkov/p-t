@@ -53,4 +53,11 @@ public class PaintController : MonoBehaviour
             }
         }
     }
+
+    void LateUpdate()
+    {
+        transform.LookAt(mainCamera.transform);
+        transform.rotation = Quaternion.Euler(-270f, transform.eulerAngles.y, transform.eulerAngles.z);
+    }
+
 }
