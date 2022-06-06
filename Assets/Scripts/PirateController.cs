@@ -175,6 +175,8 @@ public class PirateController : MonoBehaviour
                     Vector3 currentMainCameraTransformPosition = mainCameraTransform.position;
                     mainCameraTransform.position = Vector3.Lerp(currentMainCameraTransformPosition, offsetPosition, 0.25f);
 
+
+
                 }
             }
         }
@@ -193,10 +195,12 @@ public class PirateController : MonoBehaviour
                 bool isHorizontalMotion = horizontalDelta != 0;
                 bool isVerticalMotion = verticalDelta != 0;
                 bool isMotion = isHorizontalMotion || isVerticalMotion;
+
+                AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
                 if (isMotion)
                 {
 
-                    AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                     bool isPaint = animatorStateInfo.IsName("Paint");
                     bool isDoWalk = !isPaint;
                     if (isDoWalk)
@@ -214,9 +218,33 @@ public class PirateController : MonoBehaviour
                         Vector3 updatedPosition = currentPosition + localOffset;
                         rb.MovePosition(updatedPosition);
 
+                        bool isHaveMotion = verticalDelta > 0 || horizontalDelta > 0;
+                        if (isHaveMotion)
+                        {
+                            animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                            bool isAlreadyWalk = animatorStateInfo.IsName("Walk");
+                            isDoWalk = !isAlreadyWalk;
+                            if (isDoWalk)
+                            {
+                                GetComponent<Animator>().Play("Walk");
+                            }
+                        }
+
                     }
 
                 }
+
+                else
+                {
+                    animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                    bool isAlreadyIdle = animatorStateInfo.IsName("Idle");
+                    bool isDoIdle = !isAlreadyIdle;
+                    if (isDoIdle)
+                    {
+                        GetComponent<Animator>().Play("Idle");
+                    }
+                }
+
             }
         }
     }

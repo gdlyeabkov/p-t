@@ -25,7 +25,7 @@ public class CameraTracker : MonoBehaviour
     private void LateUpdate()
     {
         // update position
-        Offset = new Vector3(0f, 2.5f, -2.5f);
+        Offset = new Vector3(0f, 7.5f, -10.0f);
         Vector3 targetPosition = Target.position + Offset;
         camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, SmoothTime);
     }
