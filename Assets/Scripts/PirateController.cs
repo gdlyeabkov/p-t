@@ -23,6 +23,7 @@ public class PirateController : MonoBehaviour
     private float cameraRotationSpeed = 2f;
     public Vector3 offset = Vector3.zero;
     private Camera mainCamera;
+    public bool isHaveShovel = false;
 
     void Start()
     {
@@ -46,10 +47,6 @@ public class PirateController : MonoBehaviour
         {
             cameraTracker.Target = transform;
             StartCoroutine(InitOffset());
-        }
-
-        if (networkIndex == localIndex)
-        {
             gameManager.localPirate = gameObject;
         }
 
@@ -73,9 +70,11 @@ public class PirateController : MonoBehaviour
                     bool isQKeyDown = Input.GetKeyDown(qKey);
                     bool isEKeyUp = Input.GetKeyUp(eKey);
                     bool isEKey = Input.GetKey(eKey);
+                    KeyCode spaceKey = KeyCode.Space;
+                    bool isSpaceKeyDown = Input.GetKeyDown(spaceKey);
                     if (isEKeyDown)
                     {
-                        if (isCrossFound)
+                        if (isCrossFound && isHaveShovel)
                         {
                             bool isCrossTrap = foundedCross.isTrap;
                             if (isCrossTrap)
@@ -140,7 +139,7 @@ public class PirateController : MonoBehaviour
                     }
                     else if (isEKey)
                     {
-                        if (isCrossFound)
+                        if (isCrossFound && isHaveShovel)
                         {
                             AudioSource audio = GetComponent<AudioSource>();
                             bool isHaveSound = audio.isPlaying;
@@ -148,6 +147,47 @@ public class PirateController : MonoBehaviour
                             if (isSilence)
                             {
                                 audio.Play();
+                            }
+                        }
+                    }
+                    else if (isSpaceKeyDown)
+                    {
+                        GetComponent<Animator>().Play("Attack");
+                        Transform armature = transform.GetChild(0);
+                        Transform hips = armature.GetChild(0);
+                        Transform spine = hips.GetChild(2);
+                        Transform spine1 = spine.GetChild(0);
+                        Transform spine2 = spine1.GetChild(0);
+                        Transform shoulder = spine2.GetChild(0);
+                        Transform arm = shoulder.GetChild(0);
+                        Transform foreArm = arm.GetChild(0);
+                        Transform hand = foreArm.GetChild(0);
+                        Vector3 handPosition = hand.position;
+                        Collider[] colliders = Physics.OverlapSphere(handPosition, 1f);
+                        foreach (Collider collider in colliders)
+                        {
+                            GameObject colliderObject = collider.gameObject;
+                            string name = colliderObject.name;
+                            Debug.Log("collider: " + name);
+                            PirateController pirate = colliderObject.GetComponent<PirateController>();
+                            bool isPirate = pirate != null;
+                            if (isPirate)
+                            {
+                                int pirateLocalIndex = pirate.localIndex;
+                                bool isEnemy = pirateLocalIndex != localIndex;
+                                if (isEnemy)
+                                {
+                                    Debug.Log("Враг был убит");
+                                    int networkId = currentPlayer.ID;
+                                    PhotonView localPhotonView = colliderObject.GetComponent<PhotonView>();
+                                    localPhotonView.TransferOwnership(networkId);
+                                    float coordY = 4.107f;
+                                    Vector3 randomPosition = new Vector3(0, coordY, 0);
+                                    List<Transform> respawnPoints = gameManager.respawnPoints;
+                                    Transform respawnPoint = respawnPoints[pirateLocalIndex];
+                                    randomPosition = respawnPoint.position;
+                                    colliderObject.transform.position = randomPosition;
+                                }
                             }
                         }
                     }
@@ -238,7 +278,8 @@ public class PirateController : MonoBehaviour
                 {
                     animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                     bool isAlreadyIdle = animatorStateInfo.IsName("Idle");
-                    bool isDoIdle = !isAlreadyIdle;
+                    bool isAttack = animatorStateInfo.IsName("Attack");
+                    bool isDoIdle = !isAlreadyIdle && !isAttack;
                     if (isDoIdle)
                     {
                         GetComponent<Animator>().Play("Idle");
@@ -255,6 +296,7 @@ public class PirateController : MonoBehaviour
         string detectedObjectTag = detectedObject.tag;
         bool isCross = detectedObjectTag == "Cross";
         bool isPaint = detectedObjectTag == "Paint";
+        bool isShovel = detectedObjectTag == "Shovel";
         if (isCross)
         {
             isCrossFound = true;
@@ -268,6 +310,15 @@ public class PirateController : MonoBehaviour
             int paintIndex = paintController.localIndex;
             object[] networkData = new object[] { paintIndex };
             PhotonNetwork.RaiseEvent(197, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.All
+            });
+        }
+        else if (isShovel)
+        {
+            isHaveShovel = true;
+            object[] networkData = new object[] {  };
+            PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
             {
                 Receivers = ReceiverGroup.All
             });

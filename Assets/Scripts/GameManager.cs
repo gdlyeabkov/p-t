@@ -21,6 +21,7 @@ public class GameManager : PunBehaviour
     private AudioSource mainCameraAudio;
     public GameObject localPirate;
     public Transform islandSphereTransform;
+    public List<Transform> respawnPoints;
 
     void Start()
     {
@@ -38,37 +39,33 @@ public class GameManager : PunBehaviour
         bool isHost = PhotonNetwork.isMasterClient;
         if (isHost)
         {
-            
-            // Vector3 crossBasePosition = new Vector3(0f, 0.01f, 0f);
             Vector3 crossBasePosition = new Vector3(0f, 4.107f, 0f);
-            
             Quaternion baseRotation = Quaternion.identity;
             cross = PhotonNetwork.Instantiate("cross", crossBasePosition, baseRotation, 0);
-            
-            // float randomCoordX = Random.Range(-45, 45);
-            float randomCoordX = Random.Range(-10, 10);
-            
+            // float randomCoordX = Random.Range(-5, 5);
+            float randomCoordX = 0f;
             Transform crossTransform = cross.transform;
             Vector3 crossTransformPosition = crossTransform.position;
-            
-            // float coordY = crossTransformPosition.y;
             float coordY = 4.107f;
-
-            float randomCoordZ = Random.Range(-45, 45);
+            // float randomCoordZ = Random.Range(-45, 45);
+            float randomCoordZ = 0f;
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-
-            // cross.transform.Translate(crossPosition);
-            // cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), 20);
-            float randomRotation = Random.Range(-15, 15);
+            float randomRotation = Random.Range(-10, 10);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
             cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
+
+            Vector3 shovelPosition = new Vector3(0, 4.489f, 0);
+            Quaternion shovelRotation = Quaternion.Euler(90, 0, 0);
+            GameObject shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
+            randomRotation = Random.Range(-5, 5);
+            shovel.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 1f, 0f), randomRotation);
+        
         }
         int countPaints = Random.Range(0, 5);
         for (int i = 0; i < countPaints; i++)
         {
             StartCoroutine(GeneratePaint());
         }
-
         if (PhotonNetwork.isMasterClient)
         {
             /*
@@ -86,7 +83,12 @@ public class GameManager : PunBehaviour
                 float coordY = 6f;
 
                 float randomCoordZ = Random.Range(-45, 45);
+                
+                // Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+                Transform respawnPoint = respawnPoints[i];
+                randomPosition = respawnPoint.position;
+
                 Quaternion baseRotation = Quaternion.identity;
                 // PhotonNetwork.Instantiate("custom_pirate", randomPosition, baseRotation, 0);
                 PhotonNetwork.Instantiate("pirate_dig_anim_3 Variant", randomPosition, baseRotation, 0);
