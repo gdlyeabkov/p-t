@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon;
 
 public class GameManager : PunBehaviour
@@ -22,6 +23,8 @@ public class GameManager : PunBehaviour
     public GameObject localPirate;
     public Transform islandSphereTransform;
     public List<Transform> respawnPoints;
+    public GameObject miniGame;
+    public Text miniGameLabel;
 
     void Start()
     {
@@ -92,6 +95,7 @@ public class GameManager : PunBehaviour
                 Quaternion baseRotation = Quaternion.identity;
                 // PhotonNetwork.Instantiate("custom_pirate", randomPosition, baseRotation, 0);
                 PhotonNetwork.Instantiate("pirate_dig_anim_3 Variant", randomPosition, baseRotation, 0);
+                // PhotonNetwork.Instantiate("pirate_attack_anim_3 Variant", randomPosition, baseRotation, 0);
             }
         }
 
@@ -191,6 +195,13 @@ public class GameManager : PunBehaviour
     {
         yield return new WaitForSeconds(30f);
         LeaveLobby();
+    }
+
+    public static char GetRandomCharacter(string text = "abcdefghjklmnoprstuvwxyz")
+    {
+        System.Random rng = new System.Random();
+        int index = rng.Next(text.Length);
+        return text[index];
     }
 
 }
