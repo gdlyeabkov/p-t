@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,7 @@ public class PirateController : MonoBehaviour
     public bool isHaveShovel = false;
     public bool isMiniGame = false;
     public int miniGameCursor = 0;
+    public string rawMiniGameKey = "";
 
     void Start()
     {
@@ -69,37 +71,53 @@ public class PirateController : MonoBehaviour
                 {
                     if (isMiniGame)
                     {
-                        KeyCode spaceKey = KeyCode.Space;
-                        bool isSpaceKeyDown = Input.GetKeyDown(spaceKey);
-                        if (isSpaceKeyDown)
+                        var possibleKeys = Enum.GetValues(typeof(KeyCode));
+                        foreach (KeyCode kcode in possibleKeys)
                         {
-                            miniGameCursor++;
-                            bool isMiniGameFinish = miniGameCursor >= 5;
-                            gameManager.miniGameLabel.text = GameManager.GetRandomCharacter().ToString();
-                            if (isMiniGameFinish)
+                            bool isKeyDown = Input.GetKey(kcode);
+                            if (isKeyDown)
                             {
-                                miniGameCursor = 0;
-                                isMiniGame = false;
-                                gameManager.miniGame.SetActive(false);
-                                if (isCrossFound)
+                                string rawKeyCode = kcode.ToString();
+                                bool isRightKeyDown = rawKeyCode == rawMiniGameKey;
+                                if (isRightKeyDown)
                                 {
-                                    progressCoroutine = StartCoroutine(AddProgressCoroutine());
-                                    AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-                                    bool isAlreadyDig = animatorStateInfo.IsName("Dig");
-                                    bool isDoDig = !isAlreadyDig;
-                                    if (isDoDig)
+                                    char generatedChar = GameManager.GetRandomCharacter();
+                                    rawMiniGameKey = generatedChar.ToString();
+                                    Text miniGameLabel = gameManager.miniGameLabel;
+                                    miniGameLabel.text = rawMiniGameKey;
+                                    miniGameCursor++;
+                                    bool isMiniGameFinish = miniGameCursor >= 5;
+                                    if (isMiniGameFinish)
                                     {
-                                        GetComponent<Animator>().Play("Dig");
+                                        miniGameCursor = 0;
+                                        isMiniGame = false;
+                                        GameObject miniGame = gameManager.miniGame;
+                                        miniGame.SetActive(false);
+                                        if (isCrossFound)
+                                        {
+
+                                            // progressCoroutine = StartCoroutine(AddProgressCoroutine());
+                                            gameManager.ShowWin(localIndex, networkIndex);
+                                            GetComponent<Animator>().Play("Victory");
+
+                                            AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                                            bool isAlreadyDig = animatorStateInfo.IsName("Dig");
+                                            bool isDoDig = !isAlreadyDig;
+                                            if (isDoDig)
+                                            {
+                                                GetComponent<Animator>().Play("Dig");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            isHaveShovel = true;
+                                            object[] networkData = new object[] { };
+                                            PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
+                                            {
+                                                Receivers = ReceiverGroup.All
+                                            });
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    isHaveShovel = true;
-                                    object[] networkData = new object[] { };
-                                    PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
-                                    {
-                                        Receivers = ReceiverGroup.All
-                                    });
                                 }
                             }
                         }
@@ -146,8 +164,12 @@ public class PirateController : MonoBehaviour
                                     */
                                     
                                     isMiniGame = true;
-                                    gameManager.miniGame.SetActive(true);
-                                    gameManager.miniGameLabel.text = GameManager.GetRandomCharacter().ToString();
+                                    GameObject miniGame = gameManager.miniGame;
+                                    miniGame.SetActive(true);
+                                    char generatedChar = GameManager.GetRandomCharacter();
+                                    rawMiniGameKey = generatedChar.ToString();
+                                    Text miniGameLabel = gameManager.miniGameLabel;
+                                    miniGameLabel.text = rawMiniGameKey;
 
                                 }
                             }
@@ -390,18 +412,13 @@ public class PirateController : MonoBehaviour
         }
         else if (isShovel)
         {
-            /*
-            isHaveShovel = true;
-            object[] networkData = new object[] {  };
-            PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
-            {
-                Receivers = ReceiverGroup.All
-            });
-            */
-
             isMiniGame = true;
-            gameManager.miniGame.SetActive(true);
-
+            GameObject miniGame = gameManager.miniGame;
+            miniGame.SetActive(true);
+            char generatedChar = GameManager.GetRandomCharacter();
+            rawMiniGameKey = generatedChar.ToString();
+            Text miniGameLabel = gameManager.miniGameLabel;
+            miniGameLabel.text = rawMiniGameKey;
         }
     }
 

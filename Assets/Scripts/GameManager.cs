@@ -53,7 +53,7 @@ public class GameManager : PunBehaviour
             // float randomCoordZ = Random.Range(-45, 45);
             float randomCoordZ = 0f;
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            float randomRotation = Random.Range(-10, 10);
+            float randomRotation = Random.Range(-5, 5);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
             cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
 
@@ -197,7 +197,7 @@ public class GameManager : PunBehaviour
         LeaveLobby();
     }
 
-    public static char GetRandomCharacter(string text = "abcdefghjklmnoprstuvwxyz")
+    public static char GetRandomCharacter(string text = "ABCDEFGHJKLMNOPRSTUVWXYZ")
     {
         System.Random rng = new System.Random();
         int index = rng.Next(text.Length);
