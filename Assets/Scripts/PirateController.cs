@@ -29,6 +29,7 @@ public class PirateController : MonoBehaviour
     public bool isMiniGame = false;
     public int miniGameCursor = 0;
     public string rawMiniGameKey = "";
+    public bool isShovelFound = false;
 
     void Start()
     {
@@ -95,21 +96,13 @@ public class PirateController : MonoBehaviour
                                         miniGame.SetActive(false);
                                         if (isCrossFound)
                                         {
-
-                                            // progressCoroutine = StartCoroutine(AddProgressCoroutine());
                                             gameManager.ShowWin(localIndex, networkIndex);
                                             GetComponent<Animator>().Play("Victory");
-
-                                            AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-                                            bool isAlreadyDig = animatorStateInfo.IsName("Dig");
-                                            bool isDoDig = !isAlreadyDig;
-                                            if (isDoDig)
-                                            {
-                                                GetComponent<Animator>().Play("Dig");
-                                            }
                                         }
                                         else
                                         {
+                                            isStopped = false;
+                                            isShovelFound = false;
                                             isHaveShovel = true;
                                             object[] networkData = new object[] { };
                                             PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
@@ -151,18 +144,6 @@ public class PirateController : MonoBehaviour
                                 }
                                 else
                                 {
-                                    /*
-                                    progressCoroutine = StartCoroutine(AddProgressCoroutine());
-
-                                    AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-                                    bool isAlreadyDig = animatorStateInfo.IsName("Dig");
-                                    bool isDoDig = !isAlreadyDig;
-                                    if (isDoDig)
-                                    {
-                                        GetComponent<Animator>().Play("Dig");
-                                    }
-                                    */
-                                    
                                     isMiniGame = true;
                                     GameObject miniGame = gameManager.miniGame;
                                     miniGame.SetActive(true);
@@ -170,7 +151,36 @@ public class PirateController : MonoBehaviour
                                     rawMiniGameKey = generatedChar.ToString();
                                     Text miniGameLabel = gameManager.miniGameLabel;
                                     miniGameLabel.text = rawMiniGameKey;
+                                    AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                                    bool isAlreadyDig = animatorStateInfo.IsName("Dig");
+                                    bool isDoDig = !isAlreadyDig;
+                                    if (isDoDig)
+                                    {
+                                        GetComponent<Animator>().Play("Dig");
+                                    }
 
+                                }
+                            }
+                            else if (isShovelFound)
+                            {
+                                isMiniGame = true;
+                                GameObject miniGame = gameManager.miniGame;
+                                miniGame.SetActive(true);
+                                char generatedChar = GameManager.GetRandomCharacter();
+                                rawMiniGameKey = generatedChar.ToString();
+                                Text miniGameLabel = gameManager.miniGameLabel;
+                                miniGameLabel.text = rawMiniGameKey;
+                                AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                                bool isAlreadyPull = animatorStateInfo.IsName("Pull");
+                                bool isDoPull = !isAlreadyPull;
+                                if (isDoPull)
+                                {
+                                    GetComponent<Animator>().Play("Pull");
+                                    object[] networkData = new object[] { localIndex, "Pull" };
+                                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                    {
+                                        Receivers = ReceiverGroup.Others
+                                    });
                                 }
                             }
                             isStopped = true;
@@ -203,9 +213,7 @@ public class PirateController : MonoBehaviour
                                 StopCoroutine(progressCoroutine);
                             }
                             isStopped = false;
-
                             GetComponent<Animator>().Play("Walk");
-
                         }
                         else if (isEKey)
                         {
@@ -257,11 +265,17 @@ public class PirateController : MonoBehaviour
                                         Transform respawnPoint = respawnPoints[pirateLocalIndex];
                                         randomPosition = respawnPoint.position;
                                         colliderObject.transform.position = randomPosition;
+
+                                        object[] networkData = new object[] { pirateLocalIndex };
+                                        PhotonNetwork.RaiseEvent(193, networkData, true, new RaiseEventOptions
+                                        {
+                                            Receivers = ReceiverGroup.All
+                                        });
+                                        
                                     }
                                 }
                             }
                         }
-
                         float mouseXDelta = Input.GetAxis("Mouse X");
                         float yawDelta = cameraRotationSpeed * mouseXDelta;
                         float mouseYDelta = Input.GetAxis("Mouse Y");
@@ -288,9 +302,7 @@ public class PirateController : MonoBehaviour
                             Vector3 currentMainCameraTransformPosition = mainCameraTransform.position;
                             mainCameraTransform.position = Vector3.Lerp(currentMainCameraTransformPosition, offsetPosition, 0.25f);
                         }
-
                     }
-
                 }
             }
         }
@@ -304,45 +316,23 @@ public class PirateController : MonoBehaviour
             bool isIndexesMatches = networkIndex == localIndex;
             if (isIndexesMatches)
             {
-
-                if (isMiniGame)
-                {
-                    /*
-                    KeyCode spaceKey = KeyCode.Space;
-                    bool isSpaceKeyDown = Input.GetKeyDown(spaceKey);
-                    if (isSpaceKeyDown)
-                    {
-                        miniGameCursor++;
-                        bool isMiniGameFinish = miniGameCursor >= 5;
-                        if (isMiniGameFinish)
-                        {
-                            miniGameCursor = 0;
-                            isMiniGame = false;
-                        }
-                    }
-                    */
-                }
-                else
+                bool isNotMiniGame = !isMiniGame;
+                if (isNotMiniGame)
                 {
                     float horizontalDelta = Input.GetAxis("Horizontal");
                     float verticalDelta = Input.GetAxis("Vertical");
                     bool isHorizontalMotion = horizontalDelta != 0;
                     bool isVerticalMotion = verticalDelta != 0;
                     bool isMotion = isHorizontalMotion || isVerticalMotion;
-
                     AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-
                     if (isMotion)
                     {
-
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isDoWalk = !isPaint;
                         if (isDoWalk)
                         {
-
                             int networkId = currentPlayer.ID;
                             photonView.TransferOwnership(networkId);
-
                             Vector3 m_Input = new Vector3(horizontalDelta, 0, verticalDelta);
                             Vector3 currentPosition = rb.position;
                             Vector3 forwardDirection = Vector3.forward;
@@ -351,23 +341,9 @@ public class PirateController : MonoBehaviour
                             Vector3 localOffset = transform.TransformDirection(boostMotion);
                             Vector3 updatedPosition = currentPosition + localOffset;
                             rb.MovePosition(updatedPosition);
-
-                            bool isHaveMotion = verticalDelta > 0 || horizontalDelta > 0;
-                            if (isHaveMotion)
-                            {
-                                animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-                                bool isAlreadyWalk = animatorStateInfo.IsName("Walk");
-                                isDoWalk = !isAlreadyWalk;
-                                if (isDoWalk)
-                                {
-                                    GetComponent<Animator>().Play("Walk");
-                                }
-                            }
-
+                            GetComponent<Animator>().Play("Walk");
                         }
-
                     }
-
                     else
                     {
                         animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
@@ -379,9 +355,7 @@ public class PirateController : MonoBehaviour
                             GetComponent<Animator>().Play("Idle");
                         }
                     }
-
                 }
-
             }
         }
     }
@@ -412,13 +386,7 @@ public class PirateController : MonoBehaviour
         }
         else if (isShovel)
         {
-            isMiniGame = true;
-            GameObject miniGame = gameManager.miniGame;
-            miniGame.SetActive(true);
-            char generatedChar = GameManager.GetRandomCharacter();
-            rawMiniGameKey = generatedChar.ToString();
-            Text miniGameLabel = gameManager.miniGameLabel;
-            miniGameLabel.text = rawMiniGameKey;
+            isShovelFound = true;
         }
     }
 
@@ -427,10 +395,15 @@ public class PirateController : MonoBehaviour
         GameObject detectedObject = other.gameObject;
         string detectedObjectTag = detectedObject.tag;
         bool isCross = detectedObjectTag == "Cross";
+        bool isShovel = detectedObjectTag == "Shovel";
         if (isCross)
         {
             isCrossFound = false;
             foundedCross = null;
+        }
+        else if (isShovel)
+        {
+            isShovelFound = false;
         }
     }
 
@@ -445,9 +418,7 @@ public class PirateController : MonoBehaviour
             if (isGameOver)
             {
                 gameManager.ShowWin(localIndex, networkIndex);
-
                 GetComponent<Animator>().Play("Victory");
-
             }
         }
     }
@@ -455,6 +426,8 @@ public class PirateController : MonoBehaviour
     public void OnEvent(byte eventCode, object content, int senderId)
     {
         bool isGameOverEvent = eventCode == 196;
+        bool isPirateAnimationEvent = eventCode == 194;
+        bool isDieEvent = eventCode == 193;
         if (isGameOverEvent)
         {
             try
@@ -477,9 +450,6 @@ public class PirateController : MonoBehaviour
                     Vector3 treasurePosition = new Vector3(coordX, coordY, coordZ);
                     Quaternion baseRotation = Quaternion.identity;
                     PhotonNetwork.Instantiate("treasure", treasurePosition, baseRotation, 0);
-
-                    GetComponent<Animator>().Play("Walk");
-
                 }
             }
             catch (System.InvalidCastException e)
@@ -488,6 +458,59 @@ public class PirateController : MonoBehaviour
                 Debug.Log(castError);
             }
             catch (System.Exception e)
+            {
+                string photonError = "Не могу передать photon данные";
+                Debug.Log(photonError);
+            }
+        }
+        else if (isPirateAnimationEvent)
+        {
+            try
+            {
+                object[] data = (object[])content;
+                int index = (int)data[0];
+                string name = (string)data[1];
+                bool isLocalPirate = index == localIndex;
+                if (isLocalPirate)
+                {
+                    gameObject.GetComponent<Animator>().Play(name);
+                }
+            }
+            catch (System.InvalidCastException)
+            {
+                string castError = "Ошибка с привидением типа photon. Не могу передать photon данные";
+                Debug.Log(castError);
+            }
+            catch (System.Exception)
+            {
+                string photonError = "Не могу передать photon данные";
+                Debug.Log(photonError);
+            }
+        }
+        else if (isDieEvent)
+        {
+            try
+            {
+                object[] data = (object[])content;
+                int index = (int)data[0];
+                bool isLocalPirate = index == localIndex;
+                if (isLocalPirate)
+                {
+                    miniGameCursor = 0;
+                    isMiniGame = false;
+                    isStopped = false;
+                    isShovelFound = false;
+                    GameObject miniGame = gameManager.miniGame;
+                    miniGame.SetActive(false);
+                    GetComponent<Animator>().Play("Idle");
+                }
+            }
+            catch (System.InvalidCastException)
+            {
+                string castError = "Ошибка с привидением типа photon. Не могу передать photon данные";
+                Debug.Log(castError);
+            }
+            catch (System.Exception)
             {
                 string photonError = "Не могу передать photon данные";
                 Debug.Log(photonError);

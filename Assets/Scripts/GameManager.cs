@@ -25,44 +25,45 @@ public class GameManager : PunBehaviour
     public List<Transform> respawnPoints;
     public GameObject miniGame;
     public Text miniGameLabel;
+    public GameObject shovel = null;
 
     void Start()
     {
 
         mainCamera = Camera.main;
         mainCameraAudio = mainCamera.GetComponent<AudioSource>();
-
         PhotonNetwork.OnEventCall += OnEvent;
-
         PhotonPlayer currentPlayer = PhotonNetwork.player;
         ExitGames.Client.Photon.Hashtable customProperties = currentPlayer.CustomProperties;
         object rawCustomPropertiesIndex = customProperties["index"];
         globalNetworkIndex = ((int)(rawCustomPropertiesIndex));
-
         bool isHost = PhotonNetwork.isMasterClient;
         if (isHost)
         {
             Vector3 crossBasePosition = new Vector3(0f, 4.107f, 0f);
             Quaternion baseRotation = Quaternion.identity;
             cross = PhotonNetwork.Instantiate("cross", crossBasePosition, baseRotation, 0);
-            // float randomCoordX = Random.Range(-5, 5);
             float randomCoordX = 0f;
             Transform crossTransform = cross.transform;
             Vector3 crossTransformPosition = crossTransform.position;
             float coordY = 4.107f;
-            // float randomCoordZ = Random.Range(-45, 45);
             float randomCoordZ = 0f;
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
             float randomRotation = Random.Range(-5, 5);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
             cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
-
             Vector3 shovelPosition = new Vector3(0, 4.489f, 0);
             Quaternion shovelRotation = Quaternion.Euler(90, 0, 0);
-            GameObject shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
+            shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
             randomRotation = Random.Range(-5, 5);
+
             shovel.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 1f, 0f), randomRotation);
-        
+            /*
+            int networkId = currentPlayer.ID;
+            PhotonView localPhotonView = shovel.GetComponent<PhotonView>();
+            localPhotonView.TransferOwnership(networkId);
+            */
+
         }
         int countPaints = Random.Range(0, 5);
         for (int i = 0; i < countPaints; i++)
@@ -81,12 +82,12 @@ public class GameManager : PunBehaviour
                 float randomCoordX = Random.Range(-45, 45);
                 Transform crossTransform = cross.transform;
                 Vector3 crossTransformPosition = crossTransform.position;
-                
+
                 // float coordY = crossTransformPosition.y;
                 float coordY = 6f;
 
                 float randomCoordZ = Random.Range(-45, 45);
-                
+
                 // Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 Transform respawnPoint = respawnPoints[i];
@@ -101,7 +102,7 @@ public class GameManager : PunBehaviour
 
     }
 
-    public void ShowWin (int localIndex, int networkIndex)
+    public void ShowWin(int localIndex, int networkIndex)
     {
         bool isNotWin = !isWin;
         if (isNotWin)
@@ -123,16 +124,16 @@ public class GameManager : PunBehaviour
         LeaveLobby();
     }
 
-    public void LeaveLobby ()
+    public void LeaveLobby()
     {
         PhotonNetwork.LeaveRoom();
         Application.LoadLevel("Lobby");
     }
 
-    public IEnumerator GeneratePaint ()
+    public IEnumerator GeneratePaint()
     {
         yield return new WaitForSeconds(5f);
-        
+
         // float randomCoordX = Random.Range(-45, 45);
         float randomCoordX = Random.Range(-15, 15);
 
@@ -141,7 +142,7 @@ public class GameManager : PunBehaviour
 
         // float randomCoordZ = Random.Range(-45, 45);
         float randomCoordZ = Random.Range(-15, 15);
-        
+
         Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
         Quaternion paintRotation = Quaternion.Euler(270f, 0f, 0f);
         GameObject paintGo = PhotonNetwork.Instantiate("paint", randomPosition, paintRotation, 0);
@@ -191,7 +192,7 @@ public class GameManager : PunBehaviour
         }
     }
 
-    public IEnumerator ResetGame ()
+    public IEnumerator ResetGame()
     {
         yield return new WaitForSeconds(30f);
         LeaveLobby();
@@ -203,5 +204,18 @@ public class GameManager : PunBehaviour
         int index = rng.Next(text.Length);
         return text[index];
     }
+
+    /*
+    public void Update()
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            PhotonPlayer currentPlayer = PhotonNetwork.player;
+            int networkId = currentPlayer.ID;
+            PhotonView localPhotonView = shovel.GetComponent<PhotonView>();
+            localPhotonView.TransferOwnership(networkId);
+        }
+    }
+    */
 
 }

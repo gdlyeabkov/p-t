@@ -1,11 +1,5 @@
 ScriptsOnlyBuild:
   usedScripts:
-    Assembly-CSharp-Editor.dll:
-    - PhotonAnimatorViewEditor
-    - PhotonRigidbodyViewEditor
-    - PhotonTransformViewEditor
-    - PhotonViewInspector
-    - PunSceneSettings
     Assembly-CSharp.dll:
     - AudioRpc
     - CameraTracker
@@ -402,9 +396,21 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
+      Script: {instanceID: 11258}
+    - Class: 114
+      Script: {instanceID: 11260}
+    - Class: 114
+      Script: {instanceID: 11268}
+    - Class: 114
+      Script: {instanceID: 11276}
+    - Class: 114
       Script: {instanceID: 11578}
     - Class: 114
+      Script: {instanceID: 11708}
+    - Class: 114
       Script: {instanceID: 11798}
+    - Class: 114
+      Script: {instanceID: 12394}
     - Class: 114
       Script: {instanceID: 12878}
     - Class: 114
@@ -415,13 +421,25 @@ ScriptsOnlyBuild:
       Script: {instanceID: 13844}
     - Class: 114
       Script: {instanceID: 14552}
+    - Class: 114
+      Script: {instanceID: 14672}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 135
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
     - Class: 226
       Script: {instanceID: 0}
@@ -1078,7 +1096,7 @@ ScriptsOnlyBuild:
     className: InstantiateCube
   - hash:
       serializedVersion: 2
-      Hash: 3aca837ef4b8e6cccd3bd1588398506d
+      Hash: a5e98b2e13f9ae4faf03538af9c8db11
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1216,7 +1234,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerFoldout
   - hash:
       serializedVersion: 2
-      Hash: 1efd37ba0373f17d3e6f27d3eace1dd9
+      Hash: d72edb8a5220e04e61e447fe07069a3d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PirateController
