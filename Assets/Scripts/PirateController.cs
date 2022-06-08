@@ -582,6 +582,17 @@ public class PirateController : MonoBehaviour
                     GameObject miniGame = gameManager.miniGame;
                     miniGame.SetActive(false);
                     GetComponent<Animator>().Play("Idle");
+                
+                    if (isHaveShovel)
+                    {
+                        bool isHost = PhotonNetwork.isMasterClient;
+                        if (isHost)
+                        {
+                            gameManager.GenerateShovel();
+                        }
+                    }
+                    isHaveShovel = false;
+                
                 }
             }
             catch (System.InvalidCastException)

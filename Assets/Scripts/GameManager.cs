@@ -54,15 +54,11 @@ public class GameManager : PunBehaviour
             cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
             Vector3 shovelPosition = new Vector3(0, 4.489f, 0);
             Quaternion shovelRotation = Quaternion.Euler(90, 0, 0);
-            shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
-            randomRotation = Random.Range(-5, 5);
-
-            shovel.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 1f, 0f), randomRotation);
-            /*
-            int networkId = currentPlayer.ID;
-            PhotonView localPhotonView = shovel.GetComponent<PhotonView>();
-            localPhotonView.TransferOwnership(networkId);
-            */
+            // shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
+            // randomRotation = Random.Range(-5, 5);
+            // shovel.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 1f, 0f), randomRotation);
+            
+            GenerateShovel();
 
         }
         int countPaints = Random.Range(0, 5);
@@ -226,5 +222,15 @@ public class GameManager : PunBehaviour
         }
     }
     */
+
+    public void GenerateShovel()
+    {
+        Vector3 shovelPosition = new Vector3(0, 4.489f, 0);
+        Quaternion shovelRotation = Quaternion.Euler(90, 0, 0);
+        shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
+        float randomRotation = Random.Range(-5f, 5f);
+        Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+        shovel.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 1f, 0f), randomRotation);
+    }
 
 }
