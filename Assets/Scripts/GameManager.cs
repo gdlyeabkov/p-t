@@ -20,7 +20,7 @@ public class GameManager : PunBehaviour
     public int globalNetworkIndex = 0;
     private Camera mainCamera;
     private AudioSource mainCameraAudio;
-    public GameObject localPirate;
+    public PirateController localPirate;
     public Transform islandSphereTransform;
     public List<Transform> respawnPoints;
     public GameObject miniGame;
@@ -135,13 +135,15 @@ public class GameManager : PunBehaviour
         yield return new WaitForSeconds(5f);
 
         // float randomCoordX = Random.Range(-45, 45);
-        float randomCoordX = Random.Range(-15, 15);
+        // float randomCoordX = Random.Range(-15, 15);
+        float randomCoordX = 0f;
 
         // float coordY = 1f;
         float coordY = 4.10f;
 
         // float randomCoordZ = Random.Range(-45, 45);
-        float randomCoordZ = Random.Range(-15, 15);
+        // float randomCoordZ = Random.Range(-15, 15);
+        float randomCoordZ = 0f;
 
         Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
         Quaternion paintRotation = Quaternion.Euler(270f, 0f, 0f);
@@ -149,7 +151,7 @@ public class GameManager : PunBehaviour
         PaintController paintController = paintGo.GetComponent<PaintController>();
         paintController.isOwner = true;
 
-        float randomRotation = Random.Range(-15, 15);
+        float randomRotation = Random.Range(-5f, 5f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         paintGo.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
 
@@ -172,6 +174,13 @@ public class GameManager : PunBehaviour
                     mainCameraAudio.Play();
 
                     localPirate.GetComponent<Animator>().Play("Loose");
+
+                    int localPirateIndex = localPirate.localIndex;
+                    object[] networkData = new object[] { localPirateIndex, "Loose" };
+                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                    {
+                        Receivers = ReceiverGroup.Others
+                    });
 
                 }
                 else

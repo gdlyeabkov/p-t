@@ -53,7 +53,7 @@ public class PirateController : MonoBehaviour
         {
             cameraTracker.Target = transform;
             StartCoroutine(InitOffset());
-            gameManager.localPirate = gameObject;
+            gameManager.localPirate = this;
         }
 
     }
@@ -98,6 +98,13 @@ public class PirateController : MonoBehaviour
                                         {
                                             gameManager.ShowWin(localIndex, networkIndex);
                                             GetComponent<Animator>().Play("Victory");
+
+                                            object[] networkData = new object[] { localIndex, "Victory" };
+                                            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                            {
+                                                Receivers = ReceiverGroup.Others
+                                            });
+
                                         }
                                         else
                                         {
@@ -157,6 +164,13 @@ public class PirateController : MonoBehaviour
                                     if (isDoDig)
                                     {
                                         GetComponent<Animator>().Play("Dig");
+                                        
+                                        object[] networkData = new object[] { localIndex, "Dig" };
+                                        PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                        {
+                                            Receivers = ReceiverGroup.Others
+                                        });
+
                                     }
 
                                 }
@@ -193,15 +207,72 @@ public class PirateController : MonoBehaviour
                                 PhotonNetwork.SetMasterClient(currentPlayer);
                                 Quaternion baseRotation = Quaternion.identity;
                                 Vector3 currentPiratePosition = transform.position;
+                                
                                 float coordX = currentPiratePosition.x;
-                                float coordY = 0.02f;
+                                //float coordX = 0f;
+
+                                // float coordY = 0.02f;
+                                // float coordY = 4.107f;
+                                float coordY = currentPiratePosition.y;
+
                                 float coordZ = currentPiratePosition.z;
+                                // float coordZ = 0f;
+
                                 Vector3 crossTrapPosition = new Vector3(coordX, coordY, coordZ);
                                 GameObject crossTrapInst = PhotonNetwork.Instantiate("cross_trap", crossTrapPosition, baseRotation, 0);
                                 CrossController crossController = crossTrapInst.GetComponent<CrossController>();
                                 crossController.isOwner = true;
 
                                 GetComponent<Animator>().Play("Paint");
+
+                                Transform islandSphereTransform = gameManager.islandSphereTransform;
+                                Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), currentPiratePosition.x);
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), currentPiratePosition.z);
+                                */
+
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.FromToRotation(Quaternion.identity.eulerAngles, transform.eulerAngles).eulerAngles.x);
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.FromToRotation(Quaternion.identity.eulerAngles, transform.eulerAngles).eulerAngles.z);
+                                */
+
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.FromToRotation(Vector3.left, transform.position).eulerAngles.x);
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.FromToRotation(Vector3.forward, transform.position).eulerAngles.z);
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.FromToRotation(Vector3.up, transform.position).eulerAngles.x);
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.FromToRotation(Vector3.up, transform.position).eulerAngles.z);
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(islandSphereTransformPosition, transform.position));
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(islandSphereTransformPosition, transform.position));
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(Vector3.zero, transform.eulerAngles));
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(Vector3.zero, transform.eulerAngles));
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(transform.position, Vector3.left));
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(transform.position, Vector3.forward));
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.LookRotation(transform.position, Vector3.left).eulerAngles.x);
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.LookRotation(transform.position, Vector3.forward).eulerAngles.z);
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.LookRotation(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.left).eulerAngles.x);
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.LookRotation(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.forward).eulerAngles.z);
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.left));
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.forward));
+                                */
+                                /*
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(new Vector3(0f, 4.107f, 0f), transform.eulerAngles));
+                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(new Vector3(0f, 4.107f, 0f), transform.eulerAngles));
+                                */
 
                             }
                         }
@@ -349,10 +420,18 @@ public class PirateController : MonoBehaviour
                         animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                         bool isAlreadyIdle = animatorStateInfo.IsName("Idle");
                         bool isAttack = animatorStateInfo.IsName("Attack");
-                        bool isDoIdle = !isAlreadyIdle && !isAttack;
+                        bool isPaint = animatorStateInfo.IsName("Paint");
+                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint;
                         if (isDoIdle)
                         {
                             GetComponent<Animator>().Play("Idle");
+
+                            object[] networkData = new object[] { localIndex, "Idle" };
+                            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                            {
+                                Receivers = ReceiverGroup.Others
+                            });
+
                         }
                     }
                 }

@@ -1142,6 +1142,7 @@ MonoBehaviour:
   - {fileID: 1506348591}
   miniGame: {fileID: 1254479300}
   miniGameLabel: {fileID: 1586585730}
+  shovel: {fileID: 0}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
