@@ -211,9 +211,8 @@ public class PirateController : MonoBehaviour
                                 float coordX = currentPiratePosition.x;
                                 //float coordX = 0f;
 
-                                // float coordY = 0.02f;
-                                // float coordY = 4.107f;
-                                float coordY = currentPiratePosition.y;
+                                // float coordY = currentPiratePosition.y;
+                                float coordY = currentPiratePosition.y + 0.1f;
 
                                 float coordZ = currentPiratePosition.z;
                                 // float coordZ = 0f;
@@ -222,6 +221,15 @@ public class PirateController : MonoBehaviour
                                 GameObject crossTrapInst = PhotonNetwork.Instantiate("cross_trap", crossTrapPosition, baseRotation, 0);
                                 CrossController crossController = crossTrapInst.GetComponent<CrossController>();
                                 crossController.isOwner = true;
+
+                                Ray ray = new Ray(crossTrapInst.transform.position, Vector3.up);
+                                RaycastHit hit = new RaycastHit();
+                                bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity, gameManager.islandLayer);
+                                if (isDetectIsland)
+                                {
+                                    Vector3 hitPoint = hit.point;
+                                    crossTrapInst.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
+                                }
 
                                 GetComponent<Animator>().Play("Paint");
 

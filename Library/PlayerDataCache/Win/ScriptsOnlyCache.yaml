@@ -1,5 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
+    Assembly-CSharp-Editor.dll:
+    - PunSceneSettings
     Assembly-CSharp.dll:
     - AudioRpc
     - CameraTracker
