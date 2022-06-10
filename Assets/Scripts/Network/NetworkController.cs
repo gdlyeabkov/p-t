@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon;
@@ -94,18 +95,25 @@ public class NetworkController : PunBehaviour
 				 *	PhotonNetwork.player.NickName = playerName;
 				 */
 				Debug.Log("PhotonNetwork.IsConnected! | Trying to Create/Join Room " + roomNameField.text);
-				RoomOptions roomOptions = new RoomOptions();
-				byte maxPlayers = ((byte)(maxCountPlayers));
-				roomOptions.maxPlayers = maxPlayers;
-				countPlayers = roomOptions.maxPlayers;
-				TypedLobby typedLobby = new TypedLobby(roomName, LobbyType.Default);
-				SetRoomName(roomNameField.text);
-				PhotonNetwork.CreateRoom(roomName, roomOptions, typedLobby);
+
+				List<RoomInfo> roomList = PhotonNetwork.GetRoomList().ToList();
+				RoomInfo room = roomList.FirstOrDefault(r => r.Name == roomName);
+				bool isRoomNotExists = room == null;
+				if (isRoomNotExists)
+                {
+					RoomOptions roomOptions = new RoomOptions();
+					byte maxPlayers = ((byte)(maxCountPlayers));
+					roomOptions.maxPlayers = maxPlayers;
+					countPlayers = roomOptions.maxPlayers;
+					TypedLobby typedLobby = new TypedLobby(roomName, LobbyType.Default);
+					SetRoomName(roomNameField.text);
+					PhotonNetwork.CreateRoom(roomName, roomOptions, typedLobby);
+				}
 			}
 		}
-		catch (System.Exception e)
+		catch
 		{
-			Debug.Log(e);
+			Debug.Log("ошибка создание комнаты");
 		}
 	}
 
@@ -204,7 +212,7 @@ public class NetworkController : PunBehaviour
 
 	public override void OnLeftRoom()
 	{
-		for (int playerIndex = 0; playerIndex < players.transform.childCount; playerIndex++)
+		for (int playerIndex = 1; playerIndex < players.transform.childCount; playerIndex++)
 		{
 			Transform playersTransform = players.transform;
 			Transform playersTransformChild = playersTransform.GetChild(playerIndex);
@@ -234,7 +242,17 @@ public class NetworkController : PunBehaviour
 		string parsedCountPlayersOnline = countPlayersOnline.ToString();
 		string playersCountMessage = parsedCountPlayersOnline + "/" + parsedMaxCountPlayers;
 		playersCount.text = playersCountMessage;
-		for (int playerIndex = 0; playerIndex < players.transform.childCount; playerIndex++)
+
+		if (PhotonNetwork.room.playerCount >= countPlayers)
+		{
+			bool isRoot = PhotonNetwork.isMasterClient;
+			if (isRoot)
+			{
+				buttonJoinedArena.interactable = true;
+			}
+		}
+
+		for (int playerIndex = 1; playerIndex < players.transform.childCount; playerIndex++)
 		{
 			Destroy(players.transform.GetChild(playerIndex).gameObject);
 		}
