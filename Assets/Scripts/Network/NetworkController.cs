@@ -236,12 +236,12 @@ public class NetworkController : PunBehaviour
 	public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
 	{
 		playerRoom.SetActive(true);
-		string parsedMaxCountPlayers = maxCountPlayers.ToString();
-		RoomInfo currentRoom = PhotonNetwork.room;
-		int countPlayersOnline = currentRoom.playerCount;
+		
+		int countPlayersOnline = PhotonNetwork.room.playerCount;
 		string parsedCountPlayersOnline = countPlayersOnline.ToString();
-		string playersCountMessage = parsedCountPlayersOnline + "/" + parsedMaxCountPlayers;
-		playersCount.text = playersCountMessage;
+		string parsedMaxCountPlayers = maxCountPlayers.ToString();
+		string playersCountContent = parsedCountPlayersOnline + "/" + parsedMaxCountPlayers;
+		playersCount.text = playersCountContent;
 
 		if (PhotonNetwork.room.playerCount >= countPlayers)
 		{

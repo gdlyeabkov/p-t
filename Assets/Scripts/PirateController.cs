@@ -218,7 +218,10 @@ public class PirateController : MonoBehaviour
                                 // float coordZ = 0f;
 
                                 Vector3 crossTrapPosition = new Vector3(coordX, coordY, coordZ);
-                                GameObject crossTrapInst = PhotonNetwork.Instantiate("cross_trap", crossTrapPosition, baseRotation, 0);
+                                
+                                // GameObject crossTrapInst = PhotonNetwork.Instantiate("cross_trap", crossTrapPosition, baseRotation, 0);
+                                GameObject crossTrapInst = PhotonNetwork.Instantiate("pirate_cross_trap", crossTrapPosition, baseRotation, 0);
+
                                 CrossController crossController = crossTrapInst.GetComponent<CrossController>();
                                 crossController.isOwner = true;
 

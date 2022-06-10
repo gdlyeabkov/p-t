@@ -43,7 +43,10 @@ public class GameManager : PunBehaviour
         {
             Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
             Quaternion baseRotation = Quaternion.identity;
-            cross = PhotonNetwork.Instantiate("cross", crossBasePosition, baseRotation, 0);
+            
+            // cross = PhotonNetwork.Instantiate("cross", crossBasePosition, baseRotation, 0);
+            cross = PhotonNetwork.Instantiate("pirateCross", crossBasePosition, baseRotation, 0);
+            
             float randomCoordX = 0f;
             Transform crossTransform = cross.transform;
             Vector3 crossTransformPosition = crossTransform.position;
