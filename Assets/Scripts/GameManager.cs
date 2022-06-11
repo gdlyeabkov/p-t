@@ -27,6 +27,7 @@ public class GameManager : PunBehaviour
     public Text miniGameLabel;
     public GameObject shovel = null;
     public LayerMask islandLayer;
+    public List<Material> playerMaterials;
 
     void Start()
     {
@@ -103,7 +104,19 @@ public class GameManager : PunBehaviour
                 // PhotonNetwork.Instantiate("pirate_all_anims_2 Variant", randomPosition, baseRotation, 0);
                 // PhotonNetwork.Instantiate("pirate_all_anims_3 Variant", randomPosition, baseRotation, 0);
                 // PhotonNetwork.Instantiate("detalized_pirate_all_anims Variant", randomPosition, baseRotation, 0);
-                PhotonNetwork.Instantiate("color_pirate_all_anims_4 Variant", randomPosition, baseRotation, 0);
+                GameObject pirate = PhotonNetwork.Instantiate("color_pirate_all_anims_4 Variant", randomPosition, baseRotation, 0);
+
+                /*
+                Transform pirateTransform = pirate.transform;
+                Transform bodyTransform = pirateTransform.GetChild(3);
+                GameObject body = bodyTransform.gameObject;
+                SkinnedMeshRenderer bodyRenderer = body.GetComponent<SkinnedMeshRenderer>();
+                Material[] materials = bodyRenderer.materials;
+                Material playerMaterial = playerMaterials[i];
+                materials[2] = playerMaterial;
+                bodyRenderer.materials = materials;
+                */
+
             }
         }
 

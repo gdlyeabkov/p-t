@@ -1116,6 +1116,9 @@ MonoBehaviour:
   islandLayer:
     serializedVersion: 2
     m_Bits: 256
+  playerMaterials:
+  - {fileID: 2100000, guid: b3eeaf2c3ffa3be40afb0363098a65be, type: 2}
+  - {fileID: 2100000, guid: d23fb4781f538124380ce5c3480ab28e, type: 2}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0

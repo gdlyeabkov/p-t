@@ -78,10 +78,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -1362,7 +1360,7 @@ ScriptsOnlyBuild:
     className: InstantiateCube
   - hash:
       serializedVersion: 2
-      Hash: 07ffdc396bb8b799df18f2548ce29c77
+      Hash: 26809e11f2e81e40dc5d3be0a72a8cf4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager

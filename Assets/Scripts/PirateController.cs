@@ -56,6 +56,18 @@ public class PirateController : MonoBehaviour
             gameManager.localPirate = this;
         }
 
+
+        Transform pirateTransform = gameObject.transform;
+        Transform bodyTransform = pirateTransform.GetChild(3);
+        GameObject body = bodyTransform.gameObject;
+        SkinnedMeshRenderer bodyRenderer = body.GetComponent<SkinnedMeshRenderer>();
+        Material[] materials = bodyRenderer.materials;
+        List<Material> playerMaterials = gameManager.playerMaterials;
+        // int index = localIndex - 1;
+        Material playerMaterial = playerMaterials[localIndex];
+        materials[2] = playerMaterial;
+        bodyRenderer.materials = materials;
+
     }
 
     void Update()
