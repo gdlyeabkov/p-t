@@ -102,7 +102,8 @@ public class GameManager : PunBehaviour
                 // PhotonNetwork.Instantiate("pirate_all_anims Variant", randomPosition, baseRotation, 0);
                 // PhotonNetwork.Instantiate("pirate_all_anims_2 Variant", randomPosition, baseRotation, 0);
                 // PhotonNetwork.Instantiate("pirate_all_anims_3 Variant", randomPosition, baseRotation, 0);
-                PhotonNetwork.Instantiate("detalized_pirate_all_anims Variant", randomPosition, baseRotation, 0);
+                // PhotonNetwork.Instantiate("detalized_pirate_all_anims Variant", randomPosition, baseRotation, 0);
+                PhotonNetwork.Instantiate("color_pirate_all_anims_4 Variant", randomPosition, baseRotation, 0);
             }
         }
 

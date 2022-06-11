@@ -19,15 +19,21 @@ public class CameraTracker : MonoBehaviour
 
     private void Start()
     {
-        Offset = camTransform.position - Target.position;
+        if (Target != null)
+        {
+            Offset = camTransform.position - Target.position;
+        }
     }
 
     private void LateUpdate()
     {
         // update position
-        Offset = new Vector3(0f, 7.5f, -10.0f);
-        Vector3 targetPosition = Target.position + Offset;
-        camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, SmoothTime);
+        if (Target != null)
+        {
+            Offset = new Vector3(0f, 7.5f, -10.0f);
+            Vector3 targetPosition = Target.position + Offset;
+            camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, SmoothTime);
+        }
     }
 
 }
