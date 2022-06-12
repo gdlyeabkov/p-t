@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Animations.Rigging;
 
 public class PirateController : MonoBehaviour
 {
@@ -132,9 +133,24 @@ public class PirateController : MonoBehaviour
                                                 Receivers = ReceiverGroup.All
                                             });
 
+                                            /*
                                             Vector3 origin = Vector3.zero;
                                             leftHandController.localPosition = origin;
                                             rightHandController.localPosition = origin;
+                                            */
+                                            Vector3 origin = Vector3.zero;
+                                            GameObject handController = leftHandController.gameObject;
+                                            Rig rig = handController.GetComponent<Rig>();
+                                            rig.weight = 0.0f;
+                                            Transform ik = leftHandController.GetChild(0);
+                                            Transform target = ik.GetChild(0); ;
+                                            target.localPosition = origin;
+                                            handController = rightHandController.gameObject;
+                                            rig = handController.GetComponent<Rig>();
+                                            rig.weight = 0.0f;
+                                            ik = rightHandController.GetChild(0);
+                                            target = ik.GetChild(0); ;
+                                            target.localPosition = origin;
 
                                         }
                                     }
@@ -216,9 +232,24 @@ public class PirateController : MonoBehaviour
                                         Receivers = ReceiverGroup.Others
                                     });
 
+                                    /*
                                     Vector3 foundedShovelPosition = foundedShovel.position;
                                     leftHandController.position = foundedShovelPosition;
                                     rightHandController.position = foundedShovelPosition;
+                                    */
+                                    Vector3 foundedShovelPosition = foundedShovel.position;
+                                    GameObject handController = leftHandController.gameObject;
+                                    Rig rig = handController.GetComponent<Rig>();
+                                    rig.weight = 1.0f;
+                                    Transform ik = leftHandController.GetChild(0);
+                                    Transform target = ik.GetChild(0); ;
+                                    target.position = foundedShovelPosition;
+                                    handController = rightHandController.gameObject;
+                                    rig = handController.GetComponent<Rig>();
+                                    rig.weight = 1.0f;
+                                    ik = rightHandController.GetChild(0);
+                                    target = ik.GetChild(0); ;
+                                    target.position = foundedShovelPosition;
 
                                 }
                             }
@@ -631,9 +662,24 @@ public class PirateController : MonoBehaviour
                     }
                     isHaveShovel = false;
 
+                    /*
                     Vector3 origin = Vector3.zero;
                     leftHandController.localPosition = origin;
                     rightHandController.localPosition = origin;
+                    */
+                    Vector3 origin = Vector3.zero;
+                    GameObject handController = leftHandController.gameObject;
+                    Rig rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+                    Transform ik = leftHandController.GetChild(0);
+                    Transform target = ik.GetChild(0); ;
+                    target.localPosition = origin;
+                    handController = rightHandController.gameObject;
+                    rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+                    ik = rightHandController.GetChild(0);
+                    target = ik.GetChild(0); ;
+                    target.localPosition = origin;
 
                 }
             }

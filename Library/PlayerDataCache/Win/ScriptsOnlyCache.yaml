@@ -49,9 +49,9 @@ ScriptsOnlyBuild:
     - myThirdPersonController
     Unity.Animation.Rigging.dll:
     - UnityEngine.Animations.Rigging.BoneRenderer
-    - UnityEngine.Animations.Rigging.MultiAimConstraint
     - UnityEngine.Animations.Rigging.Rig
     - UnityEngine.Animations.Rigging.RigBuilder
+    - UnityEngine.Animations.Rigging.TwoBoneIKConstraint
     Unity.RenderPipelines.Core.Runtime.dll:
     - UnityEngine.Rendering.UI.DebugUIHandlerBitField
     - UnityEngine.Rendering.UI.DebugUIHandlerButton
@@ -228,8 +228,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12276}
     - Class: 114
-      Script: {instanceID: 12332}
-    - Class: 114
       Script: {instanceID: 12374}
     - Class: 114
       Script: {instanceID: 12384}
@@ -299,6 +297,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 14098}
     - Class: 114
       Script: {instanceID: 14238}
+    - Class: 114
+      Script: {instanceID: 14242}
     - Class: 114
       Script: {instanceID: 14310}
     - Class: 114
@@ -2439,6 +2439,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp-firstpass.dll
     namespaceName: UnityStandardAssets.Utility
     className: AutoMobileShaderSwitch
+  - hash:
+      serializedVersion: 2
+      Hash: 9342966827c5b1e5a254f841cf757fe2
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: mParent
   platform: 5
   scenePathNames:
   - Assets/Scenes/Lobby.unity
