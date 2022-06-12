@@ -30,6 +30,9 @@ public class PirateController : MonoBehaviour
     public int miniGameCursor = 0;
     public string rawMiniGameKey = "";
     public bool isShovelFound = false;
+    public Transform leftHandController;
+    public Transform rightHandController;
+    public Transform foundedShovel;
 
     void Start()
     {
@@ -128,6 +131,11 @@ public class PirateController : MonoBehaviour
                                             {
                                                 Receivers = ReceiverGroup.All
                                             });
+
+                                            Vector3 origin = Vector3.zero;
+                                            leftHandController.localPosition = origin;
+                                            rightHandController.localPosition = origin;
+
                                         }
                                     }
                                 }
@@ -207,6 +215,11 @@ public class PirateController : MonoBehaviour
                                     {
                                         Receivers = ReceiverGroup.Others
                                     });
+
+                                    Vector3 foundedShovelPosition = foundedShovel.position;
+                                    leftHandController.position = foundedShovelPosition;
+                                    rightHandController.position = foundedShovelPosition;
+
                                 }
                             }
                             isStopped = true;
@@ -489,6 +502,7 @@ public class PirateController : MonoBehaviour
         else if (isShovel)
         {
             isShovelFound = true;
+            foundedShovel = detectedObject.transform;
         }
     }
 
@@ -506,6 +520,7 @@ public class PirateController : MonoBehaviour
         else if (isShovel)
         {
             isShovelFound = false;
+            foundedShovel = null;
         }
     }
 
@@ -615,7 +630,11 @@ public class PirateController : MonoBehaviour
                         }
                     }
                     isHaveShovel = false;
-                
+
+                    Vector3 origin = Vector3.zero;
+                    leftHandController.localPosition = origin;
+                    rightHandController.localPosition = origin;
+
                 }
             }
             catch (System.InvalidCastException)
