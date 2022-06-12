@@ -34,6 +34,7 @@ public class PirateController : MonoBehaviour
     public Transform leftHandController;
     public Transform rightHandController;
     public Transform foundedShovel;
+    public Transform cameraTarget;
 
     void Start()
     {
@@ -74,7 +75,7 @@ public class PirateController : MonoBehaviour
 
     }
 
-    void Update()
+    void LateUpdate()
     {
         bool isLocalPirate = localIndex == networkIndex;
         if (isLocalPirate)
@@ -133,11 +134,6 @@ public class PirateController : MonoBehaviour
                                                 Receivers = ReceiverGroup.All
                                             });
 
-                                            /*
-                                            Vector3 origin = Vector3.zero;
-                                            leftHandController.localPosition = origin;
-                                            rightHandController.localPosition = origin;
-                                            */
                                             Vector3 origin = Vector3.zero;
                                             GameObject handController = leftHandController.gameObject;
                                             Rig rig = handController.GetComponent<Rig>();
@@ -151,6 +147,12 @@ public class PirateController : MonoBehaviour
                                             ik = rightHandController.GetChild(0);
                                             target = ik.GetChild(0); ;
                                             target.localPosition = origin;
+
+                                            foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
+                                            {
+                                                GameObject rawPirate = pirate.gameObject;
+                                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
+                                            }
 
                                         }
                                     }
@@ -232,11 +234,6 @@ public class PirateController : MonoBehaviour
                                         Receivers = ReceiverGroup.Others
                                     });
 
-                                    /*
-                                    Vector3 foundedShovelPosition = foundedShovel.position;
-                                    leftHandController.position = foundedShovelPosition;
-                                    rightHandController.position = foundedShovelPosition;
-                                    */
                                     Vector3 foundedShovelPosition = foundedShovel.position;
                                     GameObject handController = leftHandController.gameObject;
                                     Rig rig = handController.GetComponent<Rig>();
@@ -250,7 +247,17 @@ public class PirateController : MonoBehaviour
                                     ik = rightHandController.GetChild(0);
                                     target = ik.GetChild(0); ;
                                     target.position = foundedShovelPosition;
+                                    object[] localNetworkData = new object[] { localIndex, foundedShovelPosition.x, foundedShovelPosition.y, foundedShovelPosition.z};
+                                    PhotonNetwork.RaiseEvent(192, localNetworkData, true, new RaiseEventOptions
+                                    {
+                                        Receivers = ReceiverGroup.Others
+                                    });
 
+                                    foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
+                                    {
+                                        GameObject rawPirate = pirate.gameObject;
+                                        Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                    }
                                 }
                             }
                             isStopped = true;
@@ -435,10 +442,16 @@ public class PirateController : MonoBehaviour
                             Vector3 forwardDirection = Vector3.up;
                             Quaternion aroundRotation = Quaternion.AngleAxis(yawDelta, forwardDirection);
                             offset = aroundRotation * offset;
+                            
                             Vector3 piratePosition = transform.position;
+                            // Vector3 piratePosition = cameraTarget.position;
+                            
                             Vector3 offsetPosition = piratePosition + offset;
                             Vector3 currentMainCameraTransformPosition = mainCameraTransform.position;
                             mainCameraTransform.position = Vector3.Lerp(currentMainCameraTransformPosition, offsetPosition, 0.25f);
+
+                            mainCameraTransform.LookAt(piratePosition);
+
                         }
                     }
                 }
@@ -576,6 +589,7 @@ public class PirateController : MonoBehaviour
         bool isGameOverEvent = eventCode == 196;
         bool isPirateAnimationEvent = eventCode == 194;
         bool isDieEvent = eventCode == 193;
+        bool isDigEvent = eventCode == 192;
         if (isGameOverEvent)
         {
             try
@@ -662,11 +676,6 @@ public class PirateController : MonoBehaviour
                     }
                     isHaveShovel = false;
 
-                    /*
-                    Vector3 origin = Vector3.zero;
-                    leftHandController.localPosition = origin;
-                    rightHandController.localPosition = origin;
-                    */
                     Vector3 origin = Vector3.zero;
                     GameObject handController = leftHandController.gameObject;
                     Rig rig = handController.GetComponent<Rig>();
@@ -680,6 +689,58 @@ public class PirateController : MonoBehaviour
                     ik = rightHandController.GetChild(0);
                     target = ik.GetChild(0); ;
                     target.localPosition = origin;
+
+                    foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
+                    {
+                        GameObject rawPirate = pirate.gameObject;
+                        Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
+                    }
+
+                }
+            }
+            catch (System.InvalidCastException)
+            {
+                string castError = "Ошибка с привидением типа photon. Не могу передать photon данные";
+                Debug.Log(castError);
+            }
+            catch (System.Exception)
+            {
+                string photonError = "Не могу передать photon данные";
+                Debug.Log(photonError);
+            }
+        }
+        else if (isDigEvent)
+        {
+            try
+            {
+                object[] data = (object[])content;
+                int index = (int)data[0];
+                float x = (float)data[1];
+                float y = (float)data[2];
+                float z = (float)data[3];
+                bool isLocalPirate = index == localIndex;
+                if (isLocalPirate)
+                {
+                    // Vector3 foundedShovelPosition = foundedShovel.position;
+                    Vector3 foundedShovelPosition = new Vector3(x, y, z);
+                    GameObject handController = leftHandController.gameObject;
+                    Rig rig = handController.GetComponent<Rig>();
+                    rig.weight = 1.0f;
+                    Transform ik = leftHandController.GetChild(0);
+                    Transform target = ik.GetChild(0); ;
+                    target.position = foundedShovelPosition;
+                    handController = rightHandController.gameObject;
+                    rig = handController.GetComponent<Rig>();
+                    rig.weight = 1.0f;
+                    ik = rightHandController.GetChild(0);
+                    target = ik.GetChild(0); ;
+                    target.position = foundedShovelPosition;
+
+                    foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
+                    {
+                        GameObject rawPirate = pirate.gameObject;
+                        Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
+                    }
 
                 }
             }
@@ -698,11 +759,21 @@ public class PirateController : MonoBehaviour
 
     public IEnumerator InitOffset()
     {
+
+        mainCamera.transform.position = cameraTarget.position;
+
         yield return new WaitForSeconds(2f);
+
+        // mainCamera.transform.position = cameraTarget.position;
+        
         Transform mainCameraTransform = mainCamera.transform;
         Vector3 mainCameraTransformPosition = mainCameraTransform.position;
+        
         Vector3 piratePosition = transform.position;
+        // Vector3 piratePosition = cameraTarget.position;
+
         offset = mainCameraTransformPosition - piratePosition;
+    
     }
 
 }
