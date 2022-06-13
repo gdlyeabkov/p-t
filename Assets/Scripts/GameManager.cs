@@ -28,6 +28,8 @@ public class GameManager : PunBehaviour
     public GameObject shovel = null;
     public LayerMask islandLayer;
     public List<Material> playerMaterials;
+    public AudioClip dieSound;
+    public AudioClip diggSound;
 
     void Start()
     {
@@ -86,37 +88,16 @@ public class GameManager : PunBehaviour
                 Transform crossTransform = cross.transform;
                 Vector3 crossTransformPosition = crossTransform.position;
 
-                // float coordY = crossTransformPosition.y;
                 float coordY = 6f;
 
                 float randomCoordZ = Random.Range(-45, 45);
 
-                // Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 Transform respawnPoint = respawnPoints[i];
                 randomPosition = respawnPoint.position;
 
                 Quaternion baseRotation = Quaternion.identity;
-                // PhotonNetwork.Instantiate("custom_pirate", randomPosition, baseRotation, 0);
-                // PhotonNetwork.Instantiate("pirate_dig_anim_3 Variant", randomPosition, baseRotation, 0);
-                // PhotonNetwork.Instantiate("pirate_attack_anim_3 Variant", randomPosition, baseRotation, 0);
-                // PhotonNetwork.Instantiate("pirate_all_anims Variant", randomPosition, baseRotation, 0);
-                // PhotonNetwork.Instantiate("pirate_all_anims_2 Variant", randomPosition, baseRotation, 0);
-                // PhotonNetwork.Instantiate("pirate_all_anims_3 Variant", randomPosition, baseRotation, 0);
-                // PhotonNetwork.Instantiate("detalized_pirate_all_anims Variant", randomPosition, baseRotation, 0);
                 GameObject pirate = PhotonNetwork.Instantiate("color_pirate_all_anims_4 Variant", randomPosition, baseRotation, 0);
-
-                /*
-                Transform pirateTransform = pirate.transform;
-                Transform bodyTransform = pirateTransform.GetChild(3);
-                GameObject body = bodyTransform.gameObject;
-                SkinnedMeshRenderer bodyRenderer = body.GetComponent<SkinnedMeshRenderer>();
-                Material[] materials = bodyRenderer.materials;
-                Material playerMaterial = playerMaterials[i];
-                materials[2] = playerMaterial;
-                bodyRenderer.materials = materials;
-                */
-
             }
         }
 

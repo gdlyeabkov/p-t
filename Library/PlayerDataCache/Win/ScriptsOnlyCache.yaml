@@ -1,7 +1,5 @@
 ScriptsOnlyBuild:
   usedScripts:
-    Assembly-CSharp-Editor.dll:
-    - PunSceneSettings
     Assembly-CSharp.dll:
     - AudioRpc
     - CameraTracker
@@ -1409,7 +1407,7 @@ ScriptsOnlyBuild:
     className: InstantiateCube
   - hash:
       serializedVersion: 2
-      Hash: 26809e11f2e81e40dc5d3be0a72a8cf4
+      Hash: 244d552bae0289463e6f894ac739ba8b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager

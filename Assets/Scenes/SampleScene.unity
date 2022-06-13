@@ -1149,6 +1149,8 @@ MonoBehaviour:
   playerMaterials:
   - {fileID: 2100000, guid: b3eeaf2c3ffa3be40afb0363098a65be, type: 2}
   - {fileID: 2100000, guid: d23fb4781f538124380ce5c3480ab28e, type: 2}
+  dieSound: {fileID: 8300000, guid: e5151e37115536944b64288bd6144778, type: 3}
+  diggSound: {fileID: 8300000, guid: 07eff898319e32a4e9c23f8a717bd8b3, type: 3}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0

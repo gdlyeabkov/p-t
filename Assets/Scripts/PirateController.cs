@@ -209,6 +209,33 @@ public class PirateController : MonoBehaviour
                                             Receivers = ReceiverGroup.Others
                                         });
 
+                                        // здесь
+                                        AudioSource audio = GetComponent<AudioSource>();
+                                        AudioClip diggSound = gameManager.diggSound;
+                                        audio.clip = diggSound;
+                                        audio.loop = true;
+                                        audio.Play();
+                                        object[] localNetworkData = new object[] { localIndex };
+                                        PhotonNetwork.RaiseEvent(191, localNetworkData, true, new RaiseEventOptions
+                                        {
+                                            Receivers = ReceiverGroup.Others
+                                        });
+                                        foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
+                                        {
+                                            GameObject rawPirate = pirate.gameObject;
+                                            Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                        }
+                                        GameObject handController = leftHandController.gameObject;
+                                        Rig rig = handController.GetComponent<Rig>();
+                                        rig.weight = 0.0f;
+                                        Transform ik = leftHandController.GetChild(0);
+                                        Transform target = ik.GetChild(0); ;
+                                        handController = rightHandController.gameObject;
+                                        rig = handController.GetComponent<Rig>();
+                                        rig.weight = 0.0f;
+                                        ik = rightHandController.GetChild(0);
+                                        target = ik.GetChild(0);
+
                                     }
 
                                 }
@@ -270,24 +297,13 @@ public class PirateController : MonoBehaviour
                                 PhotonNetwork.SetMasterClient(currentPlayer);
                                 Quaternion baseRotation = Quaternion.identity;
                                 Vector3 currentPiratePosition = transform.position;
-                                
                                 float coordX = currentPiratePosition.x;
-                                //float coordX = 0f;
-
-                                // float coordY = currentPiratePosition.y;
                                 float coordY = currentPiratePosition.y + 0.1f;
-
                                 float coordZ = currentPiratePosition.z;
-                                // float coordZ = 0f;
-
                                 Vector3 crossTrapPosition = new Vector3(coordX, coordY, coordZ);
-                                
-                                // GameObject crossTrapInst = PhotonNetwork.Instantiate("cross_trap", crossTrapPosition, baseRotation, 0);
                                 GameObject crossTrapInst = PhotonNetwork.Instantiate("pirate_cross_trap", crossTrapPosition, baseRotation, 0);
-
                                 CrossController crossController = crossTrapInst.GetComponent<CrossController>();
                                 crossController.isOwner = true;
-
                                 Ray ray = new Ray(crossTrapInst.transform.position, Vector3.up);
                                 RaycastHit hit = new RaycastHit();
                                 bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity, gameManager.islandLayer);
@@ -296,58 +312,9 @@ public class PirateController : MonoBehaviour
                                     Vector3 hitPoint = hit.point;
                                     crossTrapInst.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
                                 }
-
                                 GetComponent<Animator>().Play("Paint");
-
                                 Transform islandSphereTransform = gameManager.islandSphereTransform;
                                 Vector3 islandSphereTransformPosition = islandSphereTransform.position;
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), currentPiratePosition.x);
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), currentPiratePosition.z);
-                                */
-
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.FromToRotation(Quaternion.identity.eulerAngles, transform.eulerAngles).eulerAngles.x);
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.FromToRotation(Quaternion.identity.eulerAngles, transform.eulerAngles).eulerAngles.z);
-                                */
-
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.FromToRotation(Vector3.left, transform.position).eulerAngles.x);
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.FromToRotation(Vector3.forward, transform.position).eulerAngles.z);
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.FromToRotation(Vector3.up, transform.position).eulerAngles.x);
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.FromToRotation(Vector3.up, transform.position).eulerAngles.z);
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(islandSphereTransformPosition, transform.position));
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(islandSphereTransformPosition, transform.position));
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(Vector3.zero, transform.eulerAngles));
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(Vector3.zero, transform.eulerAngles));
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(transform.position, Vector3.left));
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(transform.position, Vector3.forward));
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.LookRotation(transform.position, Vector3.left).eulerAngles.x);
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.LookRotation(transform.position, Vector3.forward).eulerAngles.z);
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Quaternion.LookRotation(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.left).eulerAngles.x);
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Quaternion.LookRotation(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.forward).eulerAngles.z);
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.left));
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(new Vector3(0f, 4.107f, 0f) - transform.position, Vector3.forward));
-                                */
-                                /*
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 0f), Vector3.Angle(new Vector3(0f, 4.107f, 0f), transform.eulerAngles));
-                                crossTrapInst.transform.RotateAround(islandSphereTransformPosition, new Vector3(0f, 0f, 1f), Vector3.Angle(new Vector3(0f, 4.107f, 0f), transform.eulerAngles));
-                                */
-
                             }
                         }
                         else if (isEKeyUp)
@@ -359,19 +326,6 @@ public class PirateController : MonoBehaviour
                             }
                             isStopped = false;
                             GetComponent<Animator>().Play("Walk");
-                        }
-                        else if (isEKey)
-                        {
-                            if (isCrossFound && isHaveShovel)
-                            {
-                                AudioSource audio = GetComponent<AudioSource>();
-                                bool isHaveSound = audio.isPlaying;
-                                bool isSilence = !isHaveSound;
-                                if (isSilence)
-                                {
-                                    audio.Play();
-                                }
-                            }
                         }
                         else if (isSpaceKeyDown)
                         {
@@ -421,45 +375,37 @@ public class PirateController : MonoBehaviour
                                 }
                             }
                         }
-                        float mouseXDelta = Input.GetAxis("Mouse X");
-                        float yawDelta = cameraRotationSpeed * mouseXDelta;
-                        float mouseYDelta = Input.GetAxis("Mouse Y");
-                        float pitchDelta = cameraRotationSpeed * mouseYDelta;
-                        Vector3 currentCameraRotation = transform.eulerAngles;
-                        float currentCameraZRotation = currentCameraRotation.z;
-                        bool isCanRotate = true;
-                        if (isCanRotate)
-                        {
-                            
-                            yaw += yawDelta;
-                            pitch -= pitchDelta;
-                            
-                            // Vector3 cameraRotation = new Vector3(pitch, yaw, currentCameraZRotation);
-                            float currentCameraXRotation = currentCameraRotation.x;
-                            Vector3 cameraRotation = new Vector3(currentCameraXRotation, yaw, currentCameraZRotation);
-
-                            Transform mainCameraTransform = mainCamera.transform;
-                            mainCameraTransform.eulerAngles = cameraRotation;
-
-                            float cameraXRotation = cameraRotation.x;
-                            float cameraYRotation = cameraRotation.y;
-                            float cameraZRotation = cameraRotation.z;
-                            rb.MoveRotation(Quaternion.Euler(0f, cameraYRotation, 0f));
-
-                            Vector3 forwardDirection = Vector3.up;
-                            Quaternion aroundRotation = Quaternion.AngleAxis(yawDelta, forwardDirection);
-                            offset = aroundRotation * offset;
-                            
-                            Vector3 piratePosition = transform.position;
-                            
-                            Vector3 offsetPosition = piratePosition + offset;
-                            Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
-                            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
-                            
-                            mainCameraTransform.transform.Translate(0, 0.2f, -0.5f, transform);
-
-                        }
                     }
+
+                    float mouseXDelta = Input.GetAxis("Mouse X");
+                    float yawDelta = cameraRotationSpeed * mouseXDelta;
+                    float mouseYDelta = Input.GetAxis("Mouse Y");
+                    float pitchDelta = cameraRotationSpeed * mouseYDelta;
+                    Vector3 currentCameraRotation = transform.eulerAngles;
+                    float currentCameraZRotation = currentCameraRotation.z;
+                    Transform mainCameraTransform = mainCamera.transform;
+                    bool isNotMiniGame = !isMiniGame;
+                    if (isNotMiniGame)
+                    {
+                        yaw += yawDelta;
+                        pitch -= pitchDelta;
+                        float currentCameraXRotation = currentCameraRotation.x;
+                        Vector3 cameraRotation = new Vector3(currentCameraXRotation, yaw, currentCameraZRotation);
+                        mainCameraTransform.eulerAngles = cameraRotation;
+                        float cameraXRotation = cameraRotation.x;
+                        float cameraYRotation = cameraRotation.y;
+                        float cameraZRotation = cameraRotation.z;
+                        rb.MoveRotation(Quaternion.Euler(0f, cameraYRotation, 0f));
+                        Vector3 forwardDirection = Vector3.up;
+                        Quaternion aroundRotation = Quaternion.AngleAxis(yawDelta, forwardDirection);
+                        offset = aroundRotation * offset;
+                        Vector3 piratePosition = transform.position;
+                        Vector3 offsetPosition = piratePosition + offset;
+                        Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
+                        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
+                    }
+                    mainCameraTransform.transform.Translate(0, 0.2f, -0.5f, transform);
+                    
                 }
             }
         }
@@ -596,6 +542,7 @@ public class PirateController : MonoBehaviour
         bool isPirateAnimationEvent = eventCode == 194;
         bool isDieEvent = eventCode == 193;
         bool isDigEvent = eventCode == 192;
+        bool isCrossEvent = eventCode == 191;
         if (isGameOverEvent)
         {
             try
@@ -702,6 +649,12 @@ public class PirateController : MonoBehaviour
                         Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
                     }
 
+                    AudioSource audio = GetComponent<AudioSource>();
+                    AudioClip dieSound = gameManager.dieSound;
+                    audio.clip = dieSound;
+                    audio.loop = false;
+                    audio.Play();
+
                 }
             }
             catch (System.InvalidCastException)
@@ -747,6 +700,51 @@ public class PirateController : MonoBehaviour
                         GameObject rawPirate = pirate.gameObject;
                         Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
                     }
+
+                }
+            }
+            catch (System.InvalidCastException)
+            {
+                string castError = "Ошибка с привидением типа photon. Не могу передать photon данные";
+                Debug.Log(castError);
+            }
+            catch (System.Exception)
+            {
+                string photonError = "Не могу передать photon данные";
+                Debug.Log(photonError);
+            }
+        }
+        else if (isCrossEvent)
+        {
+            try
+            {
+                object[] data = (object[])content;
+                int index = (int)data[0];
+                bool isLocalPirate = index == localIndex;
+                if (isLocalPirate)
+                {
+                    GameObject handController = leftHandController.gameObject;
+                    Rig rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+                    Transform ik = leftHandController.GetChild(0);
+                    Transform target = ik.GetChild(0); ;
+                    handController = rightHandController.gameObject;
+                    rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+                    ik = rightHandController.GetChild(0);
+                    target = ik.GetChild(0); ;
+                    
+                    foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
+                    {
+                        GameObject rawPirate = pirate.gameObject;
+                        Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
+                    }
+
+                    AudioSource audio = GetComponent<AudioSource>();
+                    AudioClip diggSound = gameManager.diggSound;
+                    audio.clip = diggSound;
+                    audio.loop = true;
+                    audio.Play();
 
                 }
             }
