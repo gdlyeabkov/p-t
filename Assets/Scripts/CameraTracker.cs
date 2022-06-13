@@ -21,7 +21,7 @@ public class CameraTracker : MonoBehaviour
     {
         if (Target != null)
         {
-            Offset = camTransform.position - Target.position;
+            // Offset = camTransform.position - Target.position;
         }
     }
 
@@ -30,9 +30,15 @@ public class CameraTracker : MonoBehaviour
         // update position
         if (Target != null)
         {
-            Offset = new Vector3(0f, 7.5f, -10.0f);
+            // Offset = new Vector3(0f, 7.5f, -10.0f);
+
             Vector3 targetPosition = Target.position + Offset;
             camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, SmoothTime);
+
+            /*
+            Vector3 targetPosition = Target.localPosition + Offset + new Vector3(0f, 0f, -10f);
+            camTransform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref velocity, SmoothTime);
+            */
         }
     }
 

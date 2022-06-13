@@ -23,7 +23,7 @@ public class PirateController : MonoBehaviour
     private Rigidbody rb;
     private float pitch = 0.0f;
     private float yaw = 0.0f;
-    private float cameraRotationSpeed = 2f;
+    private float cameraRotationSpeed = 10f;
     public Vector3 offset = Vector3.zero;
     private Camera mainCamera;
     public bool isHaveShovel = false;
@@ -430,27 +430,33 @@ public class PirateController : MonoBehaviour
                         bool isCanRotate = true;
                         if (isCanRotate)
                         {
+                            
                             yaw += yawDelta;
                             pitch -= pitchDelta;
-                            Vector3 cameraRotation = new Vector3(pitch, yaw, currentCameraZRotation);
+                            
+                            // Vector3 cameraRotation = new Vector3(pitch, yaw, currentCameraZRotation);
+                            float currentCameraXRotation = currentCameraRotation.x;
+                            Vector3 cameraRotation = new Vector3(currentCameraXRotation, yaw, currentCameraZRotation);
+
                             Transform mainCameraTransform = mainCamera.transform;
                             mainCameraTransform.eulerAngles = cameraRotation;
+
                             float cameraXRotation = cameraRotation.x;
                             float cameraYRotation = cameraRotation.y;
                             float cameraZRotation = cameraRotation.z;
-                            rb.MoveRotation(Quaternion.Euler(cameraXRotation, cameraYRotation, cameraZRotation));
+                            rb.MoveRotation(Quaternion.Euler(0f, cameraYRotation, 0f));
+
                             Vector3 forwardDirection = Vector3.up;
                             Quaternion aroundRotation = Quaternion.AngleAxis(yawDelta, forwardDirection);
                             offset = aroundRotation * offset;
                             
                             Vector3 piratePosition = transform.position;
-                            // Vector3 piratePosition = cameraTarget.position;
                             
                             Vector3 offsetPosition = piratePosition + offset;
-                            Vector3 currentMainCameraTransformPosition = mainCameraTransform.position;
-                            mainCameraTransform.position = Vector3.Lerp(currentMainCameraTransformPosition, offsetPosition, 0.25f);
-
-                            mainCameraTransform.LookAt(piratePosition);
+                            Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
+                            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
+                            
+                            mainCameraTransform.transform.Translate(0, 0.2f, -0.5f, transform);
 
                         }
                     }
@@ -773,7 +779,7 @@ public class PirateController : MonoBehaviour
         // Vector3 piratePosition = cameraTarget.position;
 
         offset = mainCameraTransformPosition - piratePosition;
-    
+
     }
 
 }
