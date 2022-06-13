@@ -89,71 +89,102 @@ public class PirateController : MonoBehaviour
                 {
                     if (isMiniGame)
                     {
-                        var possibleKeys = Enum.GetValues(typeof(KeyCode));
-                        foreach (KeyCode kcode in possibleKeys)
+                        bool isCancel = Input.GetMouseButtonDown(1);
+                        if (isCancel)
                         {
-                            bool isKeyDown = Input.GetKey(kcode);
-                            if (isKeyDown)
+                            miniGameCursor = 0;
+                            isMiniGame = false;
+                            isStopped = false;
+                            GameObject miniGame = gameManager.miniGame;
+                            miniGame.SetActive(false);
+                            GetComponent<Animator>().Play("Idle");
+                            Vector3 origin = Vector3.zero;
+                            GameObject handController = leftHandController.gameObject;
+                            Rig rig = handController.GetComponent<Rig>();
+                            rig.weight = 0.0f;
+                            Transform ik = leftHandController.GetChild(0);
+                            Transform target = ik.GetChild(0); ;
+                            target.localPosition = origin;
+                            handController = rightHandController.gameObject;
+                            rig = handController.GetComponent<Rig>();
+                            rig.weight = 0.0f;
+                            ik = rightHandController.GetChild(0);
+                            target = ik.GetChild(0); ;
+                            target.localPosition = origin;
+                            foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                             {
-                                string rawKeyCode = kcode.ToString();
-                                bool isRightKeyDown = rawKeyCode == rawMiniGameKey;
-                                if (isRightKeyDown)
+                                GameObject rawPirate = pirate.gameObject;
+                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
+                            }
+                        }
+                        else
+                        {
+                            var possibleKeys = Enum.GetValues(typeof(KeyCode));
+                            foreach (KeyCode kcode in possibleKeys)
+                            {
+                                bool isKeyDown = Input.GetKey(kcode);
+                                if (isKeyDown)
                                 {
-                                    char generatedChar = GameManager.GetRandomCharacter();
-                                    rawMiniGameKey = generatedChar.ToString();
-                                    Text miniGameLabel = gameManager.miniGameLabel;
-                                    miniGameLabel.text = rawMiniGameKey;
-                                    miniGameCursor++;
-                                    bool isMiniGameFinish = miniGameCursor >= 5;
-                                    if (isMiniGameFinish)
+                                    string rawKeyCode = kcode.ToString();
+                                    bool isRightKeyDown = rawKeyCode == rawMiniGameKey;
+                                    if (isRightKeyDown)
                                     {
-                                        miniGameCursor = 0;
-                                        isMiniGame = false;
-                                        GameObject miniGame = gameManager.miniGame;
-                                        miniGame.SetActive(false);
-                                        if (isCrossFound)
+                                        char generatedChar = GameManager.GetRandomCharacter();
+                                        rawMiniGameKey = generatedChar.ToString();
+                                        Text miniGameLabel = gameManager.miniGameLabel;
+                                        miniGameLabel.text = rawMiniGameKey;
+                                        miniGameCursor++;
+                                        bool isMiniGameFinish = miniGameCursor >= 5;
+                                        if (isMiniGameFinish)
                                         {
-                                            gameManager.ShowWin(localIndex, networkIndex);
-                                            GetComponent<Animator>().Play("Victory");
-
-                                            object[] networkData = new object[] { localIndex, "Victory" };
-                                            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                            miniGameCursor = 0;
+                                            isMiniGame = false;
+                                            GameObject miniGame = gameManager.miniGame;
+                                            miniGame.SetActive(false);
+                                            if (isCrossFound)
                                             {
-                                                Receivers = ReceiverGroup.Others
-                                            });
+                                                gameManager.ShowWin(localIndex, networkIndex);
+                                                GetComponent<Animator>().Play("Victory");
 
-                                        }
-                                        else
-                                        {
-                                            isStopped = false;
-                                            isShovelFound = false;
-                                            isHaveShovel = true;
-                                            object[] networkData = new object[] { };
-                                            PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
-                                            {
-                                                Receivers = ReceiverGroup.All
-                                            });
+                                                object[] networkData = new object[] { localIndex, "Victory" };
+                                                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                                {
+                                                    Receivers = ReceiverGroup.Others
+                                                });
 
-                                            Vector3 origin = Vector3.zero;
-                                            GameObject handController = leftHandController.gameObject;
-                                            Rig rig = handController.GetComponent<Rig>();
-                                            rig.weight = 0.0f;
-                                            Transform ik = leftHandController.GetChild(0);
-                                            Transform target = ik.GetChild(0); ;
-                                            target.localPosition = origin;
-                                            handController = rightHandController.gameObject;
-                                            rig = handController.GetComponent<Rig>();
-                                            rig.weight = 0.0f;
-                                            ik = rightHandController.GetChild(0);
-                                            target = ik.GetChild(0); ;
-                                            target.localPosition = origin;
-
-                                            foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
-                                            {
-                                                GameObject rawPirate = pirate.gameObject;
-                                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
                                             }
+                                            else
+                                            {
+                                                isStopped = false;
+                                                isShovelFound = false;
+                                                isHaveShovel = true;
+                                                object[] networkData = new object[] { };
+                                                PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
+                                                {
+                                                    Receivers = ReceiverGroup.All
+                                                });
 
+                                                Vector3 origin = Vector3.zero;
+                                                GameObject handController = leftHandController.gameObject;
+                                                Rig rig = handController.GetComponent<Rig>();
+                                                rig.weight = 0.0f;
+                                                Transform ik = leftHandController.GetChild(0);
+                                                Transform target = ik.GetChild(0); ;
+                                                target.localPosition = origin;
+                                                handController = rightHandController.gameObject;
+                                                rig = handController.GetComponent<Rig>();
+                                                rig.weight = 0.0f;
+                                                ik = rightHandController.GetChild(0);
+                                                target = ik.GetChild(0); ;
+                                                target.localPosition = origin;
+
+                                                foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
+                                                {
+                                                    GameObject rawPirate = pirate.gameObject;
+                                                    Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
+                                                }
+
+                                            }
                                         }
                                     }
                                 }
@@ -384,26 +415,24 @@ public class PirateController : MonoBehaviour
                     Vector3 currentCameraRotation = transform.eulerAngles;
                     float currentCameraZRotation = currentCameraRotation.z;
                     Transform mainCameraTransform = mainCamera.transform;
+                    yaw += yawDelta;
+                    pitch -= pitchDelta;
+                    float currentCameraXRotation = currentCameraRotation.x;
+                    Vector3 cameraRotation = new Vector3(currentCameraXRotation, yaw, currentCameraZRotation);
+                    mainCameraTransform.eulerAngles = cameraRotation;
+                    float cameraYRotation = cameraRotation.y;
                     bool isNotMiniGame = !isMiniGame;
                     if (isNotMiniGame)
                     {
-                        yaw += yawDelta;
-                        pitch -= pitchDelta;
-                        float currentCameraXRotation = currentCameraRotation.x;
-                        Vector3 cameraRotation = new Vector3(currentCameraXRotation, yaw, currentCameraZRotation);
-                        mainCameraTransform.eulerAngles = cameraRotation;
-                        float cameraXRotation = cameraRotation.x;
-                        float cameraYRotation = cameraRotation.y;
-                        float cameraZRotation = cameraRotation.z;
                         rb.MoveRotation(Quaternion.Euler(0f, cameraYRotation, 0f));
-                        Vector3 forwardDirection = Vector3.up;
-                        Quaternion aroundRotation = Quaternion.AngleAxis(yawDelta, forwardDirection);
-                        offset = aroundRotation * offset;
-                        Vector3 piratePosition = transform.position;
-                        Vector3 offsetPosition = piratePosition + offset;
-                        Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
-                        mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
                     }
+                    Vector3 forwardDirection = Vector3.up;
+                    Quaternion aroundRotation = Quaternion.AngleAxis(yawDelta, forwardDirection);
+                    offset = aroundRotation * offset;
+                    Vector3 piratePosition = transform.position;
+                    Vector3 offsetPosition = piratePosition + offset;
+                    Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
+                    mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
                     mainCameraTransform.transform.Translate(0, 0.2f, -0.5f, transform);
                     
                 }
