@@ -153,7 +153,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.6475
+  m_Radius: 1.647
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &213069132
 Rigidbody:
@@ -1149,6 +1149,12 @@ MonoBehaviour:
   playerMaterials:
   - {fileID: 2100000, guid: b3eeaf2c3ffa3be40afb0363098a65be, type: 2}
   - {fileID: 2100000, guid: d23fb4781f538124380ce5c3480ab28e, type: 2}
+  - {fileID: 2100000, guid: dabf8a7974ecc4844b2df9d3a1346e0c, type: 2}
+  - {fileID: 2100000, guid: 92386cd4f4b345449a050bc4171467eb, type: 2}
+  - {fileID: 2100000, guid: 5122e72e4398c2349946816d0d980740, type: 2}
+  - {fileID: 2100000, guid: eca5dda990094274a9d355e390b72b12, type: 2}
+  - {fileID: 2100000, guid: 5f8108f37c8aa584f924d926a90d75f4, type: 2}
+  - {fileID: 2100000, guid: c08f01cececc9874791bd386d59ab5c4, type: 2}
   dieSound: {fileID: 8300000, guid: e5151e37115536944b64288bd6144778, type: 3}
   diggSound: {fileID: 8300000, guid: 07eff898319e32a4e9c23f8a717bd8b3, type: 3}
 --- !u!4 &1108205869
