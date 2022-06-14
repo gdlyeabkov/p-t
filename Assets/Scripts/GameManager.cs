@@ -30,6 +30,9 @@ public class GameManager : PunBehaviour
     public List<Material> playerMaterials;
     public AudioClip dieSound;
     public AudioClip diggSound;
+    public Joystick movementJoystick;
+    public Joystick rotationJoystick;
+    public AdController adController;
 
     void Start()
     {
@@ -122,6 +125,8 @@ public class GameManager : PunBehaviour
 
     public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
     {
+        // LeaveLobby();
+        adController.ScheduleAd();
         LeaveLobby();
     }
 
@@ -195,6 +200,8 @@ public class GameManager : PunBehaviour
     public IEnumerator ResetGame()
     {
         yield return new WaitForSeconds(30f);
+        // adController.ShowAd();
+        adController.ScheduleAd();
         LeaveLobby();
     }
 
@@ -226,6 +233,21 @@ public class GameManager : PunBehaviour
         float randomRotation = Random.Range(-5f, 5f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         shovel.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 1f, 0f), randomRotation);
+    }
+
+    public void DoAction()
+    {
+        localPirate.DoAction();
+    }
+
+    public void DoPaint()
+    {
+        localPirate.DoPaint();
+    }
+
+    public void DoAttack()
+    {
+        localPirate.DoAttack();
     }
 
 }
