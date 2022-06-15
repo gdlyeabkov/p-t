@@ -250,4 +250,9 @@ public class GameManager : PunBehaviour
         localPirate.DoAttack();
     }
 
+    public void IncreaseMiniGameCursor()
+    {
+        localPirate.IncreaseMiniGameCursor();
+    }
+
 }
