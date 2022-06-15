@@ -35,6 +35,7 @@ public class PirateController : MonoBehaviour
     public Transform rightHandController;
     public Transform foundedShovel;
     public Transform cameraTarget;
+    public List<int> answers;
 
     void Start()
     {
@@ -611,7 +612,7 @@ public class PirateController : MonoBehaviour
                                     target = ik.GetChild(0);
                                 }
 
-                                TouchScreenKeyboard.Open("");
+                                StartCoroutine(PlayAnswers());
 
                             }
                             isStopped = true;
@@ -660,12 +661,11 @@ public class PirateController : MonoBehaviour
                                     Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
                                 }
                             }
-                            
-                            TouchScreenKeyboard.Open("");
-
                             isStopped = true;
+
+                            StartCoroutine(PlayAnswers());
+
                         }
-                        // isStopped = true;
                     }
                 }
             }
@@ -711,6 +711,15 @@ public class PirateController : MonoBehaviour
                             GetComponent<Animator>().Play("Paint");
                             Transform islandSphereTransform = gameManager.islandSphereTransform;
                             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+                        }
+                    }
+                    else
+                    {
+                        int activeAnswer = answers[miniGameCursor];
+                        bool isRight = activeAnswer == 0;
+                        if (isRight)
+                        {
+                            IncreaseMiniGameCursor();
                         }
                     }
                 }
@@ -775,6 +784,15 @@ public class PirateController : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        int activeAnswer = answers[miniGameCursor];
+                        bool isRight = activeAnswer == 1;
+                        if (isRight)
+                        {
+                            IncreaseMiniGameCursor();
+                        }
+                    }
                 }
             }
         }
@@ -832,6 +850,71 @@ public class PirateController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public IEnumerator PlayAnswers()
+    {
+        answers = new List<int>();
+        int answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        AudioSource localAudio = gameManager.GetComponent<AudioSource>();
+        if (answers[0] == 0)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (answers[0] == 1)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        if (answers[1] == 0)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (answers[1] == 1)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        if (answers[2] == 0)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (answers[2] == 1)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        if (answers[3] == 0)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (answers[3] == 1)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        if (answers[4] == 0)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (answers[4] == 1)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
     }
 
 }

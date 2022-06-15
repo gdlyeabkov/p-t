@@ -33,6 +33,9 @@ public class GameManager : PunBehaviour
     public Joystick movementJoystick;
     public Joystick rotationJoystick;
     public AdController adController;
+    public AudioClip aSound;
+    public AudioClip bSound;
+    public AudioClip cSound;
 
     void Start()
     {
