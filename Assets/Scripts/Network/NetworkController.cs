@@ -152,7 +152,7 @@ public class NetworkController : PunBehaviour
 		else if (PhotonNetwork.GetRoomList().Length <= 0)
 		{
 			GameObject roomInst = Instantiate(emptyPrefab, new Vector2(0f, 0f), Quaternion.identity);
-			roomInst.GetComponent<Text>().text = "Список комнат пуст...";
+			roomInst.GetComponent<Text>().text = "Room list is empty...";
 			roomInst.transform.parent = rooms.transform;
 			roomInst.GetComponent<RectTransform>().sizeDelta = new Vector2(rooms.GetComponent<RectTransform>().sizeDelta.x / 2, roomInst.GetComponent<RectTransform>().sizeDelta.y);
 			roomInst.transform.localScale = new Vector2(1f, 1f);
