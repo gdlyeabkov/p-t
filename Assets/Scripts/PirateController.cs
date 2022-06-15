@@ -443,7 +443,8 @@ public class PirateController : MonoBehaviour
                         Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
                         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
                     }
-                    mainCamera.transform.Translate(0, 0.2f, -0.5f, transform);
+                    // mainCamera.transform.Translate(0, 0.2f, -0.5f, transform);
+                    mainCamera.transform.Translate(0, 0.08f, -0.15f, transform);
                 }
             }
         }
@@ -480,6 +481,13 @@ public class PirateController : MonoBehaviour
                             Vector3 updatedPosition = currentPosition + localOffset;
                             rb.MovePosition(updatedPosition);
                             GetComponent<Animator>().Play("Walk");
+
+                            object[] networkData = new object[] { localIndex, "Walk" };
+                            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                            {
+                                Receivers = ReceiverGroup.Others
+                            });
+
                         }
                     }
                     else
@@ -624,6 +632,14 @@ public class PirateController : MonoBehaviour
                 if (isLocalPirate)
                 {
                     gameObject.GetComponent<Animator>().Play(name);
+
+                    GameObject handController = leftHandController.gameObject;
+                    Rig rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+                    handController = rightHandController.gameObject;
+                    rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+
                 }
             }
             catch (System.InvalidCastException)
@@ -715,7 +731,6 @@ public class PirateController : MonoBehaviour
                 bool isLocalPirate = index == localIndex;
                 if (isLocalPirate)
                 {
-                    // Vector3 foundedShovelPosition = foundedShovel.position;
                     Vector3 foundedShovelPosition = new Vector3(x, y, z);
                     GameObject handController = leftHandController.gameObject;
                     Rig rig = handController.GetComponent<Rig>();
