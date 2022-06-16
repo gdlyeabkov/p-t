@@ -660,36 +660,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &490801077
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 490801078}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &490801078
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 490801077}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17508, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &507415718
 GameObject:
   m_ObjectHideFlags: 0
@@ -1714,7 +1684,7 @@ MonoBehaviour:
   digProgress: 0
   winSound: {fileID: 8300000, guid: d88ec68c33711984581c2e2ad6b110a8, type: 3}
   looseSound: {fileID: 8300000, guid: d0065e4997a642e43be1ae7c63e0c894, type: 3}
-  treasure: {fileID: 7410400136868389580, guid: 1d8889e352dcca7428392f173b68038c,
+  treasure: {fileID: 1498852808064629080, guid: f9cfa5607707ba34390a200390a9af4f,
     type: 3}
   isWin: 0
   paint: {fileID: 3704180502566872521, guid: d4d14a30e3b40934e9f91ca3aac8c016, type: 3}
@@ -1752,6 +1722,17 @@ MonoBehaviour:
   cSound: {fileID: 8300000, guid: 89b05547465d9eb4cbb813ed018f9367, type: 3}
   wrongSound: {fileID: 8300000, guid: 77c6f38360982a742ba534e13cdf25e4, type: 3}
   successSound: {fileID: 8300000, guid: a76252273f64d69479df44adf5d1679a, type: 3}
+  pirateCrossPrefab: {fileID: 2039749418088098029, guid: e80d4a31d74c7654b80dbb36efcce75f,
+    type: 3}
+  piratePrefab: {fileID: 6710829450201462533, guid: 6d28ead4e44fe1a488de5507ec46d1c4,
+    type: 3}
+  shovelPrefab: {fileID: 1483929131926144814, guid: 06e9e7d3ca8a248438727e0e773fc973,
+    type: 3}
+  isStandardMode: 1
+  paintPrefab: {fileID: 8154566900513641231, guid: b7392318ac90d334ebdb0529c47531a4,
+    type: 3}
+  pirateCrossTrapPrefab: {fileID: 497623683837786132, guid: ba6696fbcd0851d499a56688213cdab5,
+    type: 3}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
