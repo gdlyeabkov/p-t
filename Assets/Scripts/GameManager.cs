@@ -36,6 +36,8 @@ public class GameManager : PunBehaviour
     public AudioClip aSound;
     public AudioClip bSound;
     public AudioClip cSound;
+    public AudioClip wrongSound;
+    public AudioClip successSound;
 
     void Start()
     {

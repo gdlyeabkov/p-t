@@ -993,7 +993,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 747580765}
   m_OnClick:
     m_PersistentCalls:
@@ -1750,6 +1750,8 @@ MonoBehaviour:
   aSound: {fileID: 8300000, guid: f21d622403f1501408f5dc955ffc8dd7, type: 3}
   bSound: {fileID: 8300000, guid: 6c66fc85a82fcf846b9668d9016332c6, type: 3}
   cSound: {fileID: 8300000, guid: 89b05547465d9eb4cbb813ed018f9367, type: 3}
+  wrongSound: {fileID: 8300000, guid: 77c6f38360982a742ba534e13cdf25e4, type: 3}
+  successSound: {fileID: 8300000, guid: a76252273f64d69479df44adf5d1679a, type: 3}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
@@ -2315,7 +2317,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: A
+  m_Text: 'Mini
+
+    Game'
 --- !u!222 &1586585731
 CanvasRenderer:
   m_ObjectHideFlags: 0

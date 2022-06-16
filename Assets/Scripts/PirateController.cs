@@ -570,10 +570,6 @@ public class PirateController : MonoBehaviour
                                 isMiniGame = true;
                                 GameObject miniGame = gameManager.miniGame;
                                 miniGame.SetActive(true);
-                                char generatedChar = GameManager.GetRandomCharacter();
-                                rawMiniGameKey = generatedChar.ToString();
-                                Text miniGameLabel = gameManager.miniGameLabel;
-                                miniGameLabel.text = rawMiniGameKey;
                                 AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                                 bool isAlreadyDig = animatorStateInfo.IsName("Dig");
                                 bool isDoDig = !isAlreadyDig;
@@ -622,10 +618,6 @@ public class PirateController : MonoBehaviour
                             isMiniGame = true;
                             GameObject miniGame = gameManager.miniGame;
                             miniGame.SetActive(true);
-                            char generatedChar = GameManager.GetRandomCharacter();
-                            rawMiniGameKey = generatedChar.ToString();
-                            Text miniGameLabel = gameManager.miniGameLabel;
-                            miniGameLabel.text = rawMiniGameKey;
                             AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                             bool isAlreadyPull = animatorStateInfo.IsName("Pull");
                             bool isDoPull = !isAlreadyPull;
@@ -717,10 +709,19 @@ public class PirateController : MonoBehaviour
                     {
                         int activeAnswer = answers[miniGameCursor];
                         bool isRight = activeAnswer == 0;
+                        AudioSource audio = gameManager.GetComponent<AudioSource>();
                         if (isRight)
                         {
                             IncreaseMiniGameCursor();
+                            AudioClip successSound = gameManager.successSound;
+                            audio.clip = successSound;
                         }
+                        else
+                        {
+                            AudioClip wrongSound = gameManager.wrongSound;
+                            audio.clip = wrongSound;
+                        }
+                        audio.Play();
                     }
                 }
             }
@@ -788,10 +789,19 @@ public class PirateController : MonoBehaviour
                     {
                         int activeAnswer = answers[miniGameCursor];
                         bool isRight = activeAnswer == 1;
+                        AudioSource audio = gameManager.GetComponent<AudioSource>();
                         if (isRight)
                         {
                             IncreaseMiniGameCursor();
+                            AudioClip successSound = gameManager.successSound;
+                            audio.clip = successSound;
                         }
+                        else
+                        {
+                            AudioClip wrongSound = gameManager.wrongSound;
+                            audio.clip = wrongSound;
+                        }
+                        audio.Play();
                     }
                 }
             }
@@ -866,51 +876,66 @@ public class PirateController : MonoBehaviour
         answer = UnityEngine.Random.Range(0, 2);
         answers.Add(answer);
         AudioSource localAudio = gameManager.GetComponent<AudioSource>();
-        if (answers[0] == 0)
+        answer = answers[0];
+        bool isFirstAnswer = answer == 0;
+        bool isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
         {
             localAudio.clip = gameManager.bSound;
         }
-        else if (answers[0] == 1)
+        else if (isSecondAnswer)
         {
             localAudio.clip = gameManager.cSound;
         }
         localAudio.Play();
         yield return new WaitForSeconds(2f);
-        if (answers[1] == 0)
+        answer = answers[1];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
         {
             localAudio.clip = gameManager.bSound;
         }
-        else if (answers[1] == 1)
+        else if (isSecondAnswer)
         {
             localAudio.clip = gameManager.cSound;
         }
         localAudio.Play();
         yield return new WaitForSeconds(2f);
-        if (answers[2] == 0)
+        answer = answers[2];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
         {
             localAudio.clip = gameManager.bSound;
         }
-        else if (answers[2] == 1)
+        else if (isSecondAnswer)
         {
             localAudio.clip = gameManager.cSound;
         }
         localAudio.Play();
         yield return new WaitForSeconds(2f);
-        if (answers[3] == 0)
+        answer = answers[2];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
         {
             localAudio.clip = gameManager.bSound;
         }
-        else if (answers[3] == 1)
+        else if (isSecondAnswer)
         {
             localAudio.clip = gameManager.cSound;
         }
         localAudio.Play();
         yield return new WaitForSeconds(2f);
-        if (answers[4] == 0)
+        answer = answers[2];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
         {
             localAudio.clip = gameManager.bSound;
         }
-        else if (answers[4] == 1)
+        else if (isSecondAnswer)
         {
             localAudio.clip = gameManager.cSound;
         }
