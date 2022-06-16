@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 using Photon;
 
 public class GameManager : PunBehaviour
@@ -44,6 +45,9 @@ public class GameManager : PunBehaviour
     public bool isStandardMode = true;
     public GameObject paintPrefab;
     public GameObject pirateCrossTrapPrefab;
+    public GameObject pirateEnemyPrefab;
+    public List<GameObject> bots;
+    public List<GameObject> paints;
 
     void Start()
     {
@@ -106,12 +110,13 @@ public class GameManager : PunBehaviour
                     Transform respawnPoint = respawnPoints[i];
                     randomPosition = respawnPoint.position;
                     Quaternion baseRotation = Quaternion.identity;
-                    GameObject pirate = PhotonNetwork.Instantiate("color_pirate_all_anims_4 Variant", randomPosition, baseRotation, 0);
+                    GameObject pirate = PhotonNetwork.Instantiate("pirate", randomPosition, baseRotation, 0);
                 }
             }
         }
         else
         {
+            bots = new List<GameObject>();
             globalNetworkIndex = 0;
             Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
             Quaternion baseRotation = Quaternion.identity;
@@ -149,6 +154,51 @@ public class GameManager : PunBehaviour
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
             GameObject pirate = Instantiate(piratePrefab, randomPosition, baseRotation);
+
+            randomCoordX = Random.Range(-45, 45);
+            crossTransform = cross.transform;
+            crossTransformPosition = crossTransform.position;
+            coordY = 6f;
+            randomCoordZ = Random.Range(-45, 45);
+            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+            respawnPoint = respawnPoints[1];
+            randomPosition = respawnPoint.position;
+            baseRotation = Quaternion.identity;
+            pirate = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            bots.Add(pirate);
+            Animator pirateAnimator = pirate.GetComponent<Animator>();
+            pirateAnimator.Play("Walk");
+
+            randomCoordX = Random.Range(-45, 45);
+            crossTransform = cross.transform;
+            crossTransformPosition = crossTransform.position;
+            coordY = 6f;
+            randomCoordZ = Random.Range(-45, 45);
+            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+            respawnPoint = respawnPoints[2];
+            randomPosition = respawnPoint.position;
+            baseRotation = Quaternion.identity;
+            pirate = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            bots.Add(pirate);
+            pirateAnimator = pirate.GetComponent<Animator>();
+            pirateAnimator.Play("Walk");
+
+            randomCoordX = Random.Range(-45, 45);
+            crossTransform = cross.transform;
+            crossTransformPosition = crossTransform.position;
+            coordY = 6f;
+            randomCoordZ = Random.Range(-45, 45);
+            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+            respawnPoint = respawnPoints[3];
+            randomPosition = respawnPoint.position;
+            baseRotation = Quaternion.identity;
+            pirate = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            bots.Add(pirate);
+            pirateAnimator = pirate.GetComponent<Animator>();
+            pirateAnimator.Play("Walk");
+
+            StartCoroutine(GiveOrder());
+
         }
     }
 
@@ -218,6 +268,9 @@ public class GameManager : PunBehaviour
         float randomRotation = Random.Range(-5f, 5f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         paintGo.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
+
+        paints.Add(paintGo);
+
     }
 
     public void OnEvent(byte eventCode, object content, int senderId)
@@ -315,6 +368,73 @@ public class GameManager : PunBehaviour
     public void IncreaseMiniGameCursor()
     {
         localPirate.IncreaseMiniGameCursor();
+    }
+
+    public IEnumerator GiveOrder()
+    {
+        yield return new WaitForSeconds(3f);
+        foreach (GameObject pirate in bots)
+        {
+            PirateController pirateController = pirate.GetComponent<PirateController>();
+            NavMeshAgent agent = pirate.GetComponent<NavMeshAgent>();
+            float target = Random.Range(0, 3);
+            Vector3 destination = Vector3.zero;
+            bool isCaptureCross = target == 0;
+            bool isCapturePaint = target == 1;
+            bool isAttack = target == 2;
+            if (isCaptureCross)
+            {
+                if (pirateController.isHaveShovel)
+                {
+                    destination = cross.transform.position;
+                    pirateController.agentTarget = cross.transform;
+                }
+                else
+                {
+                    destination = shovel.transform.position;
+                    pirateController.agentTarget = shovel.transform;
+                }
+            }
+            else if (isCapturePaint)
+            {
+                int countPaints = paints.Count;
+                bool isHavePaints = countPaints >= 1;
+                if (isHavePaints)
+                {
+                    GameObject somePaint = paints[0];
+                    destination = somePaint.transform.position;
+                    pirateController.agentTarget = somePaint.transform;
+                }
+            }
+            else if (isAttack)
+            {
+                destination = localPirate.transform.position;
+                pirateController.agentTarget = localPirate.transform;
+            }
+            agent.Warp(destination);
+            agent.SetDestination(destination);
+            pirateController.destination = destination;
+        }
+    }
+
+    public void Update()
+    {
+        foreach (GameObject pirate in bots)
+        {
+            NavMeshAgent agent = pirate.GetComponent<NavMeshAgent>();
+            // agent.updatePosition = true;
+            PirateController pirateController = pirate.GetComponent<PirateController>();
+            Vector3 destination = pirateController.destination;
+            // pirate.transform.LookAt(destination);
+            // pirate.transform.LookAt(destination);
+            // pirate.transform.LookAt(agent.nextPosition);
+            // Vector3 relativePos = destination - pirate.transform.position; 
+            // Vector3 relativePos = agent.nextPosition - pirate.transform.position;
+            // Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+            // pirate.transform.rotation = rotation;
+            // pirate.GetComponent<Rigidbody>().rotation = rotation;
+            // agent.nextPosition = destination;
+        }
     }
 
 }

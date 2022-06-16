@@ -1,7 +1,5 @@
 ScriptsOnlyBuild:
   usedScripts:
-    Assembly-CSharp-Editor.dll:
-    - PunSceneSettings
     Assembly-CSharp.dll:
     - AdController
     - AudioRpc
@@ -410,6 +408,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 65
       Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 82
@@ -417,6 +417,8 @@ ScriptsOnlyBuild:
     - Class: 83
       Script: {instanceID: 0}
     - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
       Script: {instanceID: 0}
     - Class: 95
       Script: {instanceID: 0}
@@ -445,24 +447,48 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12002}
     - Class: 114
+      Script: {instanceID: 12116}
+    - Class: 114
+      Script: {instanceID: 12220}
+    - Class: 114
       Script: {instanceID: 13250}
     - Class: 114
       Script: {instanceID: 13258}
     - Class: 114
       Script: {instanceID: 13372}
     - Class: 114
+      Script: {instanceID: 13648}
+    - Class: 114
+      Script: {instanceID: 13954}
+    - Class: 114
       Script: {instanceID: 14148}
     - Class: 114
+      Script: {instanceID: 14244}
+    - Class: 114
+      Script: {instanceID: 14328}
+    - Class: 114
       Script: {instanceID: 14416}
+    - Class: 114
+      Script: {instanceID: 14484}
+    - Class: 114
+      Script: {instanceID: 15046}
     - Class: 114
       Script: {instanceID: 15230}
     - Class: 114
       Script: {instanceID: 15376}
     - Class: 115
       Script: {instanceID: 0}
+    - Class: 119
+      Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
     - Class: 135
+      Script: {instanceID: 0}
+    - Class: 136
+      Script: {instanceID: 0}
+    - Class: 137
+      Script: {instanceID: 0}
+    - Class: 143
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -1469,7 +1495,7 @@ ScriptsOnlyBuild:
     className: InstantiateCube
   - hash:
       serializedVersion: 2
-      Hash: 4dcc674912467c88a78478c1f0ee63aa
+      Hash: aaad2a50e008523a1fe79a5564e696af
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1757,7 +1783,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerFoldout
   - hash:
       serializedVersion: 2
-      Hash: ca3e99950515c58140477f890ca7c6df
+      Hash: 5633931330b6ee0eb9e616a0ad310eee
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PirateController

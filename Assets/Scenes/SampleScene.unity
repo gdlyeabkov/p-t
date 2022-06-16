@@ -120,7 +120,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: a9a5198d42e3b2e4cad48854dc8eb1e5, type: 2}
 --- !u!1 &213069130
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +140,7 @@ GameObject:
   m_TagString: Island
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!135 &213069131
 SphereCollider:
@@ -1712,6 +1712,8 @@ MonoBehaviour:
   playerMaterials:
   - {fileID: 2100000, guid: b3eeaf2c3ffa3be40afb0363098a65be, type: 2}
   - {fileID: 2100000, guid: d23fb4781f538124380ce5c3480ab28e, type: 2}
+  - {fileID: 2100000, guid: dd00b256ce0446442bddb4db7ab3312d, type: 2}
+  - {fileID: 2100000, guid: 598e2298fdb05a746af583bf7263e535, type: 2}
   dieSound: {fileID: 8300000, guid: e5151e37115536944b64288bd6144778, type: 3}
   diggSound: {fileID: 8300000, guid: 07eff898319e32a4e9c23f8a717bd8b3, type: 3}
   movementJoystick: {fileID: 472236179}
@@ -1733,6 +1735,9 @@ MonoBehaviour:
     type: 3}
   pirateCrossTrapPrefab: {fileID: 497623683837786132, guid: ba6696fbcd0851d499a56688213cdab5,
     type: 3}
+  pirateEnemyPrefab: {fileID: 3028427142337624279, guid: 30f560469b6575b4596822fd7b23e91f,
+    type: 3}
+  bots: []
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
