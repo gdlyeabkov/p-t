@@ -223,9 +223,9 @@ public class PirateController : MonoBehaviour
                 bool isStop = isBot && isMissionComplete;
                 if (isStop)
                 {
-                    agent.isStopped = true;
-                    GetComponent<Animator>().Play("Idle");
-                    // DoAttack();
+                    // agent.isStopped = true;
+                    // GetComponent<Animator>().Play("Idle");
+                    DoAttack();
                 }
             }
         }
@@ -270,9 +270,9 @@ public class PirateController : MonoBehaviour
             bool isStop = isBot && isMissionComplete;
             if (isStop)
             {
-                agent.isStopped = true;
+                // agent.isStopped = true;
                 GetComponent<Animator>().Play("Idle");
-                // DoPaint();
+                DoPaint();
             }
 
         }
@@ -288,9 +288,9 @@ public class PirateController : MonoBehaviour
             bool isStop = isBot && isMissionComplete;
             if (isStop)
             {
-                agent.isStopped = true;
-                GetComponent<Animator>().Play("Idle");
-                // DoAction();
+                // agent.isStopped = true;
+                // GetComponent<Animator>().Play("Idle");
+                DoAction();
             }
 
         }

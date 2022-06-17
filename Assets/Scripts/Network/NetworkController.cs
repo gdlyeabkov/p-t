@@ -157,6 +157,9 @@ public class NetworkController : PunBehaviour
 			roomInst.GetComponent<RectTransform>().sizeDelta = new Vector2(rooms.GetComponent<RectTransform>().sizeDelta.x / 2, roomInst.GetComponent<RectTransform>().sizeDelta.y);
 			roomInst.transform.localScale = new Vector2(1f, 1f);
 			roomInst.transform.localPosition = new Vector3(0f, 0f, 0f);
+		
+			roomInst.GetComponent<Button>().interactable = false;
+
 		}
 	}
 

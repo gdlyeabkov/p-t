@@ -154,7 +154,6 @@ public class GameManager : PunBehaviour
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
             GameObject pirate = Instantiate(piratePrefab, randomPosition, baseRotation);
-
             randomCoordX = Random.Range(-45, 45);
             crossTransform = cross.transform;
             crossTransformPosition = crossTransform.position;
@@ -165,10 +164,11 @@ public class GameManager : PunBehaviour
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
             pirate = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            NavMeshAgent agent = pirate.GetComponent<NavMeshAgent>();
+            agent.speed = 0.1f;
             bots.Add(pirate);
             Animator pirateAnimator = pirate.GetComponent<Animator>();
             pirateAnimator.Play("Walk");
-
             randomCoordX = Random.Range(-45, 45);
             crossTransform = cross.transform;
             crossTransformPosition = crossTransform.position;
@@ -182,7 +182,6 @@ public class GameManager : PunBehaviour
             bots.Add(pirate);
             pirateAnimator = pirate.GetComponent<Animator>();
             pirateAnimator.Play("Walk");
-
             randomCoordX = Random.Range(-45, 45);
             crossTransform = cross.transform;
             crossTransformPosition = crossTransform.position;
@@ -412,7 +411,7 @@ public class GameManager : PunBehaviour
                 pirateController.agentTarget = localPirate.transform;
             }
             agent.Warp(destination);
-            agent.SetDestination(destination);
+            // agent.SetDestination(destination);
             pirateController.destination = destination;
         }
     }
@@ -434,6 +433,21 @@ public class GameManager : PunBehaviour
             // pirate.transform.rotation = rotation;
             // pirate.GetComponent<Rigidbody>().rotation = rotation;
             // agent.nextPosition = destination;
+
+            // agent.speed = 0.1f;
+            // agent.velocity = agent.velocity.normalized * 2f / Time.deltaTime;
+            // Rigidbody rb = pirate.GetComponent<Rigidbody>();
+            // rb.velocity = new Vector3(1f, 1f, 1f);
+            // rb.angularVelocity = new Vector3(0f, 0f, 0f);
+            if (pirateController.agentTarget != null)
+            {
+                NavMeshPath path = new NavMeshPath();
+                agent.CalculatePath(pirateController.agentTarget.position, path);
+                agent.ResetPath();
+                agent.SetPath(path);
+                // agent.SetDestination(pirateController.agentTarget.position);
+            }
+
         }
     }
 

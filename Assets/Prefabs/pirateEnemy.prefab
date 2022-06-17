@@ -89,6 +89,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: pirateEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5246009057393821532, guid: 8fedabaf0ea7554479f4b9afb3d47144,
+        type: 3}
+      propertyPath: m_Mass
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5246009057393821533, guid: 8fedabaf0ea7554479f4b9afb3d47144,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 1553c4c361ddc0e458516c192a293067,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fedabaf0ea7554479f4b9afb3d47144, type: 3}
 --- !u!1 &7573195430571928419 stripped
