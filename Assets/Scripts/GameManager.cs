@@ -46,14 +46,10 @@ public class GameManager : PunBehaviour
         {
             Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
             Quaternion baseRotation = Quaternion.identity;
-            
-            // cross = PhotonNetwork.Instantiate("cross", crossBasePosition, baseRotation, 0);
             cross = PhotonNetwork.Instantiate("pirateCross", crossBasePosition, baseRotation, 0);
-            
             float randomCoordX = 0f;
             Transform crossTransform = cross.transform;
             Vector3 crossTransformPosition = crossTransform.position;
-            // float coordY = 4.107f;
             float coordY = -0.9f;
             float randomCoordZ = 0f;
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
@@ -91,13 +87,11 @@ public class GameManager : PunBehaviour
                 float coordY = 6f;
 
                 float randomCoordZ = Random.Range(-45, 45);
-
                 Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 Transform respawnPoint = respawnPoints[i];
                 randomPosition = respawnPoint.position;
-
                 Quaternion baseRotation = Quaternion.identity;
-                GameObject pirate = PhotonNetwork.Instantiate("color_pirate_all_anims_4 Variant", randomPosition, baseRotation, 0);
+                GameObject pirate = PhotonNetwork.Instantiate("pirate", randomPosition, baseRotation, 0);
             }
         }
 

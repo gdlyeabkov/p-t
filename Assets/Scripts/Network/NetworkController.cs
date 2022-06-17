@@ -326,5 +326,11 @@ public class NetworkController : PunBehaviour
 	{
 		PhotonNetwork.JoinLobby();
 	}
-	
+
+	public void DoTrain()
+	{
+		PlayerPrefs.SetString("Mode", "Train");
+		PhotonNetwork.LoadLevel("SampleScene");
+	}
+
 }
