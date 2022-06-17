@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.AI;
 
 public class PirateController : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class PirateController : MonoBehaviour
     public Transform rightHandController;
     public Transform foundedShovel;
     public Transform cameraTarget;
+    public List<int> answers;
+    public bool isStandardMode = true;
+    public Vector3 destination = Vector3.zero;
+    public Transform agentTarget;
 
     void Start()
     {
@@ -42,13 +47,18 @@ public class PirateController : MonoBehaviour
         mainCamera = Camera.main;
         GameObject rawMainCamera = mainCamera.gameObject;
         CameraTracker cameraTracker = rawMainCamera.GetComponent<CameraTracker>();
-        photonView = GetComponent<PhotonView>();
-        currentPlayer = PhotonNetwork.player;
         rb = GetComponent<Rigidbody>();
-        ExitGames.Client.Photon.Hashtable customProperties = currentPlayer.CustomProperties;
-        object rawCustomPropertiesIndex = customProperties["index"];
-        networkIndex = ((int)(rawCustomPropertiesIndex));
-        PhotonNetwork.OnEventCall += OnEvent;
+        bool isNotStandardMode = PlayerPrefs.HasKey("Mode");
+        isStandardMode = !isNotStandardMode;
+        if (isStandardMode)
+        {
+            photonView = GetComponent<PhotonView>();
+            currentPlayer = PhotonNetwork.player;
+            ExitGames.Client.Photon.Hashtable customProperties = currentPlayer.CustomProperties;
+            object rawCustomPropertiesIndex = customProperties["index"];
+            networkIndex = ((int)(rawCustomPropertiesIndex));
+            PhotonNetwork.OnEventCall += OnEvent;
+        }
         gameManager = cameraTracker.gameManager;
         gameManager.piratesCursor++;
         int updatedPiratesCursor = gameManager.piratesCursor;
@@ -117,79 +127,6 @@ public class PirateController : MonoBehaviour
                                 Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
                             }
                         }
-                        else
-                        {
-                            var possibleKeys = Enum.GetValues(typeof(KeyCode));
-                            foreach (KeyCode kcode in possibleKeys)
-                            {
-                                bool isKeyDown = Input.GetKey(kcode);
-                                if (isKeyDown)
-                                {
-                                    string rawKeyCode = kcode.ToString();
-                                    bool isRightKeyDown = rawKeyCode == rawMiniGameKey;
-                                    if (isRightKeyDown)
-                                    {
-                                        char generatedChar = GameManager.GetRandomCharacter();
-                                        rawMiniGameKey = generatedChar.ToString();
-                                        Text miniGameLabel = gameManager.miniGameLabel;
-                                        miniGameLabel.text = rawMiniGameKey;
-                                        miniGameCursor++;
-                                        bool isMiniGameFinish = miniGameCursor >= 5;
-                                        if (isMiniGameFinish)
-                                        {
-                                            miniGameCursor = 0;
-                                            isMiniGame = false;
-                                            GameObject miniGame = gameManager.miniGame;
-                                            miniGame.SetActive(false);
-                                            if (isCrossFound)
-                                            {
-                                                gameManager.ShowWin(localIndex, networkIndex);
-                                                GetComponent<Animator>().Play("Victory");
-
-                                                object[] networkData = new object[] { localIndex, "Victory" };
-                                                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
-                                                {
-                                                    Receivers = ReceiverGroup.Others
-                                                });
-
-                                            }
-                                            else
-                                            {
-                                                isStopped = false;
-                                                isShovelFound = false;
-                                                isHaveShovel = true;
-                                                object[] networkData = new object[] { };
-                                                PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
-                                                {
-                                                    Receivers = ReceiverGroup.All
-                                                });
-
-                                                Vector3 origin = Vector3.zero;
-                                                GameObject handController = leftHandController.gameObject;
-                                                Rig rig = handController.GetComponent<Rig>();
-                                                rig.weight = 0.0f;
-                                                Transform ik = leftHandController.GetChild(0);
-                                                Transform target = ik.GetChild(0); ;
-                                                target.localPosition = origin;
-                                                handController = rightHandController.gameObject;
-                                                rig = handController.GetComponent<Rig>();
-                                                rig.weight = 0.0f;
-                                                ik = rightHandController.GetChild(0);
-                                                target = ik.GetChild(0); ;
-                                                target.localPosition = origin;
-
-                                                foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
-                                                {
-                                                    GameObject rawPirate = pirate.gameObject;
-                                                    Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
-                                                }
-
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                     else
                     {
@@ -233,14 +170,11 @@ public class PirateController : MonoBehaviour
                                     if (isDoDig)
                                     {
                                         GetComponent<Animator>().Play("Dig");
-                                        
                                         object[] networkData = new object[] { localIndex, "Dig" };
                                         PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
                                         {
                                             Receivers = ReceiverGroup.Others
                                         });
-
-                                        // здесь
                                         AudioSource audio = GetComponent<AudioSource>();
                                         AudioClip diggSound = gameManager.diggSound;
                                         audio.clip = diggSound;
@@ -266,9 +200,8 @@ public class PirateController : MonoBehaviour
                                         rig.weight = 0.0f;
                                         ik = rightHandController.GetChild(0);
                                         target = ik.GetChild(0);
-
                                     }
-
+                                    StartCoroutine(PlayAnswers());
                                 }
                             }
                             else if (isShovelFound)
@@ -317,6 +250,7 @@ public class PirateController : MonoBehaviour
                                         Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
                                     }
                                 }
+                                StartCoroutine(PlayAnswers());
                             }
                             isStopped = true;
                         }
@@ -463,8 +397,11 @@ public class PirateController : MonoBehaviour
                         bool isDoWalk = !isPaint;
                         if (isDoWalk)
                         {
-                            int networkId = currentPlayer.ID;
-                            photonView.TransferOwnership(networkId);
+                            if (isStandardMode)
+                            {
+                                int networkId = currentPlayer.ID;
+                                photonView.TransferOwnership(networkId);
+                            }
                             Vector3 m_Input = new Vector3(horizontalDelta, 0, verticalDelta);
                             Vector3 currentPosition = rb.position;
                             Vector3 forwardDirection = Vector3.forward;
@@ -474,6 +411,14 @@ public class PirateController : MonoBehaviour
                             Vector3 updatedPosition = currentPosition + localOffset;
                             rb.MovePosition(updatedPosition);
                             GetComponent<Animator>().Play("Walk");
+                            if (isStandardMode)
+                            {
+                                object[] networkData = new object[] { localIndex, "Walk" };
+                                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                {
+                                    Receivers = ReceiverGroup.Others
+                                });
+                            }
                         }
                     }
                     else
@@ -518,11 +463,111 @@ public class PirateController : MonoBehaviour
             isHavePaint = true;
             PaintController paintController = detectedObject.GetComponent<PaintController>();
             int paintIndex = paintController.localIndex;
-            object[] networkData = new object[] { paintIndex };
-            PhotonNetwork.RaiseEvent(197, networkData, true, new RaiseEventOptions
+            if (isStandardMode)
             {
-                Receivers = ReceiverGroup.All
-            });
+                object[] networkData = new object[] { paintIndex };
+                PhotonNetwork.RaiseEvent(197, networkData, true, new RaiseEventOptions
+                {
+                    Receivers = ReceiverGroup.All
+                });
+            }
+            else
+            {
+                Destroy(detectedObject);
+            }
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            bool isBot = agent != null;
+            Transform detectedObjectTransform = detectedObject.transform;
+            bool isMissionComplete = agentTarget == detectedObjectTransform;
+            bool isStop = isBot && isMissionComplete;
+            if (isStop)
+            {
+                agent.isStopped = true;
+                bool isLocalPirate = localIndex == networkIndex;
+                if (isLocalPirate)
+                {
+                    bool isGameManagerExists = gameManager != null;
+                    if (isGameManagerExists)
+                    {
+                        bool isWin = gameManager.isWin;
+                        bool isNotWin = !isWin;
+                        if (isNotWin)
+                        {
+                            bool isNotMiniGame = !isMiniGame;
+                            if (isNotMiniGame)
+                            {
+                                if (isHavePaint)
+                                {
+                                    isHavePaint = false;
+                                    if (isStandardMode)
+                                    {
+                                        PhotonNetwork.SetMasterClient(currentPlayer);
+                                    }
+                                    Quaternion baseRotation = Quaternion.identity;
+                                    Vector3 currentPiratePosition = transform.position;
+                                    float coordX = currentPiratePosition.x;
+                                    float coordY = currentPiratePosition.y + 0.1f;
+                                    float coordZ = currentPiratePosition.z;
+                                    Vector3 crossTrapPosition = new Vector3(coordX, coordY, coordZ);
+
+                                    GameObject crossTrapInst = null;
+                                    if (isStandardMode)
+                                    {
+                                        crossTrapInst = PhotonNetwork.Instantiate("pirate_cross_trap", crossTrapPosition, baseRotation, 0);
+                                    }
+                                    else
+                                    {
+                                        GameObject pirateCrossTrapPrefab = gameManager.pirateCrossTrapPrefab;
+                                        crossTrapInst = Instantiate(pirateCrossTrapPrefab, crossTrapPosition, baseRotation);
+                                    }
+
+                                    CrossController crossController = crossTrapInst.GetComponent<CrossController>();
+                                    crossController.isOwner = true;
+                                    Ray ray = new Ray(crossTrapInst.transform.position, Vector3.up);
+                                    RaycastHit hit = new RaycastHit();
+                                    bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity, gameManager.islandLayer);
+                                    if (isDetectIsland)
+                                    {
+                                        Vector3 hitPoint = hit.point;
+                                        crossTrapInst.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
+                                    }
+                                    GetComponent<Animator>().Play("Paint");
+                                    Transform islandSphereTransform = gameManager.islandSphereTransform;
+                                    Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+
+                                    if (isStandardMode)
+                                    {
+                                        object[] networkData = new object[] { localIndex, "Paint" };
+                                        PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                        {
+                                            Receivers = ReceiverGroup.Others
+                                        });
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                int activeAnswer = answers[miniGameCursor];
+                                bool isRight = activeAnswer == 0;
+                                AudioSource audio = gameManager.GetComponent<AudioSource>();
+                                if (isRight)
+                                {
+                                    IncreaseMiniGameCursor();
+                                    AudioClip successSound = gameManager.successSound;
+                                    audio.clip = successSound;
+                                }
+                                else
+                                {
+                                    AudioClip wrongSound = gameManager.wrongSound;
+                                    audio.clip = wrongSound;
+                                }
+                                audio.Play();
+                            }
+                        }
+                    }
+                }
+            }
         }
         else if (isShovel)
         {
@@ -792,21 +837,158 @@ public class PirateController : MonoBehaviour
 
     public IEnumerator InitOffset()
     {
-
         mainCamera.transform.position = cameraTarget.position;
-
         yield return new WaitForSeconds(2f);
-
-        // mainCamera.transform.position = cameraTarget.position;
-        
         Transform mainCameraTransform = mainCamera.transform;
         Vector3 mainCameraTransformPosition = mainCameraTransform.position;
-        
         Vector3 piratePosition = transform.position;
-        // Vector3 piratePosition = cameraTarget.position;
-
         offset = mainCameraTransformPosition - piratePosition;
-
     }
+
+    public void IncreaseMiniGameCursor()
+    {
+        miniGameCursor++;
+        bool isMiniGameFinish = miniGameCursor >= 5;
+        if (isMiniGameFinish)
+        {
+            miniGameCursor = 0;
+            isMiniGame = false;
+            GameObject miniGame = gameManager.miniGame;
+            miniGame.SetActive(false);
+            if (isCrossFound)
+            {
+                gameManager.ShowWin(localIndex, networkIndex);
+                GetComponent<Animator>().Play("Victory");
+                object[] networkData = new object[] { localIndex, "Victory" };
+                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                {
+                    Receivers = ReceiverGroup.Others
+                });
+                AudioSource audio = GetComponent<AudioSource>();
+                audio.Stop();
+            }
+            else
+            {
+                isStopped = false;
+                isShovelFound = false;
+                isHaveShovel = true;
+                if (isStandardMode)
+                {
+                    object[] networkData = new object[] { };
+                    PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
+                    {
+                        Receivers = ReceiverGroup.All
+                    });
+                }
+                else
+                {
+                    GameObject rawFoundedShovel = foundedShovel.gameObject;
+                    Destroy(rawFoundedShovel);
+                }
+                Vector3 origin = Vector3.zero;
+                GameObject handController = leftHandController.gameObject;
+                Rig rig = handController.GetComponent<Rig>();
+                rig.weight = 0.0f;
+                Transform ik = leftHandController.GetChild(0);
+                Transform target = ik.GetChild(0); ;
+                target.localPosition = origin;
+                handController = rightHandController.gameObject;
+                rig = handController.GetComponent<Rig>();
+                rig.weight = 0.0f;
+                ik = rightHandController.GetChild(0);
+                target = ik.GetChild(0); ;
+                target.localPosition = origin;
+                PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+                CapsuleCollider pirateCollider = GetComponent<CapsuleCollider>();
+                foreach (PirateController pirate in pirates)
+                {
+                    GameObject rawPirate = pirate.gameObject;
+                    CapsuleCollider somePirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                    Physics.IgnoreCollision(pirateCollider, somePirateCollider, false);
+                }
+            }
+        }
+    }
+
+    public IEnumerator PlayAnswers()
+    {
+        answers = new List<int>();
+        int answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        answer = UnityEngine.Random.Range(0, 2);
+        answers.Add(answer);
+        AudioSource localAudio = gameManager.GetComponent<AudioSource>();
+        answer = answers[0];
+        bool isFirstAnswer = answer == 0;
+        bool isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (isSecondAnswer)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        answer = answers[1];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (isSecondAnswer)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        answer = answers[2];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (isSecondAnswer)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        answer = answers[3];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (isSecondAnswer)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+        yield return new WaitForSeconds(2f);
+        answer = answers[4];
+        isFirstAnswer = answer == 0;
+        isSecondAnswer = answer == 1;
+        if (isFirstAnswer)
+        {
+            localAudio.clip = gameManager.bSound;
+        }
+        else if (isSecondAnswer)
+        {
+            localAudio.clip = gameManager.cSound;
+        }
+        localAudio.Play();
+    }
+
 
 }
