@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2268904166233331327
+--- !u!1001 &4654466085975531727
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -35,7 +35,7 @@ PrefabInstance:
     - target: {fileID: 2854290491172554433, guid: 62fd157a1f37c2347b8fee28c4bcabb5,
         type: 3}
       propertyPath: m_Name
-      value: shovel Variant
+      value: shovel
       objectReference: {fileID: 0}
     - target: {fileID: 3231238967708736635, guid: 62fd157a1f37c2347b8fee28c4bcabb5,
         type: 3}

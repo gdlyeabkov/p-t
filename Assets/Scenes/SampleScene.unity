@@ -1163,16 +1163,16 @@ MonoBehaviour:
   cSound: {fileID: 8300000, guid: 581b78485942ab849bf37954a1c7420f, type: 3}
   wrongSound: {fileID: 8300000, guid: e83fec9697913f74c86ac2bfa3bb844d, type: 3}
   successSound: {fileID: 8300000, guid: 9d944aafae9ab8442b9cc19bf76fd089, type: 3}
-  pirateCrossPrefab: {fileID: 5013361671680077573, guid: a798889b238820d498f611eb0f86c59f,
+  pirateCrossPrefab: {fileID: 1708789751198340057, guid: f1ce90bd9b10b09499fd361f31d5b1be,
     type: 3}
   piratePrefab: {fileID: 5112914372790426865, guid: e4ae0368d9f5d214eac50634f9a83df8,
     type: 3}
-  shovelPrefab: {fileID: 4098484865905742014, guid: 551d1352b1b425e4caddf625a98dff87,
+  shovelPrefab: {fileID: 7425175928108557838, guid: 69e4c7c2a47417b4188187d4f29ec196,
     type: 3}
   isStandardMode: 1
-  paintPrefab: {fileID: 8692833423391097090, guid: bdbcc3d7ec3c03c4bb079008e2648a3c,
+  paintPrefab: {fileID: 5341422630039106584, guid: ec9f9c3c82bb2284c9c100cccff29945,
     type: 3}
-  pirateCrossTrapPrefab: {fileID: 3541675853579798956, guid: f857fcf61b169344d80c5d29f970aba2,
+  pirateCrossTrapPrefab: {fileID: 1871179720668455402, guid: c51112379e865db4ab7c655e2fa55268,
     type: 3}
   pirateEnemyPrefab: {fileID: 8165855308786781772, guid: cabdc298be3499c4abf34e7da689ccba,
     type: 3}
