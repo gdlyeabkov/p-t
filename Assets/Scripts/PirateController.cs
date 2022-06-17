@@ -90,7 +90,7 @@ public class PirateController : MonoBehaviour
     void Update()
     {
         bool isLocalPirate = localIndex == networkIndex;
-        if (isLocalPirate)
+        if ((isLocalPirate && isStandardMode) || (isLocalPirate && !isStandardMode && localIndex == 0))
         {
             bool isGameManagerExists = gameManager != null;
             if (isGameManagerExists)
@@ -224,8 +224,8 @@ public class PirateController : MonoBehaviour
                 if (isStop)
                 {
                     agent.isStopped = true;
-                    // GetComponent<Animator>().Play("Idle");
-                    DoAttack();
+                    GetComponent<Animator>().Play("Idle");
+                    // DoAttack();
                 }
             }
         }
@@ -271,8 +271,8 @@ public class PirateController : MonoBehaviour
             if (isStop)
             {
                 agent.isStopped = true;
-                // GetComponent<Animator>().Play("Idle");
-                DoPaint();
+                GetComponent<Animator>().Play("Idle");
+                // DoPaint();
             }
 
         }
@@ -289,8 +289,8 @@ public class PirateController : MonoBehaviour
             if (isStop)
             {
                 agent.isStopped = true;
-                // GetComponent<Animator>().Play("Idle");
-                DoAction();
+                GetComponent<Animator>().Play("Idle");
+                // DoAction();
             }
 
         }

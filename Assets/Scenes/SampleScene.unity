@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1310,7 +1310,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 986ad876979ed8a4e95a5453ed795abd, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 9e560dcdd0b514e49a284bacc75daa7a, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.2
   m_Pitch: 1
@@ -1502,7 +1502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1726,7 +1726,7 @@ MonoBehaviour:
   successSound: {fileID: 8300000, guid: a76252273f64d69479df44adf5d1679a, type: 3}
   pirateCrossPrefab: {fileID: 2039749418088098029, guid: e80d4a31d74c7654b80dbb36efcce75f,
     type: 3}
-  piratePrefab: {fileID: 6710829450201462533, guid: 6d28ead4e44fe1a488de5507ec46d1c4,
+  piratePrefab: {fileID: 888012487024381338, guid: 8fedabaf0ea7554479f4b9afb3d47144,
     type: 3}
   shovelPrefab: {fileID: 1483929131926144814, guid: 06e9e7d3ca8a248438727e0e773fc973,
     type: 3}
@@ -1735,9 +1735,10 @@ MonoBehaviour:
     type: 3}
   pirateCrossTrapPrefab: {fileID: 497623683837786132, guid: ba6696fbcd0851d499a56688213cdab5,
     type: 3}
-  pirateEnemyPrefab: {fileID: 3028427142337624279, guid: 30f560469b6575b4596822fd7b23e91f,
+  pirateEnemyPrefab: {fileID: 7573195430571928419, guid: 4c019e520e278eb4b9cde2b387a8b374,
     type: 3}
   bots: []
+  paints: []
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
@@ -1912,7 +1913,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2150,7 +2151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2431,7 +2432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
