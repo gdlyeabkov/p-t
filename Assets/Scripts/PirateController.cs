@@ -266,7 +266,7 @@ public class PirateController : MonoBehaviour
                                     ik = rightHandController.GetChild(0);
                                     target = ik.GetChild(0); ;
                                     target.position = foundedShovelPosition;
-                                    object[] localNetworkData = new object[] { localIndex, foundedShovelPosition.x, foundedShovelPosition.y, foundedShovelPosition.z};
+                                    object[] localNetworkData = new object[] { localIndex, foundedShovelPosition.x, foundedShovelPosition.y, foundedShovelPosition.z };
                                     PhotonNetwork.RaiseEvent(192, localNetworkData, true, new RaiseEventOptions
                                     {
                                         Receivers = ReceiverGroup.Others
@@ -363,7 +363,7 @@ public class PirateController : MonoBehaviour
                                         {
                                             Receivers = ReceiverGroup.All
                                         });
-                                        
+
                                     }
                                 }
                             }
@@ -396,7 +396,7 @@ public class PirateController : MonoBehaviour
                     Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
                     mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
                     mainCameraTransform.transform.Translate(0, 0.2f, -0.5f, transform);
-                    
+
                 }
             }
         }
@@ -716,7 +716,7 @@ public class PirateController : MonoBehaviour
                     GameObject miniGame = gameManager.miniGame;
                     miniGame.SetActive(false);
                     GetComponent<Animator>().Play("Idle");
-                
+
                     if (isHaveShovel)
                     {
                         bool isHost = PhotonNetwork.isMasterClient;
@@ -831,7 +831,7 @@ public class PirateController : MonoBehaviour
                     rig.weight = 0.0f;
                     ik = rightHandController.GetChild(0);
                     target = ik.GetChild(0); ;
-                    
+
                     foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                     {
                         GameObject rawPirate = pirate.gameObject;

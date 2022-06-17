@@ -40,11 +40,11 @@ public class NetworkController : PunBehaviour
 	public void LoadArena()
 	{
 		if (PhotonNetwork.room.playerCount >= maxCountPlayers)
-        {
+		{
 			PhotonNetwork.LoadLevel("SampleScene");
 		}
 		else
-        {
+		{
 			string message = "Minimum " + maxCountPlayers + " Players required to Load Arena!";
 			string debugAddress = "http://unity3d.com/" + message;
 			Application.OpenURL(debugAddress);
@@ -100,7 +100,7 @@ public class NetworkController : PunBehaviour
 				RoomInfo room = roomList.FirstOrDefault(r => r.Name == roomName);
 				bool isRoomNotExists = room == null;
 				if (isRoomNotExists)
-                {
+				{
 					RoomOptions roomOptions = new RoomOptions();
 					byte maxPlayers = ((byte)(maxCountPlayers));
 					roomOptions.maxPlayers = maxPlayers;
@@ -207,7 +207,7 @@ public class NetworkController : PunBehaviour
 		ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
 		customProperties.Add("index", playerCursor);
 		PhotonNetwork.player.SetCustomProperties(customProperties);
-	
+
 	}
 
 	public override void OnLeftRoom()
@@ -236,7 +236,7 @@ public class NetworkController : PunBehaviour
 	public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
 	{
 		playerRoom.SetActive(true);
-		
+
 		int countPlayersOnline = PhotonNetwork.room.playerCount;
 		string parsedCountPlayersOnline = countPlayersOnline.ToString();
 		string parsedMaxCountPlayers = maxCountPlayers.ToString();
@@ -319,7 +319,7 @@ public class NetworkController : PunBehaviour
 
 	public void OnEvent(byte eventCode, object content, int senderId)
 	{
-		
+
 	}
 
 	public void RefreshRooms()

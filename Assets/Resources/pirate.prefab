@@ -466,11 +466,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92c4680a8397c854d9d66bc20c2db4a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 0
   isCrossFound: 0
   gameManager: {fileID: 0}
   isHavePaint: 0
-  cross: {fileID: 7503675911891325066, guid: 11926db681a669e499c5cffa56cee1a3, type: 3}
+  cross: {fileID: 0}
   isStopped: 0
   foundedCross: {fileID: 0}
   localIndex: 0
@@ -486,6 +486,10 @@ MonoBehaviour:
   rightHandController: {fileID: 7167295604933015092}
   foundedShovel: {fileID: 0}
   cameraTarget: {fileID: 5580242721012380617}
+  answers: 
+  isStandardMode: 1
+  destination: {x: 0, y: 0, z: 0}
+  agentTarget: {fileID: 0}
 --- !u!114 &1161699823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -818,7 +822,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1f47c533fd7274440915a284293c13ea,
         type: 3}
       propertyPath: m_Name
-      value: color_pirate_all_anims_4 Variant
+      value: pirate
       objectReference: {fileID: 0}
     - target: {fileID: 1885002766394999446, guid: 1f47c533fd7274440915a284293c13ea,
         type: 3}

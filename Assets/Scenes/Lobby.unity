@@ -1810,19 +1810,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameVersion: 1
   maxCountPlayers: 2
-  playerRoom: {fileID: 803309282}
-  players: {fileID: 1989530281}
-  playersCount: {fileID: 63141122}
+  playerRoom: {fileID: 0}
+  players: {fileID: 0}
+  playersCount: {fileID: 0}
   playerCursor: 0
-  playerRoomPrefab: {fileID: 626949932101395332, guid: 305938055f11f904692ebe0a84cb9076,
-    type: 3}
-  buttonJoinedArena: {fileID: 1158544391}
+  playerRoomPrefab: {fileID: 0}
+  buttonJoinedArena: {fileID: 0}
   playerName: 
   roomName: 
-  rooms: {fileID: 1409548509}
-  emptyPrefab: {fileID: 731286914708195914, guid: 20babab6d14a7174ca2d0a3ddf2e84c1,
-    type: 3}
-  roomNameField: {fileID: 147909348}
+  rooms: {fileID: 0}
+  emptyPrefab: {fileID: 0}
+  roomNameField: {fileID: 0}
   countPlayers: 0
 --- !u!4 &1961700050
 Transform:
