@@ -127,6 +127,34 @@ public class PirateController : MonoBehaviour
                                 Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>(), false);
                             }
                         }
+                        else
+                        {
+                            int activeAnswer = answers[miniGameCursor];
+                            KeyCode eKey = KeyCode.E;
+                            bool isEKeyDown = Input.GetKeyDown(eKey);
+                            KeyCode qKey = KeyCode.Q;
+                            bool isQKeyDown = Input.GetKeyDown(qKey);
+                            bool isPressed = isQKeyDown || isEKeyDown;
+                            if (isPressed)
+                            {
+                                bool isFirstAnswer = activeAnswer == 0;
+                                bool isSecondAnswer = activeAnswer == 1;
+                                bool isRight = (isFirstAnswer && isQKeyDown) || (isSecondAnswer && isEKeyDown);
+                                AudioSource audio = gameManager.GetComponent<AudioSource>();
+                                if (isRight)
+                                {
+                                    IncreaseMiniGameCursor();
+                                    AudioClip successSound = gameManager.successSound;
+                                    audio.clip = successSound;
+                                }
+                                else
+                                {
+                                    AudioClip wrongSound = gameManager.wrongSound;
+                                    audio.clip = wrongSound;
+                                }
+                                audio.Play();
+                            }
+                        }
                     }
                     else
                     {
@@ -509,7 +537,6 @@ public class PirateController : MonoBehaviour
                                     float coordY = currentPiratePosition.y + 0.1f;
                                     float coordZ = currentPiratePosition.z;
                                     Vector3 crossTrapPosition = new Vector3(coordX, coordY, coordZ);
-
                                     GameObject crossTrapInst = null;
                                     if (isStandardMode)
                                     {
@@ -520,7 +547,6 @@ public class PirateController : MonoBehaviour
                                         GameObject pirateCrossTrapPrefab = gameManager.pirateCrossTrapPrefab;
                                         crossTrapInst = Instantiate(pirateCrossTrapPrefab, crossTrapPosition, baseRotation);
                                     }
-
                                     CrossController crossController = crossTrapInst.GetComponent<CrossController>();
                                     crossController.isOwner = true;
                                     Ray ray = new Ray(crossTrapInst.transform.position, Vector3.up);
@@ -534,7 +560,6 @@ public class PirateController : MonoBehaviour
                                     GetComponent<Animator>().Play("Paint");
                                     Transform islandSphereTransform = gameManager.islandSphereTransform;
                                     Vector3 islandSphereTransformPosition = islandSphereTransform.position;
-
                                     if (isStandardMode)
                                     {
                                         object[] networkData = new object[] { localIndex, "Paint" };
@@ -543,7 +568,6 @@ public class PirateController : MonoBehaviour
                                             Receivers = ReceiverGroup.Others
                                         });
                                     }
-
                                 }
                             }
                             else
