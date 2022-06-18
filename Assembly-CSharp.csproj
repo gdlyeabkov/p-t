@@ -218,6 +218,7 @@
      <Compile Include="Assets\SampleScenes\Scripts\PlaceTargetWithMouse.cs" />
      <Compile Include="Assets\SampleScenes\Scripts\SlowMoButton.cs" />
      <Compile Include="Assets\Scripts\Ads\AdController.cs" />
+     <Compile Include="Assets\Scripts\BotController.cs" />
      <Compile Include="Assets\Scripts\CameraTracker.cs" />
      <Compile Include="Assets\Scripts\CrossController.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
@@ -833,6 +834,12 @@
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="Cinemachine">
+ <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+ </Reference>
+ <Reference Include="com.unity.cinemachine.editor">
+ <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

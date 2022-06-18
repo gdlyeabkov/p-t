@@ -5,6 +5,11 @@
       "ProjectGuid": "f56c6492-158d-1c47-9483-e32c211134c1",
       "DisplayName": "Assembly-CSharp",
       "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Прочие файлы",
+      "ColorIndex": -1
     }
   },
   "NextColorIndex": 1
