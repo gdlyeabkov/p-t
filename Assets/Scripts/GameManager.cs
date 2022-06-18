@@ -110,7 +110,8 @@ public class GameManager : PunBehaviour
                     Transform respawnPoint = respawnPoints[i];
                     randomPosition = respawnPoint.position;
                     Quaternion baseRotation = Quaternion.identity;
-                    GameObject pirate = PhotonNetwork.Instantiate("pirate", randomPosition, baseRotation, 0);
+                    // GameObject pirate = PhotonNetwork.Instantiate("pirate", randomPosition, baseRotation, 0);
+                    GameObject pirate = PhotonNetwork.Instantiate("fixed_pirate", randomPosition, baseRotation, 0);
                 }
             }
         }
@@ -337,7 +338,8 @@ public class GameManager : PunBehaviour
 
         if (isStandardMode)
         {
-            shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
+            // shovel = PhotonNetwork.Instantiate("shovel", shovelPosition, shovelRotation, 0);
+            shovel = PhotonNetwork.Instantiate("fixed_shovel", shovelPosition, shovelRotation, 0);
         }
         else
         {
@@ -421,33 +423,33 @@ public class GameManager : PunBehaviour
         foreach (GameObject pirate in bots)
         {
             NavMeshAgent agent = pirate.GetComponent<NavMeshAgent>();
-            // agent.updatePosition = true;
             PirateController pirateController = pirate.GetComponent<PirateController>();
-            Vector3 destination = pirateController.destination;
-            // pirate.transform.LookAt(destination);
-            // pirate.transform.LookAt(destination);
-            // pirate.transform.LookAt(agent.nextPosition);
-            // Vector3 relativePos = destination - pirate.transform.position; 
-            // Vector3 relativePos = agent.nextPosition - pirate.transform.position;
-            // Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
-            // pirate.transform.rotation = rotation;
-            // pirate.GetComponent<Rigidbody>().rotation = rotation;
-            // agent.nextPosition = destination;
-
-            // agent.speed = 0.1f;
-            // agent.velocity = agent.velocity.normalized * 2f / Time.deltaTime;
-            // Rigidbody rb = pirate.GetComponent<Rigidbody>();
-            // rb.velocity = new Vector3(1f, 1f, 1f);
-            // rb.angularVelocity = new Vector3(0f, 0f, 0f);
-            if (pirateController.agentTarget != null)
+            Transform agentTarget = pirateController.agentTarget;
+            bool isTargetExists = agentTarget != null;
+            if (isTargetExists)
             {
                 NavMeshPath path = new NavMeshPath();
                 agent.CalculatePath(pirateController.agentTarget.position, path);
                 agent.ResetPath();
                 agent.SetPath(path);
-                // agent.SetDestination(pirateController.agentTarget.position);
+                NavMeshPath agentPath = agent.path;
+                Vector3[] agentPathCorners = agentPath.corners;
+                int agentPathCornersLength = agentPathCorners.Length;
+                int lastAgentPathCornerIndex = agentPathCornersLength - 1;
+                Vector3 lastAgentPathCorner = agentPathCorners[lastAgentPathCornerIndex];
+                pirate.transform.LookAt(lastAgentPathCorner, Vector3.up);
+                // pirate.transform.LookAt(agent.velocity, Vector3.up);
+                // pirate.transform.localEulerAngles = agent.velocity;
+                /*
+                Vector3 direction = (lastAgentPathCorner - pirate.transform.position).normalized;
+                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                pirate.transform.rotation = Quaternion.Slerp(pirate.transform.rotation, lookRotation, Time.deltaTime * 5f);
+                */
+                /*Quaternion targetRotation = Quaternion.Euler(0f, agent.velocity.y, 0f);
+                while (pirate.transform.rotation != targetRotation) {
+                    pirate.transform.rotation = Quaternion.RotateTowards(pirate.transform.rotation, targetRotation, 5f * Time.deltaTime);
+                }*/
             }
-
         }
     }
 

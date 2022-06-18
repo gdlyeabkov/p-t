@@ -1,5 +1,11 @@
 ScriptsOnlyBuild:
   usedScripts:
+    Assembly-CSharp-Editor.dll:
+    - PhotonAnimatorViewEditor
+    - PhotonRigidbodyViewEditor
+    - PhotonTransformViewEditor
+    - PhotonViewInspector
+    - PunSceneSettings
     Assembly-CSharp.dll:
     - AdController
     - AudioRpc
@@ -48,6 +54,8 @@ ScriptsOnlyBuild:
     - TreasureController
     - WeaponSwitcher
     - myThirdPersonController
+    Unity.Animation.Rigging.Editor.dll:
+    - UnityEditor.Animations.Rigging.RigBuilderEditor
     Unity.Animation.Rigging.dll:
     - UnityEngine.Animations.Rigging.BoneRenderer
     - UnityEngine.Animations.Rigging.Rig
@@ -465,8 +473,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 14244}
     - Class: 114
-      Script: {instanceID: 14328}
-    - Class: 114
       Script: {instanceID: 14416}
     - Class: 114
       Script: {instanceID: 14484}
@@ -492,6 +498,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
+    - Class: 195
+      Script: {instanceID: 0}
     - Class: 196
       Script: {instanceID: 0}
     - Class: 213
@@ -505,6 +513,8 @@ ScriptsOnlyBuild:
     - Class: 226
       Script: {instanceID: 0}
     - Class: 227
+      Script: {instanceID: 0}
+    - Class: 238
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -1495,7 +1505,7 @@ ScriptsOnlyBuild:
     className: InstantiateCube
   - hash:
       serializedVersion: 2
-      Hash: aaad2a50e008523a1fe79a5564e696af
+      Hash: 01cdcaa67e4937764bd87eef1d8db213
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1783,7 +1793,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerFoldout
   - hash:
       serializedVersion: 2
-      Hash: 5633931330b6ee0eb9e616a0ad310eee
+      Hash: be8ca777272114cca754944a95bf68ea
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PirateController

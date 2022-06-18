@@ -1720,22 +1720,22 @@ MonoBehaviour:
   rotationJoystick: {fileID: 927916606}
   adController: {fileID: 1108205870}
   aSound: {fileID: 8300000, guid: f21d622403f1501408f5dc955ffc8dd7, type: 3}
-  bSound: {fileID: 8300000, guid: 6c66fc85a82fcf846b9668d9016332c6, type: 3}
-  cSound: {fileID: 8300000, guid: 89b05547465d9eb4cbb813ed018f9367, type: 3}
+  bSound: {fileID: 8300000, guid: 3a8cbd6996599a24882ce1b5541368e4, type: 3}
+  cSound: {fileID: 8300000, guid: c3c85cc5881ce9c44917fda4a6e66510, type: 3}
   wrongSound: {fileID: 8300000, guid: 77c6f38360982a742ba534e13cdf25e4, type: 3}
   successSound: {fileID: 8300000, guid: a76252273f64d69479df44adf5d1679a, type: 3}
   pirateCrossPrefab: {fileID: 2039749418088098029, guid: e80d4a31d74c7654b80dbb36efcce75f,
     type: 3}
-  piratePrefab: {fileID: 888012487024381338, guid: 8fedabaf0ea7554479f4b9afb3d47144,
+  piratePrefab: {fileID: 611323235979406977, guid: 968418f11463c1340a8054a77ce85889,
     type: 3}
-  shovelPrefab: {fileID: 1483929131926144814, guid: 06e9e7d3ca8a248438727e0e773fc973,
+  shovelPrefab: {fileID: 3681321844266905192, guid: 44f82754333cd0748ad756244dab6c41,
     type: 3}
   isStandardMode: 1
   paintPrefab: {fileID: 8154566900513641231, guid: b7392318ac90d334ebdb0529c47531a4,
     type: 3}
   pirateCrossTrapPrefab: {fileID: 497623683837786132, guid: ba6696fbcd0851d499a56688213cdab5,
     type: 3}
-  pirateEnemyPrefab: {fileID: 7573195430571928419, guid: 4c019e520e278eb4b9cde2b387a8b374,
+  pirateEnemyPrefab: {fileID: 7152463710351108303, guid: 7b5b7316a8d416f439be0ab7e97ff2c3,
     type: 3}
   bots: []
   paints: []

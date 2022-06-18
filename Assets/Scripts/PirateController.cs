@@ -30,7 +30,6 @@ public class PirateController : MonoBehaviour
     public bool isHaveShovel = false;
     public bool isMiniGame = false;
     public int miniGameCursor = 0;
-    public string rawMiniGameKey = "";
     public bool isShovelFound = false;
     public Transform leftHandController;
     public Transform rightHandController;
@@ -71,7 +70,8 @@ public class PirateController : MonoBehaviour
             gameManager.localPirate = this;
         }
         Transform pirateTransform = gameObject.transform;
-        Transform bodyTransform = pirateTransform.GetChild(3);
+        // Transform bodyTransform = pirateTransform.GetChild(3);
+        Transform bodyTransform = pirateTransform.GetChild(2);
         GameObject body = bodyTransform.gameObject;
         SkinnedMeshRenderer bodyRenderer = body.GetComponent<SkinnedMeshRenderer>();
         Material[] materials = bodyRenderer.materials;
@@ -133,7 +133,9 @@ public class PirateController : MonoBehaviour
                         Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
                         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
                     }
+                    // mainCamera.transform.Translate(0, 0.2f, -0.5f, transform);
                     mainCamera.transform.Translate(0, 0.08f, -0.15f, transform);
+                    // mainCamera.transform.Translate(0, 0f, 0.05f, transform);
                 }
             }
         }
@@ -290,7 +292,7 @@ public class PirateController : MonoBehaviour
             {
                 // agent.isStopped = true;
                 // GetComponent<Animator>().Play("Idle");
-                DoAction();
+                // DoAction();
             }
 
         }
