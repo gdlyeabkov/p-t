@@ -183,6 +183,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1504294107478036556, guid: d82263076949ffb47ae8912940b4d16f,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504294107478036556, guid: d82263076949ffb47ae8912940b4d16f,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1846305256425333943, guid: d82263076949ffb47ae8912940b4d16f,
         type: 3}
       propertyPath: m_Name
@@ -1591,6 +1601,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1504294107478036556, guid: d82263076949ffb47ae8912940b4d16f,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504294107478036556, guid: d82263076949ffb47ae8912940b4d16f,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1846305256425333943, guid: d82263076949ffb47ae8912940b4d16f,
         type: 3}
       propertyPath: m_Name
@@ -1797,9 +1817,9 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
-  - component: {fileID: 963194229}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1885,7 +1905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  camTransform: {fileID: 963194228}
+  camTransform: {fileID: 0}
   Offset: {x: 0, y: 0, z: 0}
   SmoothTime: 0.3
   gameManager: {fileID: 1108205868}
@@ -3389,6 +3409,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504294107478036556, guid: d82263076949ffb47ae8912940b4d16f,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504294107478036556, guid: d82263076949ffb47ae8912940b4d16f,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504294107478036556, guid: d82263076949ffb47ae8912940b4d16f,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1846305256425333943, guid: d82263076949ffb47ae8912940b4d16f,
         type: 3}

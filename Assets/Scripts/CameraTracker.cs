@@ -17,29 +17,16 @@ public class CameraTracker : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     public GameManager gameManager;
 
-    private void Start()
-    {
-        if (Target != null)
-        {
-            // Offset = camTransform.position - Target.position;
-        }
-    }
-
     private void LateUpdate()
     {
         // update position
+        /*
         if (Target != null)
         {
-            // Offset = new Vector3(0f, 7.5f, -10.0f);
-
             Vector3 targetPosition = Target.position + Offset;
             camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, SmoothTime);
-
-            /*
-            Vector3 targetPosition = Target.localPosition + Offset + new Vector3(0f, 0f, -10f);
-            camTransform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref velocity, SmoothTime);
-            */
         }
+        */
     }
 
 }

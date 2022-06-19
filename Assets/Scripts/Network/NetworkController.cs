@@ -29,6 +29,7 @@ public class NetworkController : PunBehaviour
 	{
 		// PlayerPrefs.DeleteAll();
 		PlayerPrefs.DeleteKey("ShowAd");
+		PlayerPrefs.DeleteKey("Mode");
 		ConnectToPhoton();
 		LoadNickName();
 		PhotonNetwork.OnEventCall += OnEvent;
@@ -69,7 +70,7 @@ public class NetworkController : PunBehaviour
 				StopCoroutine(checkLobby);
 				yield return null;
 			}
-			else if (!PhotonNetwork.insideLobby)
+			else if (!PhotonNetwork.insideLobby && PhotonNetwork.connectionStateDetailed == ClientState.ConnectedToGameserver)
 			{
 				PhotonNetwork.JoinLobby();
 			}
@@ -81,7 +82,8 @@ public class NetworkController : PunBehaviour
 	{
 		try
 		{
-			if (PhotonNetwork.connected)
+			Debug.Log("PhotonNetwork.connectionStateDetailed: " + PhotonNetwork.connectionStateDetailed.ToString());
+			if (PhotonNetwork.connected && PhotonNetwork.connectionStateDetailed == ClientState.JoinedLobby)
 			{
 				RoomInfo roomInfo = PhotonNetwork.room;
 				bool isRoomExist = roomInfo != null;
@@ -125,6 +127,9 @@ public class NetworkController : PunBehaviour
 		for (int roomIndex = 0; roomIndex < rooms.transform.childCount; roomIndex++)
 		{
 			Destroy(rooms.transform.GetChild(roomIndex).gameObject);
+
+			rooms.GetComponent<RectTransform>().sizeDelta = new Vector2(rooms.GetComponent<RectTransform>().sizeDelta.x, rooms.GetComponent<RectTransform>().sizeDelta.y - 30);
+
 		}
 		if (PhotonNetwork.GetRoomList().Length >= 1)
 		{
@@ -144,6 +149,14 @@ public class NetworkController : PunBehaviour
 					roomInst.transform.parent = rooms.transform;
 					roomInst.transform.localScale = new Vector2(1f, 1f);
 					roomInst.transform.localPosition = new Vector3(0f, 0f, 0f);
+
+					bool isFirstRoom = roomIndex == 0;
+					bool isNotFirstRoom = !isFirstRoom;
+					if (isNotFirstRoom)
+                    {
+						rooms.GetComponent<RectTransform>().sizeDelta = new Vector2(rooms.GetComponent<RectTransform>().sizeDelta.x, rooms.GetComponent<RectTransform>().sizeDelta.y + 30);
+					}
+
 				}
 				catch (System.Exception e)
 				{
@@ -212,6 +225,9 @@ public class NetworkController : PunBehaviour
 			playerInst.transform.parent = players.transform;
 			playerInst.transform.localScale = new Vector2(1f, 1f);
 			playerInst.transform.localPosition = new Vector3(0f, 0f, 0f);
+
+			// players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, players.GetComponent<RectTransform>().sizeDelta.y + 35);
+
 		}
 		PlayerPrefs.SetInt("PlayerIndex", PhotonNetwork.room.playerCount);
 		playerCursor = PhotonNetwork.room.playerCount - 1;
@@ -219,7 +235,9 @@ public class NetworkController : PunBehaviour
 		ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
 		customProperties.Add("index", playerCursor);
 		PhotonNetwork.player.SetCustomProperties(customProperties);
-	
+
+		buttonJoinedArena.GetComponent<Button>().interactable = false;
+
 	}
 
 	public override void OnLeftRoom()
@@ -281,7 +299,13 @@ public class NetworkController : PunBehaviour
 			playerInst.transform.parent = players.transform;
 			playerInst.transform.localScale = new Vector2(1f, 1f);
 			playerInst.transform.localPosition = new Vector3(0f, 0f, 0f);
+		
+			// players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, players.GetComponent<RectTransform>().sizeDelta.y + 35);
+
 		}
+
+		players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, players.GetComponent<RectTransform>().sizeDelta.y + 35);
+
 	}
 
 	void Awake()
@@ -309,7 +333,7 @@ public class NetworkController : PunBehaviour
 			playersCountLabel.text = playersCountLabelMessage;
 		}
 		int allPlayers = players.transform.childCount;
-		for (int playerIndex = 0; playerIndex < allPlayers; playerIndex++)
+		for (int playerIndex = 1; playerIndex < allPlayers; playerIndex++)
 		{
 			Transform playersTransform = players.transform;
 			Transform playersTransformChildTransform = playersTransform.GetChild(playerIndex);
@@ -327,6 +351,11 @@ public class NetworkController : PunBehaviour
 				break;
 			}
 		}
+
+		players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, players.GetComponent<RectTransform>().sizeDelta.y - 35);
+
+		buttonJoinedArena.GetComponent<Button>().interactable = false;
+
 	}
 
 	public void OnEvent(byte eventCode, object content, int senderId)

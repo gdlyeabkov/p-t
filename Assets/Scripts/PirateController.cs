@@ -144,6 +144,13 @@ public class PirateController : MonoBehaviour
                         Vector3 offsetPosition = piratePosition + offset;
                         Vector3 currentMainCameraTransformPosition = mainCamera.transform.position;
                         mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, offsetPosition, 0.25f);
+
+                        if (isStandardMode)
+                        {
+                            int networkId = currentPlayer.ID;
+                            photonView.TransferOwnership(networkId);
+                        }
+
                     }
                     mainCamera.transform.Translate(0, 0.08f, -0.15f, transform);
                 }
