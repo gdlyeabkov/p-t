@@ -653,6 +653,9 @@
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Cinemachine">
+ <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.Monetization">
  <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/UnityEngine.Monetization.dll</HintPath>
  </Reference>
@@ -695,6 +698,9 @@
  <Reference Include="Unity.Animation.Rigging.Editor">
  <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/Unity.Animation.Rigging.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="com.unity.cinemachine.editor">
+ <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.Advertisements.Editor">
  <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/UnityEngine.Advertisements.Editor.dll</HintPath>
  </Reference>
@@ -709,12 +715,6 @@
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="Cinemachine">
- <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
- </Reference>
- <Reference Include="com.unity.cinemachine.editor">
- <HintPath>C:/unity_projects/CarambaOnline/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
