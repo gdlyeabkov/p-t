@@ -3128,7 +3128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameVersion: 1
-  maxCountPlayers: 2
+  maxCountPlayers: 4
   playerRoom: {fileID: 803309282}
   players: {fileID: 1989530281}
   playersCount: {fileID: 63141122}

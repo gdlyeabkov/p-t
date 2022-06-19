@@ -37,28 +37,38 @@ public class BotController : MonoBehaviour
     {
         GameObject detectedObject = other.gameObject;
         string detectedObjectTag = detectedObject.tag;
-        bool isPaint = detectedObjectTag == "Paint";
         bool isShovel = detectedObjectTag == "Shovel";
         if (isShovel)
         {
+            /*
             Transform botTransform = transform.parent;
             bool isBot = botTransform != null;
             if (isBot)
+            */
             {
                 Transform detectedObjectTransform = detectedObject.transform;
-                GameObject bot = botTransform.gameObject;
-                PirateController pirateController = bot.GetComponent<PirateController>();
+                // GameObject bot = botTransform.gameObject;
+                Transform rawPirateTransform = transform.GetChild(0);
+                GameObject rawPirate = rawPirateTransform.gameObject;
+                PirateController pirateController = rawPirate.GetComponent<PirateController>();
                 Transform agentTarget = pirateController.agentTarget;
-                bool isMissionComplete = agentTarget == detectedObjectTransform;
-                if (isMissionComplete)
+                bool isHaveTarget = agentTarget != null;
+                if (isHaveTarget)
                 {
-                    NavMeshAgent agent = bot.GetComponent<NavMeshAgent>();
-                    // agent.isStopped = true;
-                    // GetComponent<Animator>().Play("Idle");
-                    // DoAction();
-                    pirateController.gameManager.GiveOrder(bot);
-                    pirateController.isShovelFound = true;
-                    pirateController.foundedShovel = detectedObject.transform;
+                    bool isMissionComplete = agentTarget == detectedObjectTransform;
+                    Debug.Log("isMissionComplete: " + isMissionComplete.ToString());
+                    if (isMissionComplete)
+                    {
+                        // NavMeshAgent agent = bot.GetComponent<NavMeshAgent>();
+                        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+                        agent.isStopped = true;
+                        // GetComponent<Animator>().Play("Idle");
+                        // pirateController.gameManager.GiveOrder(bot);
+                        pirateController.gameManager.GiveOrder(gameObject);
+                        pirateController.isShovelFound = true;
+                        pirateController.foundedShovel = detectedObject.transform;
+                        pirateController.DoAction();
+                    }
                 }
             }
         }

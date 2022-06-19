@@ -210,6 +210,15 @@ public class GameManager : PunBehaviour
             StartCoroutine(GiveOrders());
 
         }
+
+        // HideCursor();
+
+    }
+
+    public void HideCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void ShowWin(int localIndex, int networkIndex)
