@@ -455,13 +455,11 @@ public class GameManager : PunBehaviour
                 agent.CalculatePath(agentTarget.position, path);
                 agent.ResetPath();
                 agent.SetPath(path);
-                NavMeshPath agentPath = agent.path;
-                Vector3[] agentPathCorners = agentPath.corners;
-                int agentPathCornersLength = agentPathCorners.Length;
-                int lastAgentPathCornerIndex = agentPathCornersLength - 1;
-                Vector3 lastAgentPathCorner = agentPathCorners[lastAgentPathCornerIndex];
-                // pirate.transform.LookAt(lastAgentPathCorner, Vector3.up);
-                pirate.transform.rotation = Quaternion.LookRotation(pirateWrap.GetComponent<Rigidbody>().velocity, Vector3.up);
+                Vector3 yAxis = Vector3.up;
+                Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
+                Vector3 velocity = pirateWrapRB.velocity;
+                Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
+                pirate.transform.rotation = lookRotation;
             }
         }
     }

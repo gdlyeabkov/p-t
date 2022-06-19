@@ -23,11 +23,14 @@ public class NetworkController : PunBehaviour
 	public GameObject emptyPrefab;
 	public InputField roomNameField;
 	public int countPlayers = 0;
+	public InputField nickNameField;
 
 	public void Start()
 	{
-		PlayerPrefs.DeleteAll();
+		// PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteKey("ShowAd");
 		ConnectToPhoton();
+		LoadNickName();
 		PhotonNetwork.OnEventCall += OnEvent;
 	}
 
@@ -176,9 +179,15 @@ public class NetworkController : PunBehaviour
 	public override void OnJoinedRoom()
 	{
 
-		string generatedName = SystemInfo.deviceName;
-		SetPlayerName(generatedName);
-		PhotonNetwork.player.NickName = generatedName;
+		string nickName = nickNameField.text;
+		int nickNameLength = nickName.Length;
+		bool isNickNameExists = nickNameLength <= 0;
+		if (isNickNameExists)
+        {
+			string generatedName = SystemInfo.deviceName;
+			SetPlayerName(generatedName);
+			PhotonNetwork.player.NickName = generatedName;
+		}
 
 		playerRoom.SetActive(true);
 		int countPlayersOnline = PhotonNetwork.room.playerCount;
@@ -334,6 +343,26 @@ public class NetworkController : PunBehaviour
     {
 		PlayerPrefs.SetString("Mode", "Train");
 		PhotonNetwork.LoadLevel("SampleScene");
+	}
+
+	public void SetNickName()
+    {
+		string nickName = nickNameField.text;
+		SetPlayerName(nickName);
+		PhotonNetwork.player.NickName = nickName;
+		PlayerPrefs.SetString("nickName", nickName);
+	}
+
+	public void LoadNickName()
+	{
+		bool isNickNameExists = PlayerPrefs.HasKey("nickName");
+		if (isNickNameExists)
+        {
+			string nickName = PlayerPrefs.GetString("nickName");
+			SetPlayerName(nickName);
+			PhotonNetwork.player.NickName = nickName;
+			nickNameField.text = nickName;
+		}
 	}
 
 }

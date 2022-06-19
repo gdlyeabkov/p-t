@@ -46,7 +46,9 @@ public class AdController : MonoBehaviour
 
     private void HandleShowResult(UnityEngine.Monetization.ShowResult result)
     {
-        if (result == UnityEngine.Monetization.ShowResult.Finished)
+        UnityEngine.Monetization.ShowResult adFinished = UnityEngine.Monetization.ShowResult.Finished;
+        bool isAdFinished = result == adFinished;
+        if (isAdFinished)
         {
             this.Reclaim();
         }
@@ -54,8 +56,6 @@ public class AdController : MonoBehaviour
 
     private void Reclaim()
     {
-        // this.doubleCoinsButton.SetActive(false);
-        // gameManager.LeaveLobby();
         PlayerPrefs.DeleteKey("ShowAd");
     }
 
