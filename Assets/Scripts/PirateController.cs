@@ -252,7 +252,6 @@ public class PirateController : MonoBehaviour
                                     {
                                         Receivers = ReceiverGroup.Others
                                     });
-
                                     Vector3 foundedShovelPosition = foundedShovel.position;
                                     GameObject handController = leftHandController.gameObject;
                                     Rig rig = handController.GetComponent<Rig>();
@@ -459,13 +458,11 @@ public class PirateController : MonoBehaviour
                         if (isDoIdle)
                         {
                             GetComponent<Animator>().Play("Idle");
-
                             object[] networkData = new object[] { localIndex, "Idle" };
                             PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
                             {
                                 Receivers = ReceiverGroup.Others
                             });
-
                         }
                     }
                 }

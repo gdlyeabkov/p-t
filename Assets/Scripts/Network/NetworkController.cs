@@ -23,11 +23,14 @@ public class NetworkController : PunBehaviour
 	public GameObject emptyPrefab;
 	public InputField roomNameField;
 	public int countPlayers = 0;
+	public InputField nickNameField;
 
 	public void Start()
 	{
-		PlayerPrefs.DeleteAll();
+		PlayerPrefs.DeleteKey("ShowAd");
+		PlayerPrefs.DeleteKey("Mode");
 		ConnectToPhoton();
+		LoadNickName();
 		PhotonNetwork.OnEventCall += OnEvent;
 	}
 
@@ -78,7 +81,7 @@ public class NetworkController : PunBehaviour
 	{
 		try
 		{
-			if (PhotonNetwork.connected)
+			if (PhotonNetwork.connected && PhotonNetwork.connectionStateDetailed == ClientState.JoinedLobby)
 			{
 				RoomInfo roomInfo = PhotonNetwork.room;
 				bool isRoomExist = roomInfo != null;
@@ -95,7 +98,6 @@ public class NetworkController : PunBehaviour
 				 *	PhotonNetwork.player.NickName = playerName;
 				 */
 				Debug.Log("PhotonNetwork.IsConnected! | Trying to Create/Join Room " + roomNameField.text);
-
 				List<RoomInfo> roomList = PhotonNetwork.GetRoomList().ToList();
 				RoomInfo room = roomList.FirstOrDefault(r => r.Name == roomName);
 				bool isRoomNotExists = room == null;
@@ -157,6 +159,7 @@ public class NetworkController : PunBehaviour
 			roomInst.GetComponent<RectTransform>().sizeDelta = new Vector2(rooms.GetComponent<RectTransform>().sizeDelta.x / 2, roomInst.GetComponent<RectTransform>().sizeDelta.y);
 			roomInst.transform.localScale = new Vector2(1f, 1f);
 			roomInst.transform.localPosition = new Vector3(0f, 0f, 0f);
+			roomInst.GetComponent<Button>().interactable = false;
 		}
 	}
 
@@ -172,11 +175,9 @@ public class NetworkController : PunBehaviour
 
 	public override void OnJoinedRoom()
 	{
-
 		string generatedName = SystemInfo.deviceName;
 		SetPlayerName(generatedName);
 		PhotonNetwork.player.NickName = generatedName;
-
 		playerRoom.SetActive(true);
 		int countPlayersOnline = PhotonNetwork.room.playerCount;
 		string parsedCountPlayersOnline = countPlayersOnline.ToString();
@@ -203,11 +204,10 @@ public class NetworkController : PunBehaviour
 		}
 		PlayerPrefs.SetInt("PlayerIndex", PhotonNetwork.room.playerCount);
 		playerCursor = PhotonNetwork.room.playerCount - 1;
-
 		ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
 		customProperties.Add("index", playerCursor);
 		PhotonNetwork.player.SetCustomProperties(customProperties);
-
+		buttonJoinedArena.GetComponent<Button>().interactable = false;
 	}
 
 	public override void OnLeftRoom()
@@ -236,7 +236,6 @@ public class NetworkController : PunBehaviour
 	public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
 	{
 		playerRoom.SetActive(true);
-
 		int countPlayersOnline = PhotonNetwork.room.playerCount;
 		string parsedCountPlayersOnline = countPlayersOnline.ToString();
 		string parsedMaxCountPlayers = maxCountPlayers.ToString();
@@ -270,6 +269,7 @@ public class NetworkController : PunBehaviour
 			playerInst.transform.localScale = new Vector2(1f, 1f);
 			playerInst.transform.localPosition = new Vector3(0f, 0f, 0f);
 		}
+		players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, players.GetComponent<RectTransform>().sizeDelta.y + 35);
 	}
 
 	void Awake()
@@ -297,7 +297,7 @@ public class NetworkController : PunBehaviour
 			playersCountLabel.text = playersCountLabelMessage;
 		}
 		int allPlayers = players.transform.childCount;
-		for (int playerIndex = 0; playerIndex < allPlayers; playerIndex++)
+		for (int playerIndex = 1; playerIndex < allPlayers; playerIndex++)
 		{
 			Transform playersTransform = players.transform;
 			Transform playersTransformChildTransform = playersTransform.GetChild(playerIndex);
@@ -315,6 +315,8 @@ public class NetworkController : PunBehaviour
 				break;
 			}
 		}
+		players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, players.GetComponent<RectTransform>().sizeDelta.y - 35);
+		buttonJoinedArena.GetComponent<Button>().interactable = false;
 	}
 
 	public void OnEvent(byte eventCode, object content, int senderId)
@@ -331,6 +333,26 @@ public class NetworkController : PunBehaviour
 	{
 		PlayerPrefs.SetString("Mode", "Train");
 		PhotonNetwork.LoadLevel("SampleScene");
+	}
+
+	public void SetNickName()
+	{
+		string nickName = nickNameField.text;
+		SetPlayerName(nickName);
+		PhotonNetwork.player.NickName = nickName;
+		PlayerPrefs.SetString("nickName", nickName);
+	}
+
+	public void LoadNickName()
+	{
+		bool isNickNameExists = PlayerPrefs.HasKey("nickName");
+		if (isNickNameExists)
+		{
+			string nickName = PlayerPrefs.GetString("nickName");
+			SetPlayerName(nickName);
+			PhotonNetwork.player.NickName = nickName;
+			nickNameField.text = nickName;
+		}
 	}
 
 }
