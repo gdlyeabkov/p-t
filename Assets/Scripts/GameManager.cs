@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon;
 using UnityEngine.AI;
+using Cinemachine;
 
 public class GameManager : PunBehaviour
 {
@@ -45,6 +46,7 @@ public class GameManager : PunBehaviour
     public GameObject pirateEnemyPrefab;
     public List<GameObject> bots;
     public List<GameObject> paints;
+    public CinemachineVirtualCamera viewCamera;
 
     void Start()
     {
@@ -108,7 +110,7 @@ public class GameManager : PunBehaviour
                     Transform respawnPoint = respawnPoints[i];
                     randomPosition = respawnPoint.position;
                     Quaternion baseRotation = Quaternion.identity;
-                    GameObject pirate = PhotonNetwork.Instantiate("pirate", randomPosition, baseRotation, 0);
+                    GameObject pirate = PhotonNetwork.Instantiate("fixed_pirate", randomPosition, baseRotation, 0);
                 }
             }
         }
@@ -161,8 +163,13 @@ public class GameManager : PunBehaviour
             respawnPoint = respawnPoints[1];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
-            pirate = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            bots.Add(pirate);
+            GameObject pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
+            agent.speed = 0.1f;
+            bots.Add(pirateWrap);
+            Transform pirateWrapTransform = pirateWrap.transform;
+            Transform pirateTransform = pirateWrapTransform.GetChild(0);
+            pirate = pirateTransform.gameObject;
             Animator pirateAnimator = pirate.GetComponent<Animator>();
             pirateAnimator.Play("Walk");
             randomCoordX = Random.Range(-45, 45);
@@ -174,8 +181,10 @@ public class GameManager : PunBehaviour
             respawnPoint = respawnPoints[2];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
-            pirate = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            bots.Add(pirate);
+            pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            agent = pirateWrap.GetComponent<NavMeshAgent>();
+            agent.speed = 0.1f;
+            bots.Add(pirateWrap);
             pirateAnimator = pirate.GetComponent<Animator>();
             pirateAnimator.Play("Walk");
             randomCoordX = Random.Range(-45, 45);
@@ -187,11 +196,13 @@ public class GameManager : PunBehaviour
             respawnPoint = respawnPoints[3];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
-            pirate = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            bots.Add(pirate);
+            pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            agent = pirateWrap.GetComponent<NavMeshAgent>();
+            agent.speed = 0.1f;
+            bots.Add(pirateWrap);
             pirateAnimator = pirate.GetComponent<Animator>();
             pirateAnimator.Play("Walk");
-            StartCoroutine(GiveOrder());
+            StartCoroutine(GiveOrders());
         }
     }
 
@@ -343,61 +354,129 @@ public class GameManager : PunBehaviour
         localPirate.IncreaseMiniGameCursor();
     }
 
-    public IEnumerator GiveOrder()
+
+    public void Update()
     {
-        yield return new WaitForSeconds(3f);
-        foreach (GameObject pirate in bots)
+        foreach (GameObject pirateWrap in bots)
         {
-            PirateController pirateController = pirate.GetComponent<PirateController>();
-            NavMeshAgent agent = pirate.GetComponent<NavMeshAgent>();
-            float target = Random.Range(0, 3);
-            Vector3 destination = Vector3.zero;
-            bool isCaptureCross = target == 0;
-            bool isCapturePaint = target == 1;
-            bool isAttack = target == 2;
-            if (isCaptureCross)
+            Transform pirateWrapTransform = pirateWrap.transform;
+            Transform pirateTransform = pirateWrapTransform.GetChild(0);
+            GameObject pirate = pirateTransform.gameObject;
+            NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
+            Animator pirateAnimator = pirate.GetComponent<Animator>();
+            AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
+            bool isPull = animatorStateInfo.IsName("Pull");
+            bool isDig = animatorStateInfo.IsName("Dig");
+            bool isStop = isWin || isDig || isPull;
+            if (isStop)
             {
-                if (pirateController.isHaveShovel)
+                agent.speed = 0;
+                agent.angularSpeed = 0;
+                agent.acceleration = 0;
+                agent.updatePosition = false;
+                PirateController pirateController = pirate.GetComponent<PirateController>();
+                Transform foundedShovel = pirateController.foundedShovel;
+                bool isShovelExists = foundedShovel != null;
+                bool isSyncPullPosition = isPull && isShovelExists;
+                if (isSyncPullPosition)
                 {
-                    destination = cross.transform.position;
-                    pirateController.agentTarget = cross.transform;
+                    Vector3 foundedShovelPosition = foundedShovel.position;
+                    agent.Warp(foundedShovelPosition);
                 }
-                else
+                else if (isDig)
                 {
-                    destination = shovel.transform.position;
-                    pirateController.agentTarget = shovel.transform;
+                    Transform crossTransform = cross.transform;
+                    Vector3 crossPosition = crossTransform.position;
+                    agent.Warp(crossPosition);
                 }
             }
-            else if (isCapturePaint)
+            else
             {
-                int countPaints = paints.Count;
-                bool isHavePaints = countPaints >= 1;
-                if (isHavePaints)
+                agent.updatePosition = true;
+                PirateController pirateController = pirate.GetComponent<PirateController>();
+                Transform agentTarget = pirateController.agentTarget;
+                bool isTargetExists = agentTarget != null;
+                bool isOnNavMesh = agent.isOnNavMesh;
+                bool isUpdateBot = isTargetExists && isOnNavMesh;
+                if (isUpdateBot)
                 {
-                    GameObject somePaint = paints[0];
+                    agent.speed = 30;
+                    agent.angularSpeed = 30;
+                    agent.acceleration = 30;
+                    NavMeshPath path = new NavMeshPath();
+                    agent.CalculatePath(agentTarget.position, path);
+                    agent.ResetPath();
+                    agent.SetPath(path);
+                    Vector3 yAxis = Vector3.up;
+                    Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
+                    Vector3 velocity = pirateWrapRB.velocity;
+                    Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
+                    pirate.transform.rotation = lookRotation;
+                }
+            }
+        }
+    }
+
+    public IEnumerator GiveOrders()
+    {
+        yield return new WaitForSeconds(3f);
+        foreach (GameObject pirateWrap in bots)
+        {
+            GiveOrder(pirateWrap);
+        }
+    }
+
+    public void GiveOrder(GameObject pirateWrap)
+    {
+        Transform pirateWrapTransform = pirateWrap.transform;
+        Transform pirateTransform = pirateWrapTransform.GetChild(0);
+        GameObject pirate = pirateTransform.gameObject;
+        PirateController pirateController = pirate.GetComponent<PirateController>();
+        NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
+        float target = Random.Range(0, 3);
+        Vector3 destination = Vector3.zero;
+        bool isCaptureCross = target == 0;
+        bool isCapturePaint = target == 1;
+        bool isAttack = target == 2;
+        if (isCaptureCross)
+        {
+            if (pirateController.isHaveShovel)
+            {
+                destination = cross.transform.position;
+                pirateController.agentTarget = cross.transform;
+            }
+            else if (shovel != null)
+            {
+                destination = shovel.transform.position;
+                pirateController.agentTarget = shovel.transform;
+            }
+        }
+        else if (isCapturePaint)
+        {
+            int countPaints = paints.Count;
+            bool isHavePaints = countPaints >= 1;
+            if (isHavePaints)
+            {
+                GameObject somePaint = paints[0];
+                bool isPaintExists = somePaint != null;
+                if (isPaintExists)
+                {
                     destination = somePaint.transform.position;
                     pirateController.agentTarget = somePaint.transform;
                 }
             }
-            else if (isAttack)
+            else
             {
-                destination = localPirate.transform.position;
-                pirateController.agentTarget = localPirate.transform;
+                GiveOrder(pirateWrap);
             }
-            agent.Warp(destination);
-            agent.SetDestination(destination);
-            pirateController.destination = destination;
         }
-    }
-
-    public void Update()
-    {
-        foreach (GameObject pirate in bots)
+        else if (isAttack)
         {
-            NavMeshAgent agent = pirate.GetComponent<NavMeshAgent>();
-            PirateController pirateController = pirate.GetComponent<PirateController>();
-            Vector3 destination = pirateController.destination;
+            destination = localPirate.transform.position;
+            pirateController.agentTarget = localPirate.transform;
         }
+        agent.Warp(destination);
+        pirateController.destination = destination;
     }
 
 }

@@ -775,6 +775,12 @@
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
+ <Reference Include="Cinemachine">
+ <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+ </Reference>
+ <Reference Include="com.unity.cinemachine.editor">
+ <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
