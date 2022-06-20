@@ -234,8 +234,20 @@ public class GameManager : PunBehaviour
             {
                 Receivers = ReceiverGroup.All
             });
+            
+            // GameObject rawObject = localPirate.gameObject;
+            GameObject rawObject = null;
+            if (isStandardMode)
+            {
+                rawObject = localPirate.gameObject;
+            }
+            else
+            {
+                int botIndex = localIndex - 1;
+                GameObject bot = bots[botIndex];
+                rawObject = bot;
+            }
 
-            GameObject rawObject = localPirate.gameObject;
             Transform rawObjectTransform = rawObject.transform;
             Vector3 currentPosition = rawObjectTransform.position;
             float coordX = currentPosition.x;
@@ -307,9 +319,7 @@ public class GameManager : PunBehaviour
                 {
                     mainCameraAudio.clip = looseSound;
                     mainCameraAudio.Play();
-
                     localPirate.GetComponent<Animator>().Play("Loose");
-
                     int localPirateIndex = localPirate.localIndex;
                     object[] networkData = new object[] { localPirateIndex, "Loose" };
                     PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
@@ -417,7 +427,7 @@ public class GameManager : PunBehaviour
                 destination = cross.transform.position;
                 pirateController.agentTarget = cross.transform;
             }
-            else
+            else if (shovel != null)
             {
                 destination = shovel.transform.position;
                 pirateController.agentTarget = shovel.transform;
@@ -430,8 +440,12 @@ public class GameManager : PunBehaviour
             if (isHavePaints)
             {
                 GameObject somePaint = paints[0];
-                destination = somePaint.transform.position;
-                pirateController.agentTarget = somePaint.transform;
+                bool isPaintExists = somePaint != null;
+                if (isPaintExists)
+                {
+                    destination = somePaint.transform.position;
+                    pirateController.agentTarget = somePaint.transform;
+                }
             }
             else
             {
@@ -455,20 +469,63 @@ public class GameManager : PunBehaviour
             Transform pirateTransform = pirateWrapTransform.GetChild(0);
             GameObject pirate = pirateTransform.gameObject;
             NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
-            PirateController pirateController = pirate.GetComponent<PirateController>();
-            Transform agentTarget = pirateController.agentTarget;
-            bool isTargetExists = agentTarget != null;
-            if (isTargetExists && agent.isOnNavMesh)
+            Animator pirateAnimator = pirate.GetComponent<Animator>();
+            AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
+            bool isPull = animatorStateInfo.IsName("Pull");
+            bool isDig = animatorStateInfo.IsName("Dig");
+            bool isStop = isWin || isDig || isPull;
+            if (isStop)
             {
-                NavMeshPath path = new NavMeshPath();
-                agent.CalculatePath(agentTarget.position, path);
-                agent.ResetPath();
-                agent.SetPath(path);
-                Vector3 yAxis = Vector3.up;
-                Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
-                Vector3 velocity = pirateWrapRB.velocity;
-                Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
-                pirate.transform.rotation = lookRotation;
+                agent.speed = 0;
+                agent.angularSpeed = 0;
+                agent.acceleration = 0;
+                agent.updatePosition = false;
+                PirateController pirateController = pirate.GetComponent<PirateController>();
+                Transform foundedShovel = pirateController.foundedShovel;
+                bool isShovelExists = foundedShovel != null;
+                bool isSyncPullPosition = isPull && isShovelExists;
+                if (isSyncPullPosition)
+                {
+                    Vector3 foundedShovelPosition = foundedShovel.position;
+                    agent.Warp(foundedShovelPosition);
+                }
+                else if (isDig)
+                {
+                    Transform crossTransform = cross.transform;
+                    Vector3 crossPosition = crossTransform.position;
+                    agent.Warp(crossPosition);
+                }
+            }
+            else
+            {
+                agent.updatePosition = true;
+                PirateController pirateController = pirate.GetComponent<PirateController>();
+                Transform agentTarget = pirateController.agentTarget;
+                bool isTargetExists = agentTarget != null;
+                bool isOnNavMesh = agent.isOnNavMesh;
+                bool isUpdateBot = isTargetExists && isOnNavMesh;
+                if (isUpdateBot)
+                {
+
+                    /*
+                    agent.speed = 100;
+                    agent.angularSpeed = 100;
+                    agent.acceleration = 100;
+                    */
+                    agent.speed = 30;
+                    agent.angularSpeed = 30;
+                    agent.acceleration = 30;
+
+                    NavMeshPath path = new NavMeshPath();
+                    agent.CalculatePath(agentTarget.position, path);
+                    agent.ResetPath();
+                    agent.SetPath(path);
+                    Vector3 yAxis = Vector3.up;
+                    Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
+                    Vector3 velocity = pirateWrapRB.velocity;
+                    Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
+                    pirate.transform.rotation = lookRotation;
+                }
             }
         }
     }
