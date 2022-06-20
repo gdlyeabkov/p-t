@@ -727,6 +727,9 @@
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Cinemachine">
+ <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.VSCode.Editor">
  <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
@@ -763,6 +766,9 @@
  <Reference Include="Unity.Animation.Rigging.Editor">
  <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/Unity.Animation.Rigging.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="com.unity.cinemachine.editor">
+ <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.ShaderGraph.Editor">
  <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
  </Reference>
@@ -774,12 +780,6 @@
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="Cinemachine">
- <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
- </Reference>
- <Reference Include="com.unity.cinemachine.editor">
- <HintPath>C:/unity_projects/CarambaOnlineStandalone/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
