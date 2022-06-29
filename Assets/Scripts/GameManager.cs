@@ -227,8 +227,19 @@ public class GameManager : PunBehaviour
         if (isNotWin)
         {
             isWin = true;
-            mainCameraAudio.clip = winSound;
-            mainCameraAudio.Play();
+
+            bool isCrossFound = localPirate.isCrossFound;
+            if (isCrossFound)
+            {
+                mainCameraAudio.clip = winSound;
+                mainCameraAudio.Play();
+            }
+            else
+            {
+                mainCameraAudio.clip = looseSound;
+                mainCameraAudio.Play();
+            }
+
             object[] networkData = new object[] { localIndex, networkIndex };
             PhotonNetwork.RaiseEvent(196, networkData, true, new RaiseEventOptions
             {

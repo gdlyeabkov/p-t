@@ -265,7 +265,7 @@ public class NetworkController : PunBehaviour
 
 	public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
 	{
-		playerRoom.SetActive(true);
+			playerRoom.SetActive(true);
 		
 		int countPlayersOnline = PhotonNetwork.room.playerCount;
 		string parsedCountPlayersOnline = countPlayersOnline.ToString();
