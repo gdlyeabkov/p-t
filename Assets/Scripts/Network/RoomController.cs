@@ -10,7 +10,6 @@ public class RoomController : UnityEngine.MonoBehaviour
 
     string playerName;
 
-
     public void SetPlayerName(string name)
     {
         playerName = name;
@@ -20,8 +19,14 @@ public class RoomController : UnityEngine.MonoBehaviour
     {
         if (PhotonNetwork.connected)
         {
+            /*
             SetPlayerName(SystemInfo.deviceName);
             PhotonNetwork.player.NickName = playerName;
+            */
+            
+            SetPlayerName(PlayerPrefs.GetString("nickName"));
+            PhotonNetwork.player.NickName = playerName;
+
             string roomName = GetComponent<Text>().text.Split(new string[] { ":" }, StringSplitOptions.None)[0];
             PhotonNetwork.JoinRoom(roomName);
         }

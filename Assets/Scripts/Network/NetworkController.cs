@@ -175,7 +175,10 @@ public class NetworkController : PunBehaviour
 
 	public override void OnJoinedRoom()
 	{
-		string generatedName = SystemInfo.deviceName;
+		
+		// string generatedName = SystemInfo.deviceName;
+		string generatedName = playerName;
+
 		SetPlayerName(generatedName);
 		PhotonNetwork.player.NickName = generatedName;
 		playerRoom.SetActive(true);

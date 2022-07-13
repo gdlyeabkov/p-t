@@ -40,6 +40,8 @@ public class PirateController : MonoBehaviour
     public bool isStandardMode = true;
     public Vector3 destination = Vector3.zero;
     public Transform agentTarget;
+    public TextMesh numberLabel;
+    public Transform numberLabelWrap;
 
     void Start()
     {
@@ -89,6 +91,13 @@ public class PirateController : MonoBehaviour
         if (isNotStandardMode)
         {
             networkIndex = updatedPiratesCursor;
+        }
+        else
+        {
+            // numberLabel.text = "Player " + (localIndex + 1).ToString();
+            numberLabel.text = PhotonNetwork.playerList[localIndex].name;
+            numberLabelWrap.transform.position = new Vector3(transform.position.x, numberLabelWrap.position.y, numberLabelWrap.position.z);
+
         }
     }
 
@@ -1615,6 +1624,15 @@ public class PirateController : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    void Awake()
+    {
+        if (agentTarget != null)
+        {
+            NavMeshAgent nav = GetComponent<NavMeshAgent>();
+            nav.speed = 2.0f;
         }
     }
 

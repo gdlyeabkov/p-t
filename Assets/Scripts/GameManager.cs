@@ -401,8 +401,10 @@ public class GameManager : PunBehaviour
                 if (isUpdateBot)
                 {
                     agent.speed = 30;
+                    agent.speed = 10;
                     agent.angularSpeed = 30;
-                    agent.acceleration = 30;
+                    // agent.acceleration = 30;
+                    agent.acceleration = 5000000000;
                     NavMeshPath path = new NavMeshPath();
                     agent.CalculatePath(agentTarget.position, path);
                     agent.ResetPath();
