@@ -226,6 +226,7 @@
      <Compile Include="Assets\Scripts\Network\RoomController.cs" />
      <Compile Include="Assets\Scripts\PaintController.cs" />
      <Compile Include="Assets\Scripts\PirateController.cs" />
+     <Compile Include="Assets\Scripts\PlayerLabelController.cs" />
      <Compile Include="Assets\Scripts\ShovelController.cs" />
      <Compile Include="Assets\Scripts\TreasureController.cs" />
      <Compile Include="Assets\SimpleCumulus\Demo\Scripts\Player\FPSWalkerEnhanced.cs" />

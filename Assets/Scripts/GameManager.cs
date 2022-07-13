@@ -50,6 +50,7 @@ public class GameManager : PunBehaviour
     public List<GameObject> bots;
     public List<GameObject> paints;
     public CinemachineVirtualCamera viewCamera;
+    public float maxSpeed = 0f;
 
     void Start()
     {
@@ -472,6 +473,14 @@ public class GameManager : PunBehaviour
         pirateController.destination = destination;
     }
 
+    public void FixedUpdate()
+    {
+        /*foreach (GameObject pirateWrap in bots)
+        {
+            pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(pirateWrap.GetComponent<Rigidbody>().velocity, maxSpeed);
+        }*/
+    }
+
     public void Update()
     {
         foreach (GameObject pirateWrap in bots)
@@ -518,14 +527,15 @@ public class GameManager : PunBehaviour
                 if (isUpdateBot)
                 {
 
-                    /*
-                    agent.speed = 100;
-                    agent.angularSpeed = 100;
-                    agent.acceleration = 100;
-                    */
-                    agent.speed = 30;
+                    // agent.speed = 30;
+                    agent.speed = 10;
                     agent.angularSpeed = 30;
+                    // agent.acceleration = 30;
                     agent.acceleration = 30;
+
+                    // agent.velocity = Vector3.zero;
+                    // pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    // pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(pirateWrap.GetComponent<Rigidbody>().velocity, 0.05f);
 
                     NavMeshPath path = new NavMeshPath();
                     agent.CalculatePath(agentTarget.position, path);
@@ -533,11 +543,16 @@ public class GameManager : PunBehaviour
                     agent.SetPath(path);
                     Vector3 yAxis = Vector3.up;
                     Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
-                    Vector3 velocity = pirateWrapRB.velocity;
+                    // Vector3 velocity = pirateWrapRB.velocity;
+                    Vector3 velocity = agent.velocity;
                     Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
                     pirate.transform.rotation = lookRotation;
+
+                    pirate.GetComponent<Animator>().Play("Walk");
+
                 }
             }
+            // pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(pirateWrap.GetComponent<Rigidbody>().velocity, maxSpeed);
         }
     }
 

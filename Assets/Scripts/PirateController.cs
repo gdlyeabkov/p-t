@@ -39,6 +39,7 @@ public class PirateController : MonoBehaviour
     public bool isStandardMode = true;
     public Vector3 destination = Vector3.zero;
     public Transform agentTarget;
+    public TextMesh numberLabel;
 
     void Start()
     {
@@ -95,6 +96,10 @@ public class PirateController : MonoBehaviour
         if (isNotStandardMode)
         {
             networkIndex = updatedPiratesCursor;
+        }
+        else
+        {
+            numberLabel.text = PhotonNetwork.playerList[localIndex].name;
         }
 
     }
@@ -229,6 +234,19 @@ public class PirateController : MonoBehaviour
                             {
                                 Receivers = ReceiverGroup.Others
                             });
+                        }
+                    }
+                    else if (isBot)
+                    {
+                        animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                        bool isAlreadyIdle = animatorStateInfo.IsName("Idle");
+                        bool isAttack = animatorStateInfo.IsName("Attack");
+                        bool isPaint = animatorStateInfo.IsName("Paint");
+                        bool isLoose = animatorStateInfo.IsName("Loose");
+                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose;
+                        if (isDoIdle)
+                        {
+                            GetComponent<Animator>().Play("Walk");
                         }
                     }
                 }
