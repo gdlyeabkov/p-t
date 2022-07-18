@@ -159,7 +159,14 @@ public class PirateController : MonoBehaviour
                                 }
                                 else
                                 {
-                                    Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                    try
+                                    {
+                                        Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                    }
+                                    catch
+                                    {
+
+                                    }
                                 }
                             }
                         }
@@ -252,7 +259,14 @@ public class PirateController : MonoBehaviour
                                         foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                                         {
                                             GameObject rawPirate = pirate.gameObject;
-                                            Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                            try
+                                            {
+                                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                            }
+                                            catch
+                                            {
+
+                                            }
                                         }
                                         GameObject handController = leftHandController.gameObject;
                                         Rig rig = handController.GetComponent<Rig>();
@@ -309,8 +323,39 @@ public class PirateController : MonoBehaviour
 
                                     foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                                     {
+                                        /*
                                         GameObject rawPirate = pirate.gameObject;
                                         Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                        */
+                                        GameObject rawPirate = pirate.gameObject;
+                                        Transform botTransform = transform.parent;
+                                        bool isBot = botTransform != null;
+                                        if (isBot)
+                                        {
+                                            CapsuleCollider rawPirateCollider = null;
+                                            Transform localBotTransform = rawPirate.transform.parent;
+                                            bool isLocalBot = localBotTransform != null;
+                                            if (isLocalBot)
+                                            {
+                                                rawPirateCollider = localBotTransform.gameObject.GetComponent<CapsuleCollider>();
+                                            }
+                                            else
+                                            {
+                                                rawPirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                                            }
+                                            Physics.IgnoreCollision(transform.parent.gameObject.GetComponent<CapsuleCollider>(), rawPirateCollider);
+                                        }
+                                        else
+                                        {
+                                            try
+                                            {
+                                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                            }
+                                            catch
+                                            {
+
+                                            }
+                                        }
                                     }
                                 }
                                 StartCoroutine(PlayAnswers());
@@ -382,23 +427,26 @@ public class PirateController : MonoBehaviour
                                     bool isEnemy = pirateLocalIndex != localIndex;
                                     if (isEnemy)
                                     {
-                                        Debug.Log("Враг был убит");
-                                        int networkId = currentPlayer.ID;
-                                        PhotonView localPhotonView = colliderObject.GetComponent<PhotonView>();
-                                        localPhotonView.TransferOwnership(networkId);
+                                        if (isStandardMode)
+                                        {
+                                            int networkId = currentPlayer.ID;
+                                            PhotonView localPhotonView = colliderObject.GetComponent<PhotonView>();
+                                            localPhotonView.TransferOwnership(networkId);
+                                        }
                                         float coordY = 4.107f;
                                         Vector3 randomPosition = new Vector3(0, coordY, 0);
                                         List<Transform> respawnPoints = gameManager.respawnPoints;
                                         Transform respawnPoint = respawnPoints[pirateLocalIndex];
                                         randomPosition = respawnPoint.position;
                                         colliderObject.transform.position = randomPosition;
-
-                                        object[] networkData = new object[] { pirateLocalIndex };
-                                        PhotonNetwork.RaiseEvent(193, networkData, true, new RaiseEventOptions
+                                        if (isStandardMode)
                                         {
-                                            Receivers = ReceiverGroup.All
-                                        });
-
+                                            object[] networkData = new object[] { pirateLocalIndex };
+                                            PhotonNetwork.RaiseEvent(193, networkData, true, new RaiseEventOptions
+                                            {
+                                                Receivers = ReceiverGroup.All
+                                            });
+                                        }
                                     }
                                 }
                             }
@@ -453,11 +501,11 @@ public class PirateController : MonoBehaviour
                     Transform botTransform = transform.parent;
                     bool isBot = botTransform != null;
                     bool isNotBot = !isBot;
-                    if (isMotion)
+                    if (isMotion || isBot)
                     {
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isDoWalk = !isPaint;
-                        if (isDoWalk)
+                        if ((isDoWalk && isNotBot) || (isBot && transform.parent.gameObject.GetComponent<NavMeshAgent>().velocity.z != 0f))
                         {
                             if (isStandardMode)
                             {
@@ -513,6 +561,18 @@ public class PirateController : MonoBehaviour
                     }
                 }
             }
+        }
+        if (GetComponent<Rigidbody>() != null)
+        {
+            // GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().velocity.normalized * 1f;
+            if (GetComponent<Rigidbody>().velocity.y > 0)
+            {
+                Vector3 v = GetComponent<Rigidbody>().velocity;
+                v.y = 0;
+                // or: v.y *= 0.5f; // extreme y up drag
+                GetComponent<Rigidbody>().velocity = v;
+            }
+
         }
     }
 
@@ -1192,7 +1252,14 @@ public class PirateController : MonoBehaviour
                             }
                             else
                             {
-                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                try
+                                {
+                                    Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                }
+                                catch
+                                {
+
+                                }
                             }
                         }
                     }
@@ -1225,7 +1292,7 @@ public class PirateController : MonoBehaviour
                                     miniGame.SetActive(true);
                                     StartCoroutine(PlayAnswers());
                                 }
-                                else
+                                else if (cross != null)
                                 {
                                     // transform.parent.gameObject.GetComponent<Rigidbody>().position = cross.gameObject.GetComponent<Rigidbody>().position;
                                     NavMeshAgent agent = transform.parent.gameObject.GetComponent<NavMeshAgent>();
@@ -1275,7 +1342,14 @@ public class PirateController : MonoBehaviour
                                         }
                                         else
                                         {
-                                            Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                            try
+                                            {
+                                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                            }
+                                            catch
+                                            {
+
+                                            }
                                         }
                                     }
                                     GameObject handController = leftHandController.gameObject;
@@ -1347,7 +1421,14 @@ public class PirateController : MonoBehaviour
                                     }
                                     else
                                     {
-                                        Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                        try
+                                        {
+                                            Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                        }
+                                        catch
+                                        {
+
+                                        }
                                     }
                                 }
                             }
@@ -1479,6 +1560,8 @@ public class PirateController : MonoBehaviour
                     if (isNotMiniGame)
                     {
                         GetComponent<Animator>().Play("Attack");
+                        // ComputeDamage();
+                        /*
                         Transform armature = transform.GetChild(0);
                         Transform hips = armature.GetChild(0);
                         Transform spine = hips.GetChild(2);
@@ -1603,6 +1686,7 @@ public class PirateController : MonoBehaviour
                                 Receivers = ReceiverGroup.Others
                             });
                         }
+                        */
                     }
                     else if (transform.parent == null)
                     {
@@ -1635,5 +1719,166 @@ public class PirateController : MonoBehaviour
             nav.speed = 2.0f;
         }
     }
+
+    public void ComputeDamage ()
+    {
+        Transform armature = transform.GetChild(0);
+        Transform hips = armature.GetChild(0);
+        Transform spine = hips.GetChild(2);
+        Transform spine1 = spine.GetChild(0);
+        Transform spine2 = spine1.GetChild(0);
+        Transform shoulder = spine2.GetChild(0);
+        Transform arm = shoulder.GetChild(0);
+        Transform foreArm = arm.GetChild(0);
+        Transform hand = foreArm.GetChild(0);
+        Vector3 handPosition = hand.position;
+        Collider[] colliders = Physics.OverlapSphere(handPosition, 1f);
+        foreach (Collider collider in colliders)
+        {
+            GameObject colliderObject = collider.gameObject;
+            string name = colliderObject.name;
+            // PirateController pirate = colliderObject.GetComponent<PirateController>();
+            PirateController pirate = null;
+            bool isBot = colliderObject.GetComponent<NavMeshAgent>();
+            if (isStandardMode)
+            {
+                pirate = colliderObject.GetComponent<PirateController>();
+            }
+            else if (isBot)
+            {
+                Transform botTransform = colliderObject.transform;
+                Transform pirateTransform = botTransform.GetChild(0);
+                GameObject rawPirate = pirateTransform.gameObject;
+                pirate = rawPirate.GetComponent<PirateController>();
+            }
+            bool isPirate = pirate != null;
+            if (isPirate)
+            {
+                int pirateLocalIndex = pirate.localIndex;
+                bool isEnemy = pirateLocalIndex != localIndex;
+                if (isEnemy)
+                {
+                    if (isStandardMode)
+                    {
+                        int networkId = currentPlayer.ID;
+                        PhotonView localPhotonView = colliderObject.GetComponent<PhotonView>();
+                        localPhotonView.TransferOwnership(networkId);
+                    }
+                    float coordY = 4.107f;
+                    Vector3 randomPosition = new Vector3(0, coordY, 0);
+                    List<Transform> respawnPoints = gameManager.respawnPoints;
+                    Transform respawnPoint = respawnPoints[pirateLocalIndex];
+                    randomPosition = respawnPoint.position;
+                    colliderObject.transform.position = randomPosition;
+                    if (isStandardMode)
+                    {
+                        object[] networkData = new object[] { pirateLocalIndex };
+                        PhotonNetwork.RaiseEvent(193, networkData, true, new RaiseEventOptions
+                        {
+                            Receivers = ReceiverGroup.All
+                        });
+                    }
+                    else
+                    {
+                        pirate.miniGameCursor = 0;
+                        pirate.isMiniGame = false;
+                        pirate.isStopped = false;
+                        pirate.isShovelFound = false;
+                        GameObject miniGame = pirate.gameManager.miniGame;
+                        miniGame.SetActive(false);
+                        // pirate.GetComponent<Animator>().Play("Idle");
+                        if (pirate.isHaveShovel)
+                        {
+                            gameManager.GenerateShovel();
+                        }
+                        pirate.isHaveShovel = false;
+                        Vector3 origin = Vector3.zero;
+                        GameObject handController = pirate.leftHandController.gameObject;
+                        Rig rig = handController.GetComponent<Rig>();
+                        rig.weight = 0.0f;
+                        Transform ik = pirate.leftHandController.GetChild(0);
+                        Transform target = ik.GetChild(0); ;
+                        target.localPosition = origin;
+                        handController = pirate.rightHandController.gameObject;
+                        rig = handController.GetComponent<Rig>();
+                        rig.weight = 0.0f;
+                        ik = pirate.rightHandController.GetChild(0);
+                        target = ik.GetChild(0); ;
+                        target.localPosition = origin;
+                        PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+                        foreach (PirateController localPirate in pirates)
+                        {
+                            GameObject rawPirate = localPirate.gameObject;
+                            CapsuleCollider localCollider = null;
+                            CapsuleCollider pirateCollider = null;
+                            if (transform.parent != null)
+                            {
+                                localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                            }
+                            else
+                            {
+                                localCollider = GetComponent<CapsuleCollider>();
+                            }
+                            if (rawPirate.transform.parent != null)
+                            {
+                                pirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                            }
+                            else
+                            {
+                                pirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                            }
+                            Physics.IgnoreCollision(localCollider, pirateCollider, false);
+                        }
+                        AudioSource audio = pirate.GetComponent<AudioSource>();
+                        AudioClip dieSound = pirate.gameManager.dieSound;
+                        audio.clip = dieSound;
+                        audio.loop = false;
+                        audio.Play();
+                    
+                        /*
+                        if (pirate.gameObject.GetComponent<Rigidbody>() != null)
+                        {
+                            pirate.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                        }
+                        else
+                        {
+                            pirate.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                        }
+                        */
+
+                    }
+                    Debug.Log("Удар мечом");
+                }
+            }
+        }
+        if (isStandardMode)
+        {
+            object[] networkData = new object[] { localIndex, "Attack" };
+            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.Others
+            });
+        }
+    }
+
+    /*
+    public void OnCollisionEnter(Collision other)
+    {
+        GameObject detectedObject = other.gameObject;
+        string detectedObjectTag = detectedObject.tag;
+        bool isIsland = detectedObjectTag == "Island";
+        if (isIsland && transform.parent != null)
+        {
+            if (GetComponent<Rigidbody>() != null)
+            {
+                GetComponent<Rigidbody>().isKinematic = true;
+            }
+            else
+            {
+                transform.parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            }
+        }
+    }
+    */
 
 }

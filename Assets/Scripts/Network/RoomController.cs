@@ -28,7 +28,17 @@ public class RoomController : UnityEngine.MonoBehaviour
             PhotonNetwork.player.NickName = playerName;
 
             string roomName = GetComponent<Text>().text.Split(new string[] { ":" }, StringSplitOptions.None)[0];
-            PhotonNetwork.JoinRoom(roomName);
+            
+            try
+            {
+                PhotonNetwork.JoinRoom(roomName);
+            }
+            catch
+            {
+                Debug.Log("Комната заполнена");
+            }
+
+
         }
     }
 

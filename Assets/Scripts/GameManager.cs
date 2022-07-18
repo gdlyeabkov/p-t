@@ -400,22 +400,30 @@ public class GameManager : PunBehaviour
                 bool isUpdateBot = isTargetExists && isOnNavMesh;
                 if (isUpdateBot)
                 {
-                    agent.speed = 30;
+                    // agent.speed = 30;
                     agent.speed = 10;
                     agent.angularSpeed = 30;
-                    // agent.acceleration = 30;
-                    agent.acceleration = 5000000000;
+                    agent.acceleration = 30;
+                    // agent.acceleration = 5000000000;
+                    /*
+                    
+                    */
                     NavMeshPath path = new NavMeshPath();
                     agent.CalculatePath(agentTarget.position, path);
                     agent.ResetPath();
                     agent.SetPath(path);
+                    // agent.SetDestination(agentTarget.position);
                     Vector3 yAxis = Vector3.up;
                     Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
-                    Vector3 velocity = pirateWrapRB.velocity;
+                    // Vector3 velocity = pirateWrapRB.velocity;
+                    Vector3 velocity = agent.velocity;
                     Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
                     pirate.transform.rotation = lookRotation;
                 }
             }
+
+            pirateWrapTransform.GetChild(0).localPosition = Vector3.zero;
+
         }
     }
 

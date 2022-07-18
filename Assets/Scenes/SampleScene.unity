@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 213069133}
   m_Layer: 8
   m_Name: IslandSphere
-  m_TagString: Untagged
+  m_TagString: Island
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -305,7 +305,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 100, y: 100, z: 10}
+  m_Size: {x: 120, y: 100, z: 10}
   m_Center: {x: 0, y: 0, z: 55}
 --- !u!65 &319796079
 BoxCollider:
@@ -318,7 +318,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 100, y: 100, z: 10}
+  m_Size: {x: 120, y: 100, z: 10}
   m_Center: {x: 0, y: 0, z: -55}
 --- !u!4 &319796080
 Transform:
@@ -349,7 +349,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!65 &319796082
 BoxCollider:
   m_ObjectHideFlags: 0
