@@ -214,11 +214,27 @@ public class GameManager : PunBehaviour
             isWin = true;
             mainCameraAudio.clip = winSound;
             mainCameraAudio.Play();
-            object[] networkData = new object[] { localIndex, networkIndex };
-            PhotonNetwork.RaiseEvent(196, networkData, true, new RaiseEventOptions
+            
+            if (isStandardMode)
             {
-                Receivers = ReceiverGroup.All
-            });
+                object[] networkData = new object[] { localIndex, networkIndex };
+                PhotonNetwork.RaiseEvent(196, networkData, true, new RaiseEventOptions
+                {
+                    Receivers = ReceiverGroup.All
+                });
+            }
+            else
+            {
+                bool isLooser = networkIndex != localIndex;
+                if (isLooser)
+                {
+                    mainCameraAudio.clip = looseSound;
+                    mainCameraAudio.Play();
+                    localPirate.GetComponent<Animator>().Play("Loose");
+                }
+                StartCoroutine(ResetGame());
+            }
+
         }
 
     }
