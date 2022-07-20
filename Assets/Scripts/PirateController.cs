@@ -1168,6 +1168,7 @@ public class PirateController : MonoBehaviour
             {
                 localCollider = GetComponent<CapsuleCollider>();
             }
+            isBot = rawPirate.transform.parent != null;
             if (isBot)
             {
                 somePirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();

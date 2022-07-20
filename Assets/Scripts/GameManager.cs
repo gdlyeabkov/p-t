@@ -233,6 +233,11 @@ public class GameManager : PunBehaviour
                     localPirate.GetComponent<Animator>().Play("Loose");
                 }
                 StartCoroutine(ResetGame());
+                
+                Vector3 treasurePosition = cross.transform.position;
+                Quaternion baseRotation = Quaternion.identity;
+                Instantiate(treasure, treasurePosition, baseRotation);
+            
             }
 
         }
