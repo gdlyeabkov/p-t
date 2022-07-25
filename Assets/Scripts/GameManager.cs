@@ -47,6 +47,8 @@ public class GameManager : PunBehaviour
     public List<GameObject> bots;
     public List<GameObject> paints;
     public CinemachineVirtualCamera viewCamera;
+    public GameObject treasureInst;
+    public List<GameObject> boats;
 
     void Start()
     {
@@ -236,8 +238,12 @@ public class GameManager : PunBehaviour
                 
                 Vector3 treasurePosition = cross.transform.position;
                 Quaternion baseRotation = Quaternion.identity;
-                Instantiate(treasure, treasurePosition, baseRotation);
-            
+                
+                // treasureInst = Instantiate(treasure, treasurePosition, baseRotation);
+
+                // treasureInst.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                // StartCoroutine(ResetConstraints(treasureInst));
+
             }
 
         }
@@ -508,6 +514,15 @@ public class GameManager : PunBehaviour
         }
         agent.Warp(destination);
         pirateController.destination = destination;
+    }
+
+    public IEnumerator ResetConstraints (GameObject someTreasure)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            someTreasure.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
     }
 
 }
