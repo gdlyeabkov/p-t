@@ -299,7 +299,8 @@ public class GameManager : PunBehaviour
                 object[] data = (object[])content;
                 int index = (int)data[0];
                 int localNetworkIndex = (int)data[1];
-                bool isLooser = globalNetworkIndex != localNetworkIndex;
+                // bool isLooser = globalNetworkIndex != localNetworkIndex;
+                bool isLooser = index != localNetworkIndex;
                 if (isLooser)
                 {
                     mainCameraAudio.clip = looseSound;
