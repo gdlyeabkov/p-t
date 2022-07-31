@@ -237,7 +237,7 @@ public class PirateController : MonoBehaviour
                                     char generatedChar = GameManager.GetRandomCharacter();
                                     rawMiniGameKey = generatedChar.ToString();
                                     Text miniGameLabel = gameManager.miniGameLabel;
-                                    miniGameLabel.text = rawMiniGameKey;
+                                    // miniGameLabel.text = rawMiniGameKey;
                                     AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                                     bool isAlreadyDig = animatorStateInfo.IsName("Dig");
                                     bool isDoDig = !isAlreadyDig;
@@ -293,7 +293,7 @@ public class PirateController : MonoBehaviour
                                 char generatedChar = GameManager.GetRandomCharacter();
                                 rawMiniGameKey = generatedChar.ToString();
                                 Text miniGameLabel = gameManager.miniGameLabel;
-                                miniGameLabel.text = rawMiniGameKey;
+                                // miniGameLabel.text = rawMiniGameKey;
                                 AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                                 bool isAlreadyPull = animatorStateInfo.IsName("Pull");
                                 bool isDoPull = !isAlreadyPull;
@@ -771,6 +771,7 @@ public class PirateController : MonoBehaviour
                         }
                     }
                     gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                    GetComponent<AudioSource>().Stop();
 
                 }
             }
@@ -1087,6 +1088,7 @@ public class PirateController : MonoBehaviour
                         }
                     }
                     gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                    GetComponent<AudioSource>().Stop();
                 }
                 else
                 {
@@ -1470,6 +1472,7 @@ public class PirateController : MonoBehaviour
 
             gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
             // StopAllCoroutines();
+            GetComponent<AudioSource>().Stop();
 
         }
         else

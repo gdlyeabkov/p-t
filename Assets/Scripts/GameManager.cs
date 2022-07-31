@@ -235,15 +235,8 @@ public class GameManager : PunBehaviour
                     localPirate.GetComponent<Animator>().Play("Loose");
                 }
                 StartCoroutine(ResetGame());
-                
                 Vector3 treasurePosition = cross.transform.position;
                 Quaternion baseRotation = Quaternion.identity;
-                
-                // treasureInst = Instantiate(treasure, treasurePosition, baseRotation);
-
-                // treasureInst.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                // StartCoroutine(ResetConstraints(treasureInst));
-
             }
 
         }
@@ -268,7 +261,6 @@ public class GameManager : PunBehaviour
     {
         yield return new WaitForSeconds(5f);
         float randomCoordX = 0f;
-        // float coordY = 4.10f;
         float coordY = -0.9f;
         float randomCoordZ = 0f;
         Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
@@ -299,8 +291,7 @@ public class GameManager : PunBehaviour
                 object[] data = (object[])content;
                 int index = (int)data[0];
                 int localNetworkIndex = (int)data[1];
-                // bool isLooser = globalNetworkIndex != localNetworkIndex;
-                bool isLooser = index != localNetworkIndex;
+                bool isLooser = globalNetworkIndex != localNetworkIndex;
                 if (isLooser)
                 {
                     mainCameraAudio.clip = looseSound;
@@ -346,20 +337,7 @@ public class GameManager : PunBehaviour
         int index = rng.Next(text.Length);
         return text[index];
     }
-
-    /*
-    public void Update()
-    {
-        if (PhotonNetwork.isMasterClient)
-        {
-            PhotonPlayer currentPlayer = PhotonNetwork.player;
-            int networkId = currentPlayer.ID;
-            PhotonView localPhotonView = shovel.GetComponent<PhotonView>();
-            localPhotonView.TransferOwnership(networkId);
-        }
-    }
-    */
-
+    
     public void GenerateShovel()
     {
         Vector3 shovelPosition = new Vector3(0, -0.9f, 0);
@@ -428,22 +406,15 @@ public class GameManager : PunBehaviour
                 bool isUpdateBot = isTargetExists && isOnNavMesh;
                 if (isUpdateBot)
                 {
-                    // agent.speed = 30;
                     agent.speed = 10;
                     agent.angularSpeed = 30;
                     agent.acceleration = 30;
-                    // agent.acceleration = 5000000000;
-                    /*
-                    
-                    */
                     NavMeshPath path = new NavMeshPath();
                     agent.CalculatePath(agentTarget.position, path);
                     agent.ResetPath();
                     agent.SetPath(path);
-                    // agent.SetDestination(agentTarget.position);
                     Vector3 yAxis = Vector3.up;
                     Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
-                    // Vector3 velocity = pirateWrapRB.velocity;
                     Vector3 velocity = agent.velocity;
                     Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
                     pirate.transform.rotation = lookRotation;
