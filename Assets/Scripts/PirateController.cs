@@ -181,11 +181,27 @@ public class PirateController : MonoBehaviour
                     Transform botTransform = transform.parent;
                     bool isBot = botTransform != null;
                     bool isNotBot = !isBot;
-                    if (isMotion)
+                    if (isMotion || isBot)
                     {
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isDoWalk = !isPaint;
-                        if (isDoWalk)
+                        Transform parent = transform.parent;
+                        GameObject rawParent = null;
+                        NavMeshAgent botController = null;
+                        Vector3 botVelocity = Vector3.zero;
+                        if (parent != null)
+                        {
+                            rawParent = parent.gameObject;
+                            botController = rawParent.GetComponent<NavMeshAgent>();
+                            botVelocity = botController.velocity;
+                        }
+                        float botVelocityZ = botVelocity.z;
+                        bool isHaveVelocity = botVelocityZ != 0f;
+                        bool isNotWin = !gameManager.isWin;
+                        bool isPlayerWalk = isDoWalk && isNotBot && isNotWin;
+                        bool isBotWalk = isBot && isHaveVelocity && isNotWin;
+                        bool isWalk = isPlayerWalk || isBotWalk;
+                        if (isWalk)
                         {
                             if (isStandardMode)
                             {
@@ -367,7 +383,68 @@ public class PirateController : MonoBehaviour
                     coordY += verticalOffset;
                     Vector3 treasurePosition = new Vector3(coordX, coordY, coordZ);
                     Quaternion baseRotation = Quaternion.identity;
-                    PhotonNetwork.Instantiate("treasure", treasurePosition, baseRotation, 0);
+                    StartCoroutine(gameManager.ResetConstraints(gameManager.treasureInst));
+                    agentTarget = gameManager.boats[localIndex].transform;
+                    destination = gameManager.boats[localIndex].transform.position;
+                    miniGameCursor = 0;
+                    isMiniGame = false;
+                    isStopped = false;
+                    isShovelFound = false;
+                    Transform botTransform = transform.parent;
+                    GameObject bot = botTransform.gameObject;
+                    NavMeshAgent agent = bot.GetComponent<NavMeshAgent>();
+                    Vector3 origin = Vector3.zero;
+                    GameObject handController = leftHandController.gameObject;
+                    Rig rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+                    Transform ik = leftHandController.GetChild(0);
+                    Transform target = ik.GetChild(0); ;
+                    target.localPosition = origin;
+                    handController = rightHandController.gameObject;
+                    rig = handController.GetComponent<Rig>();
+                    rig.weight = 0.0f;
+                    ik = rightHandController.GetChild(0);
+                    target = ik.GetChild(0); ;
+                    target.localPosition = origin;
+                    PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+                    CapsuleCollider pirateCollider = GetComponent<CapsuleCollider>();
+                    foreach (PirateController pirate in pirates)
+                    {
+                        GameObject rawPirate = pirate.gameObject;
+                        CapsuleCollider localCollider = null;
+                        CapsuleCollider somePirateCollider = null;
+                        bool isBot = botTransform != null;
+                        if (isBot)
+                        {
+                            localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                        }
+                        else
+                        {
+                            localCollider = GetComponent<CapsuleCollider>();
+                        }
+                        isBot = rawPirate.transform.parent != null;
+                        if (isBot)
+                        {
+                            somePirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                        }
+                        else
+                        {
+                            somePirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                        }
+                        Physics.IgnoreCollision(localCollider, somePirateCollider, false);
+                    }
+                    List<GameObject> bots = gameManager.bots;
+                    foreach (GameObject localBot in bots)
+                    {
+                        int botIndex = localBot.transform.GetChild(0).gameObject.GetComponent<PirateController>().localIndex;
+                        bool isOtherBot = localIndex != botIndex;
+                        if (isOtherBot)
+                        {
+                            gameManager.GiveOrder(localBot);
+                        }
+                    }
+                    gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                    GetComponent<AudioSource>().Stop();
                 }
             }
             catch (System.InvalidCastException e)
@@ -1292,87 +1369,217 @@ public class PirateController : MonoBehaviour
     public IEnumerator GetCrossForBot()
     {
         yield return new WaitForSeconds(10f);
-        gameManager.ShowWin(localIndex, networkIndex);
-        GetComponent<Animator>().Play("Victory");
-        miniGameCursor = 0;
-        isMiniGame = false;
-        isStopped = false;
-        isShovelFound = false;
-        Transform botTransform = transform.parent;
-        GameObject bot = botTransform.gameObject;
-        NavMeshAgent agent = bot.GetComponent<NavMeshAgent>();
-        if (foundedShovel != null && agent.isOnNavMesh)
+        if (isStandardMode)
         {
-            isHaveShovel = true;
-            GameObject rawFoundedShovel = foundedShovel.gameObject;
-            Destroy(rawFoundedShovel);
-            destination = gameManager.cross.transform.position;
-            agentTarget = gameManager.cross.transform;
-            // agent.isStopped = false;
+            object[] networkData = new object[] { localIndex, networkIndex };
+            PhotonNetwork.RaiseEvent(196, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.All
+            });
         }
-        Vector3 origin = Vector3.zero;
-        GameObject handController = leftHandController.gameObject;
-        Rig rig = handController.GetComponent<Rig>();
-        rig.weight = 0.0f;
-        Transform ik = leftHandController.GetChild(0);
-        Transform target = ik.GetChild(0); ;
-        target.localPosition = origin;
-        handController = rightHandController.gameObject;
-        rig = handController.GetComponent<Rig>();
-        rig.weight = 0.0f;
-        ik = rightHandController.GetChild(0);
-        target = ik.GetChild(0); ;
-        target.localPosition = origin;
-        PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
-        CapsuleCollider pirateCollider = GetComponent<CapsuleCollider>();
-        foreach (PirateController pirate in pirates)
+        else if (gameManager.treasureInst == null)
         {
-            GameObject rawPirate = pirate.gameObject;
-            CapsuleCollider localCollider = null;
-            CapsuleCollider somePirateCollider = null;
-            if (transform.parent != null)
+            Vector3 treasurePosition = gameManager.cross.transform.position;
+            Quaternion baseRotation = Quaternion.identity;
+            gameManager.treasureInst = Instantiate(gameManager.treasure, treasurePosition, baseRotation);
+            StartCoroutine(gameManager.ResetConstraints(gameManager.treasureInst));
+            agentTarget = gameManager.boats[localIndex].transform;
+            destination = gameManager.boats[localIndex].transform.position;
+            GetComponent<Animator>().Play("Walk");
+            miniGameCursor = 0;
+            isMiniGame = false;
+            isStopped = false;
+            isShovelFound = false;
+            Transform botTransform = transform.parent;
+            GameObject bot = botTransform.gameObject;
+            NavMeshAgent agent = bot.GetComponent<NavMeshAgent>();
+            Vector3 origin = Vector3.zero;
+            GameObject handController = leftHandController.gameObject;
+            Rig rig = handController.GetComponent<Rig>();
+            rig.weight = 0.0f;
+            Transform ik = leftHandController.GetChild(0);
+            Transform target = ik.GetChild(0); ;
+            target.localPosition = origin;
+            handController = rightHandController.gameObject;
+            rig = handController.GetComponent<Rig>();
+            rig.weight = 0.0f;
+            ik = rightHandController.GetChild(0);
+            target = ik.GetChild(0); ;
+            target.localPosition = origin;
+            PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+            CapsuleCollider pirateCollider = GetComponent<CapsuleCollider>();
+            foreach (PirateController pirate in pirates)
             {
-                localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
-            }
-            else
-            {
-                localCollider = GetComponent<CapsuleCollider>();
-            }
-            if (rawPirate.transform.parent != null)
-            {
-                somePirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
-            }
-            else
-            {
-                somePirateCollider = rawPirate.GetComponent<CapsuleCollider>();
-            }
-            Physics.IgnoreCollision(localCollider, somePirateCollider, false);
-        }
-
-        gameManager.localPirate.GetComponent<Animator>().Play("Loose");
-        gameManager.localPirate.isStopped = true;
-        foreach (GameObject localBot in gameManager.bots)
-        {
-            Transform localBotTransform = localBot.transform;
-            Transform localPirateTransform = localBotTransform.GetChild(0);
-            GameObject localPirate = localPirateTransform.gameObject;
-            PirateController localPirateController = localPirate.GetComponent<PirateController>();
-            int localPirateIndex = localPirateController.localIndex;
-            bool isLooser = localPirateIndex != localIndex;
-            if (isLooser)
-            {
-                Animator localPirateAnimator = localPirate.GetComponent<Animator>();
-                localPirateAnimator.Play("Loose");
-                if (agent.isOnNavMesh)
+                GameObject rawPirate = pirate.gameObject;
+                CapsuleCollider localCollider = null;
+                CapsuleCollider somePirateCollider = null;
+                bool isBot = botTransform != null;
+                if (isBot)
                 {
-                    agent.isStopped = true;
+                    localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
                 }
-                gameManager.viewCamera.Follow = null;
+                else
+                {
+                    localCollider = GetComponent<CapsuleCollider>();
+                }
+                isBot = rawPirate.transform.parent != null;
+                if (isBot)
+                {
+                    somePirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                }
+                else
+                {
+                    somePirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                }
+                Physics.IgnoreCollision(localCollider, somePirateCollider, false);
+            }
+            List<GameObject> bots = gameManager.bots;
+            foreach (GameObject localBot in bots)
+            {
+                int botIndex = localBot.transform.GetChild(0).gameObject.GetComponent<PirateController>().localIndex;
+                bool isOtherBot = localIndex != botIndex;
+                if (isOtherBot)
+                {
+                    gameManager.GiveOrder(localBot);
+                }
+            }
+            gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+            GetComponent<AudioSource>().Stop();
+        }
+        else
+        {
+            gameManager.GiveOrder(transform.parent.gameObject);
+            transform.parent.GetChild(0).gameObject.GetComponent<Animator>().Play("Idle");
+        }
+    }
+
+    public void ComputeDamage()
+    {
+        Transform armature = transform.GetChild(0);
+        Transform hips = armature.GetChild(0);
+        Transform spine = hips.GetChild(2);
+        Transform spine1 = spine.GetChild(0);
+        Transform spine2 = spine1.GetChild(0);
+        Transform shoulder = spine2.GetChild(0);
+        Transform arm = shoulder.GetChild(0);
+        Transform foreArm = arm.GetChild(0);
+        Transform hand = foreArm.GetChild(0);
+        Vector3 handPosition = hand.position;
+        Collider[] colliders = Physics.OverlapSphere(handPosition, 1f);
+        foreach (Collider collider in colliders)
+        {
+            GameObject colliderObject = collider.gameObject;
+            string name = colliderObject.name;
+            // PirateController pirate = colliderObject.GetComponent<PirateController>();
+            PirateController pirate = null;
+            bool isBot = colliderObject.GetComponent<NavMeshAgent>();
+            if (isStandardMode)
+            {
+                pirate = colliderObject.GetComponent<PirateController>();
+            }
+            else if (isBot)
+            {
+                Transform botTransform = colliderObject.transform;
+                Transform pirateTransform = botTransform.GetChild(0);
+                GameObject rawPirate = pirateTransform.gameObject;
+                pirate = rawPirate.GetComponent<PirateController>();
+            }
+            bool isPirate = pirate != null;
+            if (isPirate)
+            {
+                int pirateLocalIndex = pirate.localIndex;
+                bool isEnemy = pirateLocalIndex != localIndex;
+                if (isEnemy)
+                {
+                    if (isStandardMode)
+                    {
+                        int networkId = currentPlayer.ID;
+                        PhotonView localPhotonView = colliderObject.GetComponent<PhotonView>();
+                        localPhotonView.TransferOwnership(networkId);
+                    }
+                    float coordY = 4.107f;
+                    Vector3 randomPosition = new Vector3(0, coordY, 0);
+                    List<Transform> respawnPoints = gameManager.respawnPoints;
+                    Transform respawnPoint = respawnPoints[pirateLocalIndex];
+                    randomPosition = respawnPoint.position;
+                    colliderObject.transform.position = randomPosition;
+                    if (isStandardMode)
+                    {
+                        object[] networkData = new object[] { pirateLocalIndex };
+                        PhotonNetwork.RaiseEvent(193, networkData, true, new RaiseEventOptions
+                        {
+                            Receivers = ReceiverGroup.All
+                        });
+                    }
+                    else
+                    {
+                        pirate.miniGameCursor = 0;
+                        pirate.isMiniGame = false;
+                        pirate.isStopped = false;
+                        pirate.isShovelFound = false;
+                        GameObject miniGame = pirate.gameManager.miniGame;
+                        miniGame.SetActive(false);
+                        // pirate.GetComponent<Animator>().Play("Idle");
+                        if (pirate.isHaveShovel)
+                        {
+                            gameManager.GenerateShovel();
+                        }
+                        pirate.isHaveShovel = false;
+                        Vector3 origin = Vector3.zero;
+                        GameObject handController = pirate.leftHandController.gameObject;
+                        Rig rig = handController.GetComponent<Rig>();
+                        rig.weight = 0.0f;
+                        Transform ik = pirate.leftHandController.GetChild(0);
+                        Transform target = ik.GetChild(0); ;
+                        target.localPosition = origin;
+                        handController = pirate.rightHandController.gameObject;
+                        rig = handController.GetComponent<Rig>();
+                        rig.weight = 0.0f;
+                        ik = pirate.rightHandController.GetChild(0);
+                        target = ik.GetChild(0); ;
+                        target.localPosition = origin;
+                        PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+                        foreach (PirateController localPirate in pirates)
+                        {
+                            GameObject rawPirate = localPirate.gameObject;
+                            CapsuleCollider localCollider = null;
+                            CapsuleCollider pirateCollider = null;
+                            if (transform.parent != null)
+                            {
+                                localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                            }
+                            else
+                            {
+                                localCollider = GetComponent<CapsuleCollider>();
+                            }
+                            if (rawPirate.transform.parent != null)
+                            {
+                                pirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                            }
+                            else
+                            {
+                                pirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                            }
+                            Physics.IgnoreCollision(localCollider, pirateCollider, false);
+                        }
+                        AudioSource audio = pirate.GetComponent<AudioSource>();
+                        AudioClip dieSound = pirate.gameManager.dieSound;
+                        audio.clip = dieSound;
+                        audio.loop = false;
+                        audio.Play();
+                    }
+                    Debug.Log("Удар мечом");
+                }
             }
         }
-        AudioSource botAudio = GetComponent<AudioSource>();
-        botAudio.Stop();
-
+        if (isStandardMode)
+        {
+            object[] networkData = new object[] { localIndex, "Attack" };
+            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.Others
+            });
+        }
     }
 
 }

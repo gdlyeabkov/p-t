@@ -1,5 +1,28 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!145 &-306110879398771539
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1498852808064629080}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.69282407, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Spring: 10
+  m_Damper: 0.2
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 1
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1001 &8222439432926665620
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35,7 +58,7 @@ PrefabInstance:
     - target: {fileID: 7410400136868389580, guid: 1d8889e352dcca7428392f173b68038c,
         type: 3}
       propertyPath: m_Name
-      value: treasure Variant
+      value: treasure
       objectReference: {fileID: 0}
     - target: {fileID: 7411447061828122306, guid: 1d8889e352dcca7428392f173b68038c,
         type: 3}
@@ -98,3 +121,9 @@ PrefabInstance:
     - {fileID: 862153097389933062, guid: 1d8889e352dcca7428392f173b68038c, type: 3}
     - {fileID: -2994156838507890973, guid: 1d8889e352dcca7428392f173b68038c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1d8889e352dcca7428392f173b68038c, type: 3}
+--- !u!1 &1498852808064629080 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7410400136868389580, guid: 1d8889e352dcca7428392f173b68038c,
+    type: 3}
+  m_PrefabInstance: {fileID: 8222439432926665620}
+  m_PrefabAsset: {fileID: 0}

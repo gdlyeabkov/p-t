@@ -131,7 +131,14 @@ public class NetworkController : PunBehaviour
 			rooms.GetComponent<RectTransform>().sizeDelta = new Vector2(rooms.GetComponent<RectTransform>().sizeDelta.x, rooms.GetComponent<RectTransform>().sizeDelta.y - 30);
 
 		}
-		if (PhotonNetwork.GetRoomList().Length >= 1)
+		// if (PhotonNetwork.GetRoomList().Length >= 1)
+		bool isHaveRooms = PhotonNetwork.GetRoomList().Count((RoomInfo someRoom) =>
+		{
+			int someRoomCountPlayers = someRoom.playerCount;
+			bool isRoomNotFull = someRoomCountPlayers < maxCountPlayers;
+			return isRoomNotFull;
+		}) >= 1;
+		if (isHaveRooms)
 		{
 			for (int roomIndex = 0; roomIndex < PhotonNetwork.countOfRooms; roomIndex++)
 			{
@@ -165,7 +172,8 @@ public class NetworkController : PunBehaviour
 				roomInst.GetComponent<RectTransform>().sizeDelta = new Vector2(rooms.GetComponent<RectTransform>().sizeDelta.x / 2, roomInst.GetComponent<RectTransform>().sizeDelta.y);
 			}
 		}
-		else if (PhotonNetwork.GetRoomList().Length <= 0)
+		// else if (PhotonNetwork.GetRoomList().Length <= 0)
+		else
 		{
 			GameObject roomInst = Instantiate(emptyPrefab, new Vector2(0f, 0f), Quaternion.identity);
 			roomInst.GetComponent<Text>().text = "Room list is empty...";

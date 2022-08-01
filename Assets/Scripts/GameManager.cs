@@ -51,6 +51,8 @@ public class GameManager : PunBehaviour
     public List<GameObject> paints;
     public CinemachineVirtualCamera viewCamera;
     public float maxSpeed = 0f;
+    public GameObject treasureInst;
+    public List<GameObject> boats;
 
     void Start()
     {
@@ -552,7 +554,15 @@ public class GameManager : PunBehaviour
 
                 }
             }
-            // pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(pirateWrap.GetComponent<Rigidbody>().velocity, maxSpeed);
+        }
+    }
+
+    public IEnumerator ResetConstraints(GameObject someTreasure)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            someTreasure.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
     }
 
