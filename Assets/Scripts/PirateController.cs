@@ -211,7 +211,13 @@ public class PirateController : MonoBehaviour
                         bool isEKeyUp = Input.GetKeyUp(eKey);
                         bool isEKey = Input.GetKey(eKey);
                         KeyCode spaceKey = KeyCode.Space;
-                        bool isSpaceKeyDown = Input.GetKeyDown(spaceKey);
+                        // bool isSpaceKeyDown = Input.GetKeyDown(spaceKey);
+                        bool isSpaceKeyUp = Input.GetKeyDown(spaceKey);
+                        bool isFreeHands = !isHaveShovel;
+                        AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                        bool isAlreadyAttack = animatorStateInfo.IsName("Attack");
+                        bool isNotAlreadyAttack = !isAlreadyAttack;
+                        bool isCanAttack = isSpaceKeyUp && isFreeHands && isNotAlreadyAttack;
                         if (isEKeyDown)
                         {
                             if (isCrossFound && isHaveShovel)
@@ -238,7 +244,6 @@ public class PirateController : MonoBehaviour
                                     rawMiniGameKey = generatedChar.ToString();
                                     Text miniGameLabel = gameManager.miniGameLabel;
                                     // miniGameLabel.text = rawMiniGameKey;
-                                    AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                                     bool isAlreadyDig = animatorStateInfo.IsName("Dig");
                                     bool isDoDig = !isAlreadyDig;
                                     if (isDoDig)
@@ -294,7 +299,6 @@ public class PirateController : MonoBehaviour
                                 rawMiniGameKey = generatedChar.ToString();
                                 Text miniGameLabel = gameManager.miniGameLabel;
                                 // miniGameLabel.text = rawMiniGameKey;
-                                AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                                 bool isAlreadyPull = animatorStateInfo.IsName("Pull");
                                 bool isDoPull = !isAlreadyPull;
                                 if (isDoPull)
@@ -403,7 +407,7 @@ public class PirateController : MonoBehaviour
                             isStopped = false;
                             GetComponent<Animator>().Play("Walk");
                         }
-                        else if (isSpaceKeyDown)
+                        else if (isCanAttack)
                         {
                             GetComponent<Animator>().Play("Attack");
                             Transform armature = transform.GetChild(0);
