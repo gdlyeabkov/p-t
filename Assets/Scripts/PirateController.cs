@@ -217,7 +217,9 @@ public class PirateController : MonoBehaviour
                         AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                         bool isAlreadyAttack = animatorStateInfo.IsName("Attack");
                         bool isNotAlreadyAttack = !isAlreadyAttack;
-                        bool isCanAttack = isSpaceKeyUp && isFreeHands && isNotAlreadyAttack;
+                        bool isWalk = animatorStateInfo.IsName("Walk");
+                        bool isNotWalk = !isWalk;
+                        bool isCanAttack = isSpaceKeyUp && isFreeHands && isNotAlreadyAttack && isNotWalk;
                         if (isEKeyDown)
                         {
                             if (isCrossFound && isHaveShovel)
