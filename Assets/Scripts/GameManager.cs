@@ -257,7 +257,8 @@ public class GameManager : PunBehaviour
             }
             else
             {
-                int botIndex = localIndex - 1;
+                // int botIndex = localIndex - 1;
+                int botIndex = localIndex;
                 GameObject bot = bots[botIndex];
                 rawObject = bot;
             }

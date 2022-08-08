@@ -686,7 +686,8 @@ public class PirateController : MonoBehaviour
                         target.localPosition = origin;
                         foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                         {
-                            GameObject rawPirate = pirate.gameObject;
+                            // GameObject rawPirate = pirate.gameObject;
+                            GameObject rawPirate = pirate.gameObject.transform.gameObject;
                             Transform botTransform = transform.parent;
                             bool isBot = botTransform != null;
                             if (isBot)
@@ -706,7 +707,7 @@ public class PirateController : MonoBehaviour
                             }
                             else
                             {
-                                Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                // Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
                             }
                         }
                     }
@@ -771,7 +772,8 @@ public class PirateController : MonoBehaviour
                                     });
                                     foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                                     {
-                                        GameObject rawPirate = pirate.gameObject;
+                                        // GameObject rawPirate = pirate.gameObject;
+                                        GameObject rawPirate = pirate.gameObject.transform.gameObject;
                                         if (isBot)
                                         {
                                             CapsuleCollider rawPirateCollider = null;
@@ -789,7 +791,7 @@ public class PirateController : MonoBehaviour
                                         }
                                         else
                                         {
-                                            Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                            // Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
                                         }
                                     }
                                     GameObject handController = leftHandController.gameObject;
@@ -843,7 +845,8 @@ public class PirateController : MonoBehaviour
                                 });
                                 foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                                 {
-                                    GameObject rawPirate = pirate.gameObject;
+                                    // GameObject rawPirate = pirate.gameObject;
+                                    GameObject rawPirate = pirate.gameObject.transform.gameObject;
                                     if (isBot)
                                     {
                                         CapsuleCollider rawPirateCollider = null;
@@ -861,7 +864,7 @@ public class PirateController : MonoBehaviour
                                     }
                                     else
                                     {
-                                        Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
+                                        // Physics.IgnoreCollision(GetComponent<CapsuleCollider>(), rawPirate.GetComponent<CapsuleCollider>());
                                     }
                                 }
                             }
