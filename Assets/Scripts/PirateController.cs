@@ -268,6 +268,36 @@ public class PirateController : MonoBehaviour
                 }
             }
         }
+
+        /*if (transform.parent != null)
+        {
+            if (transform.parent.gameObject.GetComponent<Rigidbody>().velocity.z > 1f)
+            {
+                transform.parent.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(transform.parent.gameObject.GetComponent<Rigidbody>().velocity.x, transform.parent.gameObject.GetComponent<Rigidbody>().velocity.y, 1f);
+            }
+        }
+        else
+        {
+            if (GetComponent<Rigidbody>().velocity.z > 1f)
+            {
+                GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, GetComponent<Rigidbody>().velocity.y, 1f);
+            }
+        }*/
+/*        if (transform.parent != null)
+        {
+            if (transform.parent.gameObject.GetComponent<Rigidbody>().velocity.magnitude > 1f)
+            {
+                transform.parent.gameObject.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(transform.parent.gameObject.GetComponent<Rigidbody>().velocity, 1f);
+            }
+        }
+        else
+        {
+            if (GetComponent<Rigidbody>().velocity.magnitude > 1f)
+            {
+                GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, 1f);
+            }
+        }*/
+
     }
 
     public void OnTriggerEnter(Collider other)
@@ -1043,7 +1073,10 @@ public class PirateController : MonoBehaviour
                                     List<Transform> respawnPoints = gameManager.respawnPoints;
                                     Transform respawnPoint = respawnPoints[pirateLocalIndex];
                                     randomPosition = respawnPoint.position;
+
                                     colliderObject.transform.position = randomPosition;
+                                    // StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+
                                     if (isStandardMode)
                                     {
                                         object[] networkData = new object[] { pirateLocalIndex };
@@ -1108,6 +1141,19 @@ public class PirateController : MonoBehaviour
                                         audio.clip = dieSound;
                                         audio.loop = false;
                                         audio.Play();
+
+                                        if (gameManager.treasureInst != null)
+                                        {
+                                            if (transform.parent != null)
+                                            {
+                                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                                            }
+                                            else
+                                            {
+                                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                                            }
+                                        }
+
                                     }
                                 }
                             }
@@ -1583,6 +1629,14 @@ public class PirateController : MonoBehaviour
                 Receivers = ReceiverGroup.Others
             });
         }
+    }
+
+    public IEnumerator RespawnPirate (GameObject pirate, Vector3 randomPosition)
+    {
+        pirate.SetActive(false);
+        yield return new WaitForSeconds(10f);
+        pirate.transform.position = randomPosition;
+        pirate.SetActive(true);
     }
 
 }

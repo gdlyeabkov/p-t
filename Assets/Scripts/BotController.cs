@@ -83,4 +83,30 @@ public class BotController : MonoBehaviour
             }
         }
     }
+
+    public void Update()
+    {
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        bool isOnNavMesh = agent.isOnNavMesh;
+        if (isOnNavMesh)
+        {
+            if (agent.remainingDistance <= 3f)
+            // if (false)
+            {
+                Transform pirateTransform = transform.GetChild(0);
+                GameObject pirate = pirateTransform.gameObject;
+                Animator pirateAnimator = pirate.GetComponent<Animator>();
+                AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
+                bool isAttack = animatorStateInfo.IsName("Attack");
+                bool isNotAttack = !isAttack;
+                if (isNotAttack)
+                {
+                    PirateController pirateController = pirate.GetComponent<PirateController>();
+                    pirateController.DoAttack();
+                    pirateController.gameManager.GiveOrder(gameObject);
+                }
+            }
+        }
+    }
+
 }

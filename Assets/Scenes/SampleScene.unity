@@ -351,12 +351,12 @@ PrefabInstance:
     - target: {fileID: 3114354268144252252, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 60.8
+      value: 47.7
       objectReference: {fileID: 0}
     - target: {fileID: 3114354268144252252, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.9
+      value: -4.22
       objectReference: {fileID: 0}
     - target: {fileID: 3114354268144252252, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
@@ -398,6 +398,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -20.383
       objectReference: {fileID: 0}
+    - target: {fileID: 4516755890553565293, guid: 240851b0736e96748b6d792ec49e6b0d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 598e2298fdb05a746af583bf7263e535, type: 2}
     - target: {fileID: 4546376316036234726, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: number
@@ -711,7 +716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 383832301}
   m_Layer: 0
-  m_Name: Bases
+  m_Name: Boats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1651,17 +1656,17 @@ PrefabInstance:
     - target: {fileID: 3114354268144252252, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -75.298584
+      value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 3114354268144252252, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.540575
+      value: -4.33
       objectReference: {fileID: 0}
     - target: {fileID: 3114354268144252252, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 81.87
+      value: 46.4
       objectReference: {fileID: 0}
     - target: {fileID: 3114354268144252252, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
@@ -1698,6 +1703,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -20.383001
       objectReference: {fileID: 0}
+    - target: {fileID: 4516755890553565293, guid: 240851b0736e96748b6d792ec49e6b0d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b3eeaf2c3ffa3be40afb0363098a65be, type: 2}
     - target: {fileID: 4546376316036234726, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: gameManager
@@ -1887,6 +1897,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -20.383
       objectReference: {fileID: 0}
+    - target: {fileID: 4516755890553565293, guid: 240851b0736e96748b6d792ec49e6b0d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dd00b256ce0446442bddb4db7ab3312d, type: 2}
     - target: {fileID: 4546376316036234726, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: number
@@ -3116,6 +3131,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -20.383
       objectReference: {fileID: 0}
+    - target: {fileID: 4516755890553565293, guid: 240851b0736e96748b6d792ec49e6b0d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d23fb4781f538124380ce5c3480ab28e, type: 2}
     - target: {fileID: 4546376316036234726, guid: 240851b0736e96748b6d792ec49e6b0d,
         type: 3}
       propertyPath: number

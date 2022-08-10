@@ -496,7 +496,9 @@ public class GameManager : PunBehaviour
             AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
             bool isPull = animatorStateInfo.IsName("Pull");
             bool isDig = animatorStateInfo.IsName("Dig");
-            bool isStop = isWin || isDig || isPull;
+            bool isAttack = animatorStateInfo.IsName("Attack");
+            // bool isStop = isWin || isDig || isPull;
+            bool isStop = isWin || isDig || isPull || isAttack;
             if (isStop)
             {
                 agent.speed = 0;
@@ -531,10 +533,12 @@ public class GameManager : PunBehaviour
                 {
 
                     // agent.speed = 30;
-                    agent.speed = 10;
+                    // agent.speed = 10;
+                    agent.speed = 1;
                     agent.angularSpeed = 30;
-                    // agent.acceleration = 30;
+                    // agent.angularSpeed = 5;
                     agent.acceleration = 30;
+                    // agent.acceleration = 5;
 
                     // agent.velocity = Vector3.zero;
                     // pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.zero;

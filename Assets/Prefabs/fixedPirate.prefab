@@ -92,12 +92,21 @@ PrefabInstance:
       propertyPath: m_Drag
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6802778770058329762, guid: 55f7c1c2f336f174297d74244b55dad6,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802778770058329762, guid: 55f7c1c2f336f174297d74244b55dad6,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7199195563659336905, guid: 55f7c1c2f336f174297d74244b55dad6,
         type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 13400000, guid: 1553c4c361ddc0e458516c192a293067,
-        type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2086796652518818565, guid: 55f7c1c2f336f174297d74244b55dad6, type: 3}
     - {fileID: 1797583288409400121, guid: 55f7c1c2f336f174297d74244b55dad6, type: 3}
