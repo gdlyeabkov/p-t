@@ -283,7 +283,7 @@ public class PirateController : MonoBehaviour
                 GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, GetComponent<Rigidbody>().velocity.y, 1f);
             }
         }*/
-/*        if (transform.parent != null)
+        /*if (transform.parent != null)
         {
             if (transform.parent.gameObject.GetComponent<Rigidbody>().velocity.magnitude > 1f)
             {
@@ -297,7 +297,24 @@ public class PirateController : MonoBehaviour
                 GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, 1f);
             }
         }*/
-
+        if (transform.parent != null)
+        {
+            var v = transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+            if (v.sqrMagnitude > 1f)
+            {
+                transform.parent.gameObject.GetComponent<Rigidbody>().velocity = v.normalized * 1f;
+            }
+            transform.parent.gameObject.GetComponent<Rigidbody>().ResetCenterOfMass();
+        }
+        else
+        {
+            var v = GetComponent<Rigidbody>().velocity;
+            if (v.sqrMagnitude > 1f)
+            {
+                GetComponent<Rigidbody>().velocity = v.normalized * 1f;
+            }
+            GetComponent<Rigidbody>().ResetCenterOfMass();
+        }
     }
 
     public void OnTriggerEnter(Collider other)

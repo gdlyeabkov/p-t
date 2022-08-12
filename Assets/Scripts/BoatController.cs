@@ -12,7 +12,9 @@ public class BoatController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (gameManager.treasureInst != null)
+        GameObject treasureInst = gameManager.treasureInst;
+        bool isTreasureExists = treasureInst != null;
+        if (isTreasureExists)
         {
             GameObject detectedObject = other.gameObject;
             SpringJoint joint = detectedObject.GetComponent<SpringJoint>();
@@ -29,7 +31,11 @@ public class BoatController : MonoBehaviour
                     PirateController pirateController = null;
                     if (isBot)
                     {
-                        pirateController = botController.gameObject.transform.GetChild(0).gameObject.GetComponent<PirateController>();
+                        GameObject rawBot = botController.gameObject;
+                        Transform botTransform = rawBot.transform;
+                        Transform pirateBotTransform = botTransform.GetChild(0);
+                        GameObject rawPirateBot = pirateBotTransform.gameObject;
+                        pirateController = rawPirateBot.GetComponent<PirateController>();
                     }
                     else
                     {
@@ -57,22 +63,27 @@ public class BoatController : MonoBehaviour
                         {
                             gameManager.GiveOrders();
                             pirateController.isHaveShovel = true;
-                            GameObject rawFoundedShovel = pirateController.foundedShovel.gameObject;
+                            Transform foundedShovel = pirateController.foundedShovel;
+                            GameObject rawFoundedShovel = foundedShovel.gameObject;
                             Destroy(rawFoundedShovel);
-                            pirateController.destination = gameManager.cross.transform.position;
-                            pirateController.agentTarget = gameManager.cross.transform;
+                            GameObject cross = gameManager.cross;
+                            Transform agentTarget = cross.transform;
+                            pirateController.destination = agentTarget.position;
+                            pirateController.agentTarget = agentTarget;
                         }
                         Vector3 origin = Vector3.zero;
-                        GameObject handController = pirateController.leftHandController.gameObject;
+                        Transform leftHandController = pirateController.leftHandController;
+                        GameObject handController = leftHandController.gameObject;
                         Rig rig = handController.GetComponent<Rig>();
                         rig.weight = 0.0f;
-                        Transform ik = pirateController.leftHandController.GetChild(0);
+                        Transform ik = leftHandController.GetChild(0);
                         Transform target = ik.GetChild(0); ;
                         target.localPosition = origin;
-                        handController = pirateController.rightHandController.gameObject;
+                        Transform rightHandController = pirateController.rightHandController;
+                        handController = rightHandController.gameObject;
                         rig = handController.GetComponent<Rig>();
                         rig.weight = 0.0f;
-                        ik = pirateController.rightHandController.GetChild(0);
+                        ik = rightHandController.GetChild(0);
                         target = ik.GetChild(0); ;
                         target.localPosition = origin;
                         PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
@@ -84,16 +95,21 @@ public class BoatController : MonoBehaviour
                             CapsuleCollider somePirateCollider = null;
                             if (isBot)
                             {
-                                localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                                Transform parent = transform.parent;
+                                GameObject rawParent = parent.gameObject;
+                                localCollider = rawParent.GetComponent<CapsuleCollider>();
                             }
                             else
                             {
                                 localCollider = GetComponent<CapsuleCollider>();
                             }
-                            isBot = rawPirate.transform.parent != null;
+                            Transform rawPirateTransform = rawPirate.transform;
+                            Transform botTransform = rawPirateTransform.parent;
+                            isBot = botTransform != null;
                             if (isBot)
                             {
-                                somePirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                                GameObject bot = botTransform.gameObject;
+                                somePirateCollider = bot.GetComponent<CapsuleCollider>();
                             }
                             else
                             {
@@ -136,7 +152,8 @@ public class BoatController : MonoBehaviour
                         bool isPlayerLooser = 0 != localIndex;
                         if (isPlayerLooser)
                         {
-                            Animator localPirateAnimator = gameManager.localPirate.GetComponent<Animator>();
+                            PirateController localPirate = gameManager.localPirate;
+                            Animator localPirateAnimator = localPirate.GetComponent<Animator>();
                             localPirateAnimator.Play("Loose");
                         }
 

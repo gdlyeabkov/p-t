@@ -94,6 +94,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6802778770058329762, guid: 55f7c1c2f336f174297d74244b55dad6,
         type: 3}
+      propertyPath: m_Mass
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802778770058329762, guid: 55f7c1c2f336f174297d74244b55dad6,
+        type: 3}
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}

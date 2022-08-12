@@ -81,14 +81,22 @@ public class GameManager : PunBehaviour
                 Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
                 float randomRotation = Random.Range(-5, 5);
                 Vector3 islandSphereTransformPosition = islandSphereTransform.position;
-                cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
-                Ray ray = new Ray(cross.transform.position, Vector3.down);
+                Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
+                cross.transform.RotateAround(islandSphereTransformPosition, crossRotationAxes, randomRotation);
+                Vector3 updatedCrossPosition = cross.transform.position;
+                Vector3 downDirection = Vector3.down;
+                Ray ray = new Ray(updatedCrossPosition, downDirection);
                 RaycastHit hit = new RaycastHit();
-                bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity);
+                float infinityLength = Mathf.Infinity;
+                bool isDetectIsland = Physics.Raycast(ray, out hit, infinityLength);
                 if (isDetectIsland)
                 {
                     Vector3 hitPoint = hit.point;
-                    cross.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
+                    float hitPointX = hitPoint.x;
+                    float hitPointY = hitPoint.y;
+                    float neededHitPointY = hitPointY + 0.1f;
+                    float hitPointZ = hitPoint.z;
+                    cross.transform.position = new Vector3(hitPointX, neededHitPointY, hitPointZ);
                 }
                 GenerateShovel();
             }
@@ -97,7 +105,7 @@ public class GameManager : PunBehaviour
             {
                 StartCoroutine(GeneratePaint());
             }
-            if (PhotonNetwork.isMasterClient)
+            if (isHost)
             {
                 /*
                     * кеширование в переменную ниже приводит к тому, что пираты вообще не создаются
@@ -134,14 +142,22 @@ public class GameManager : PunBehaviour
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
             float randomRotation = Random.Range(-5, 5);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
-            cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
-            Ray ray = new Ray(cross.transform.position, Vector3.down);
+            Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
+            cross.transform.RotateAround(islandSphereTransformPosition, crossRotationAxes, randomRotation);
+            Vector3 updatedCrossPosition = cross.transform.position;
+            Vector3 downDirection = Vector3.down;
+            Ray ray = new Ray(updatedCrossPosition, downDirection);
             RaycastHit hit = new RaycastHit();
-            bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity);
+            float infinityLength = Mathf.Infinity;
+            bool isDetectIsland = Physics.Raycast(ray, out hit, infinityLength);
             if (isDetectIsland)
             {
                 Vector3 hitPoint = hit.point;
-                cross.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
+                float hitPointX = hitPoint.x;
+                float hitPointY = hitPoint.y;
+                float neededHitPointY = hitPointY + 0.1f;
+                float hitPointZ = hitPoint.z;
+                cross.transform.position = new Vector3(hitPointX, neededHitPointY, hitPointZ);
             }
             GenerateShovel();
             int countPaints = Random.Range(0, 5);
@@ -213,17 +229,8 @@ public class GameManager : PunBehaviour
             StartCoroutine(GiveOrders());
 
         }
-
-        // HideCursor();
-
     }
-
-    public void HideCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
+    
     public void ShowWin(int localIndex, int networkIndex)
     {
         bool isNotWin = !isWin;
@@ -249,7 +256,6 @@ public class GameManager : PunBehaviour
                 Receivers = ReceiverGroup.All
             });
             
-            // GameObject rawObject = localPirate.gameObject;
             GameObject rawObject = null;
             if (isStandardMode)
             {
@@ -313,7 +319,8 @@ public class GameManager : PunBehaviour
         paintController.isOwner = true;
         float randomRotation = Random.Range(-5f, 5f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
-        paintGo.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
+        Vector3 paintRotationAxes = new Vector3(1f, 0f, 1f);
+        paintGo.transform.RotateAround(islandSphereTransformPosition, paintRotationAxes, randomRotation);
 
         paints.Add(paintGo);
 
@@ -391,7 +398,8 @@ public class GameManager : PunBehaviour
 
         float randomRotation = Random.Range(-5f, 5f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
-        shovel.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 1f, 0f), randomRotation);
+        Vector3 shovelRotationAxes = new Vector3(1f, 1f, 0f);
+        shovel.transform.RotateAround(islandSphereTransformPosition, shovelRotationAxes, randomRotation);
     }
 
     public void DoAction()
@@ -437,15 +445,19 @@ public class GameManager : PunBehaviour
         bool isAttack = target == 2;
         if (isCaptureCross)
         {
-            if (pirateController.isHaveShovel)
+            bool isHaveShovel = pirateController.isHaveShovel;
+            bool isShovelExists = shovel != null;
+            if (isHaveShovel)
             {
-                destination = cross.transform.position;
-                pirateController.agentTarget = cross.transform;
+                Transform agentTarget = cross.transform;
+                destination = agentTarget.position;
+                pirateController.agentTarget = agentTarget;
             }
-            else if (shovel != null)
+            else if (isShovelExists)
             {
-                destination = shovel.transform.position;
-                pirateController.agentTarget = shovel.transform;
+                Transform agentTarget = shovel.transform;
+                destination = agentTarget.position;
+                pirateController.agentTarget = agentTarget;
             }
         }
         else if (isCapturePaint)
@@ -458,8 +470,9 @@ public class GameManager : PunBehaviour
                 bool isPaintExists = somePaint != null;
                 if (isPaintExists)
                 {
-                    destination = somePaint.transform.position;
-                    pirateController.agentTarget = somePaint.transform;
+                    Transform agentTarget = somePaint.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
                 }
             }
             else
@@ -469,8 +482,9 @@ public class GameManager : PunBehaviour
         }
         else if (isAttack)
         {
-            destination = localPirate.transform.position;
-            pirateController.agentTarget = localPirate.transform;
+            Transform agentTarget = localPirate.transform;
+            destination = agentTarget.position;
+            pirateController.agentTarget = agentTarget;
         }
         agent.Warp(destination);
         pirateController.destination = destination;
