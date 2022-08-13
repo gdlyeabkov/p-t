@@ -53,6 +53,7 @@ public class GameManager : PunBehaviour
     public float maxSpeed = 0f;
     public GameObject treasureInst;
     public List<GameObject> boats;
+    public bool isInit = false;
 
     void Start()
     {
@@ -486,7 +487,10 @@ public class GameManager : PunBehaviour
             destination = agentTarget.position;
             pirateController.agentTarget = agentTarget;
         }
-        agent.Warp(destination);
+        if (!isInit)
+        {
+            agent.Warp(destination);
+        }
         pirateController.destination = destination;
     }
 

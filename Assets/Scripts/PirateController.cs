@@ -77,8 +77,7 @@ public class PirateController : MonoBehaviour
             Transform spine2 = spine1.GetChild(0);
             Transform neck = spine2.GetChild(1);
             Transform head = neck.GetChild(0);
-            gameManager.viewCamera.Follow = head;
-            gameManager.viewCamera.LookAt = head;
+            StartCoroutine(SetPlayerCamera());
 
         }
 
@@ -1654,6 +1653,21 @@ public class PirateController : MonoBehaviour
         yield return new WaitForSeconds(10f);
         pirate.transform.position = randomPosition;
         pirate.SetActive(true);
+    }
+
+    public IEnumerator SetPlayerCamera()
+    {
+        yield return new WaitForSeconds(5f);
+        Transform armature = transform.GetChild(0);
+        Transform hips = armature.GetChild(0);
+        Transform spine = hips.GetChild(2);
+        Transform spine1 = spine.GetChild(0);
+        Transform spine2 = spine1.GetChild(0);
+        Transform neck = spine2.GetChild(1);
+        Transform head = neck.GetChild(0);
+        gameManager.viewCamera.Follow = head;
+        gameManager.viewCamera.LookAt = head;
+        gameManager.isInit = true;
     }
 
 }
