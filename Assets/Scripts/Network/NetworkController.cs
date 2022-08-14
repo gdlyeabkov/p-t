@@ -42,9 +42,10 @@ public class NetworkController : PunBehaviour
 
 	public void LoadArena()
 	{
-		if (PhotonNetwork.room.playerCount >= maxCountPlayers)
+		// if (PhotonNetwork.room.playerCount >= maxCountPlayers)
+		if (true)
 		{
-			PhotonNetwork.LoadLevel("SampleScene");
+			PhotonNetwork.LoadLevel("Main");
 		}
 		else
 		{
@@ -218,7 +219,7 @@ public class NetworkController : PunBehaviour
 		ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
 		customProperties.Add("index", playerCursor);
 		PhotonNetwork.player.SetCustomProperties(customProperties);
-		buttonJoinedArena.GetComponent<Button>().interactable = false;
+		// buttonJoinedArena.GetComponent<Button>().interactable = false;
 	}
 
 	public override void OnLeftRoom()
@@ -327,7 +328,7 @@ public class NetworkController : PunBehaviour
 			}
 		}
 		players.GetComponent<RectTransform>().sizeDelta = new Vector2(players.GetComponent<RectTransform>().sizeDelta.x, players.GetComponent<RectTransform>().sizeDelta.y - 35);
-		buttonJoinedArena.GetComponent<Button>().interactable = false;
+		// buttonJoinedArena.GetComponent<Button>().interactable = false;
 	}
 
 	public void OnEvent(byte eventCode, object content, int senderId)
@@ -343,7 +344,7 @@ public class NetworkController : PunBehaviour
 	public void DoTrain()
 	{
 		PlayerPrefs.SetString("Mode", "Train");
-		PhotonNetwork.LoadLevel("SampleScene");
+		PhotonNetwork.LoadLevel("Main");
 	}
 
 	public void SetNickName()

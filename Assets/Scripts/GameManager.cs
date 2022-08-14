@@ -49,6 +49,7 @@ public class GameManager : PunBehaviour
     public CinemachineVirtualCamera viewCamera;
     public GameObject treasureInst;
     public List<GameObject> boats;
+    public GameObject pirateEnemyResourse;
 
     void Start()
     {
@@ -114,98 +115,215 @@ public class GameManager : PunBehaviour
                     Quaternion baseRotation = Quaternion.identity;
                     GameObject pirate = PhotonNetwork.Instantiate("fixed_pirate", randomPosition, baseRotation, 0);
                 }
+                
+                CreateNetworkBots();
+            
             }
+            // CreateNetworkBots();
         }
         else
         {
-            bots = new List<GameObject>();
-            globalNetworkIndex = 0;
-            Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
-            Quaternion baseRotation = Quaternion.identity;
-            cross = Instantiate(pirateCrossPrefab, crossBasePosition, baseRotation);
-            float randomCoordX = 0f;
-            Transform crossTransform = cross.transform;
-            Vector3 crossTransformPosition = crossTransform.position;
-            float coordY = -0.9f;
-            float randomCoordZ = 0f;
-            Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            float randomRotation = Random.Range(-5, 5);
-            Vector3 islandSphereTransformPosition = islandSphereTransform.position;
-            cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
-            Ray ray = new Ray(cross.transform.position, Vector3.down);
-            RaycastHit hit = new RaycastHit();
-            bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity);
-            if (isDetectIsland)
-            {
-                Vector3 hitPoint = hit.point;
-                cross.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
-            }
-            GenerateShovel();
-            int countPaints = Random.Range(0, 5);
-            for (int i = 0; i < countPaints; i++)
-            {
-                StartCoroutine(GeneratePaint());
-            }
+            CreateBots();
+        }
+    }
+
+    public void CreateNetworkBots ()
+    {
+        bots = new List<GameObject>();
+        Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
+        Quaternion baseRotation = Quaternion.identity;
+        cross = Instantiate(pirateCrossPrefab, crossBasePosition, baseRotation);
+        float randomCoordX = 0f;
+        Transform crossTransform = cross.transform;
+        Vector3 crossTransformPosition = crossTransform.position;
+        float coordY = -0.9f;
+        float randomCoordZ = 0f;
+        Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        float randomRotation = Random.Range(-5, 5);
+        Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+        cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
+        Ray ray = new Ray(cross.transform.position, Vector3.down);
+        RaycastHit hit = new RaycastHit();
+        bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity);
+        if (isDetectIsland)
+        {
+            Vector3 hitPoint = hit.point;
+            cross.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
+        }
+        int countPaints = Random.Range(0, 5);
+        for (int i = 0; i < countPaints; i++)
+        {
+            StartCoroutine(GeneratePaint());
+        }
+        
+        // for (int i = PhotonNetwork.room.playerCount; i > 0; i--)
+        for (int i = PhotonNetwork.room.playerCount; i < 4; i++)
+        {
+            baseRotation = Quaternion.identity;
             randomCoordX = Random.Range(-45, 45);
             crossTransform = cross.transform;
             crossTransformPosition = crossTransform.position;
             coordY = 6f;
             randomCoordZ = Random.Range(-45, 45);
             Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            Transform respawnPoint = respawnPoints[0];
+            Transform respawnPoint = respawnPoints[1];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
-            GameObject pirate = Instantiate(piratePrefab, randomPosition, baseRotation);
-            randomCoordX = Random.Range(-45, 45);
-            crossTransform = cross.transform;
-            crossTransformPosition = crossTransform.position;
-            coordY = 6f;
-            randomCoordZ = Random.Range(-45, 45);
-            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            respawnPoint = respawnPoints[1];
-            randomPosition = respawnPoint.position;
-            baseRotation = Quaternion.identity;
-            GameObject pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            // GameObject pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+            GameObject pirateWrap = PhotonNetwork.Instantiate("fixedatePirateEnemyWrapResourse", randomPosition, baseRotation, 0);
             NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
             agent.speed = 0.1f;
             bots.Add(pirateWrap);
-            Transform pirateWrapTransform = pirateWrap.transform;
-            Transform pirateTransform = pirateWrapTransform.GetChild(0);
-            pirate = pirateTransform.gameObject;
-            Animator pirateAnimator = pirate.GetComponent<Animator>();
-            pirateAnimator.Play("Walk");
-            randomCoordX = Random.Range(-45, 45);
-            crossTransform = cross.transform;
-            crossTransformPosition = crossTransform.position;
-            coordY = 6f;
-            randomCoordZ = Random.Range(-45, 45);
-            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            respawnPoint = respawnPoints[2];
-            randomPosition = respawnPoint.position;
-            baseRotation = Quaternion.identity;
-            pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            agent = pirateWrap.GetComponent<NavMeshAgent>();
-            agent.speed = 0.1f;
-            bots.Add(pirateWrap);
-            pirateAnimator = pirate.GetComponent<Animator>();
-            pirateAnimator.Play("Walk");
-            randomCoordX = Random.Range(-45, 45);
-            crossTransform = cross.transform;
-            crossTransformPosition = crossTransform.position;
-            coordY = 6f;
-            randomCoordZ = Random.Range(-45, 45);
-            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            respawnPoint = respawnPoints[3];
-            randomPosition = respawnPoint.position;
-            baseRotation = Quaternion.identity;
-            pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            agent = pirateWrap.GetComponent<NavMeshAgent>();
-            agent.speed = 0.1f;
-            bots.Add(pirateWrap);
-            pirateAnimator = pirate.GetComponent<Animator>();
-            pirateAnimator.Play("Walk");
-            StartCoroutine(GiveOrders());
         }
+        /*randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        Transform respawnPoint = respawnPoints[0];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        respawnPoint = respawnPoints[1];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        GameObject pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+        NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
+        agent.speed = 0.1f;
+        bots.Add(pirateWrap);
+        Transform pirateWrapTransform = pirateWrap.transform;
+        Transform pirateTransform = pirateWrapTransform.GetChild(0);
+        GameObject pirate = pirateTransform.gameObject;
+        Animator pirateAnimator = pirate.GetComponent<Animator>();
+        pirateAnimator.Play("Walk");
+        randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        respawnPoint = respawnPoints[2];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+        agent = pirateWrap.GetComponent<NavMeshAgent>();
+        agent.speed = 0.1f;
+        bots.Add(pirateWrap);
+        pirateAnimator = pirate.GetComponent<Animator>();
+        pirateAnimator.Play("Walk");
+        randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        respawnPoint = respawnPoints[3];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+        agent = pirateWrap.GetComponent<NavMeshAgent>();
+        agent.speed = 0.1f;
+        bots.Add(pirateWrap);
+        pirateAnimator = pirate.GetComponent<Animator>();
+        pirateAnimator.Play("Walk");*/
+        StartCoroutine(GiveOrders());
+    }
+
+    public void CreateBots ()
+    {
+        bots = new List<GameObject>();
+        globalNetworkIndex = 0;
+        Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
+        Quaternion baseRotation = Quaternion.identity;
+        cross = Instantiate(pirateCrossPrefab, crossBasePosition, baseRotation);
+        float randomCoordX = 0f;
+        Transform crossTransform = cross.transform;
+        Vector3 crossTransformPosition = crossTransform.position;
+        float coordY = -0.9f;
+        float randomCoordZ = 0f;
+        Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        float randomRotation = Random.Range(-5, 5);
+        Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+        cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
+        Ray ray = new Ray(cross.transform.position, Vector3.down);
+        RaycastHit hit = new RaycastHit();
+        bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity);
+        if (isDetectIsland)
+        {
+            Vector3 hitPoint = hit.point;
+            cross.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
+        }
+        GenerateShovel();
+        int countPaints = Random.Range(0, 5);
+        for (int i = 0; i < countPaints; i++)
+        {
+            StartCoroutine(GeneratePaint());
+        }
+        randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        Transform respawnPoint = respawnPoints[0];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        GameObject pirate = Instantiate(piratePrefab, randomPosition, baseRotation);
+        randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        respawnPoint = respawnPoints[1];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        GameObject pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+        NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
+        agent.speed = 0.1f;
+        bots.Add(pirateWrap);
+        Transform pirateWrapTransform = pirateWrap.transform;
+        Transform pirateTransform = pirateWrapTransform.GetChild(0);
+        pirate = pirateTransform.gameObject;
+        Animator pirateAnimator = pirate.GetComponent<Animator>();
+        pirateAnimator.Play("Walk");
+        randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        respawnPoint = respawnPoints[2];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+        agent = pirateWrap.GetComponent<NavMeshAgent>();
+        agent.speed = 0.1f;
+        bots.Add(pirateWrap);
+        pirateAnimator = pirate.GetComponent<Animator>();
+        pirateAnimator.Play("Walk");
+        randomCoordX = Random.Range(-45, 45);
+        crossTransform = cross.transform;
+        crossTransformPosition = crossTransform.position;
+        coordY = 6f;
+        randomCoordZ = Random.Range(-45, 45);
+        randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        respawnPoint = respawnPoints[3];
+        randomPosition = respawnPoint.position;
+        baseRotation = Quaternion.identity;
+        pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
+        agent = pirateWrap.GetComponent<NavMeshAgent>();
+        agent.speed = 0.1f;
+        bots.Add(pirateWrap);
+        pirateAnimator = pirate.GetComponent<Animator>();
+        pirateAnimator.Play("Walk");
+        StartCoroutine(GiveOrders());
     }
 
     public void ShowWin(int localIndex, int networkIndex)
@@ -441,51 +559,75 @@ public class GameManager : PunBehaviour
         Transform pirateTransform = pirateWrapTransform.GetChild(0);
         GameObject pirate = pirateTransform.gameObject;
         PirateController pirateController = pirate.GetComponent<PirateController>();
-        NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
-        float target = Random.Range(0, 3);
-        Vector3 destination = Vector3.zero;
-        bool isCaptureCross = target == 0;
-        bool isCapturePaint = target == 1;
-        bool isAttack = target == 2;
-        if (isCaptureCross)
+        if (pirateController != null)
         {
-            if (pirateController.isHaveShovel)
+            NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
+            float target = Random.Range(0, 3);
+            Vector3 destination = Vector3.zero;
+            bool isCaptureCross = target == 0;
+            bool isCapturePaint = target == 1;
+            bool isAttack = target == 2;
+            if (isCaptureCross)
             {
-                destination = cross.transform.position;
-                pirateController.agentTarget = cross.transform;
-            }
-            else if (shovel != null)
-            {
-                destination = shovel.transform.position;
-                pirateController.agentTarget = shovel.transform;
-            }
-        }
-        else if (isCapturePaint)
-        {
-            int countPaints = paints.Count;
-            bool isHavePaints = countPaints >= 1;
-            if (isHavePaints)
-            {
-                GameObject somePaint = paints[0];
-                bool isPaintExists = somePaint != null;
-                if (isPaintExists)
+                if (pirateController.isHaveShovel)
                 {
-                    destination = somePaint.transform.position;
-                    pirateController.agentTarget = somePaint.transform;
+                    destination = cross.transform.position;
+                    pirateController.agentTarget = cross.transform;
+                }
+                else if (shovel != null)
+                {
+                    destination = shovel.transform.position;
+                    pirateController.agentTarget = shovel.transform;
                 }
             }
-            else
+            else if (isCapturePaint)
             {
-                GiveOrder(pirateWrap);
+                int countPaints = paints.Count;
+                bool isHavePaints = countPaints >= 1;
+                if (isHavePaints)
+                {
+                    GameObject somePaint = paints[0];
+                    bool isPaintExists = somePaint != null;
+                    if (isPaintExists)
+                    {
+                        destination = somePaint.transform.position;
+                        pirateController.agentTarget = somePaint.transform;
+                    }
+                }
+                else
+                {
+                    GiveOrder(pirateWrap);
+                }
             }
+            else if (isAttack)
+            {
+                /*
+                destination = localPirate.transform.position;
+                pirateController.agentTarget = localPirate.transform;
+                */
+                PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+                List<Transform> players = new List<Transform>();
+                foreach (PirateController somePirate in pirates)
+                {
+                    GameObject rawPirate = somePirate.gameObject;
+                    Transform rawPirateTransform = rawPirate.transform;
+                    Transform somePirateWrap = rawPirateTransform.parent;
+                    bool isBot = somePirateWrap != null;
+                    bool isNotBot = !isBot;
+                    if (isNotBot)
+                    {
+                        players.Add(rawPirateTransform);
+                    }
+                }
+                int randomPirateIndex = Random.Range(0, players.Count);
+                Transform randomPirateTransform = players[randomPirateIndex];
+                pirateController.agentTarget = randomPirateTransform;
+                Vector3 randomPiratePosition = randomPirateTransform.position;
+                destination = randomPiratePosition;
+            }
+            agent.Warp(destination);
+            pirateController.destination = destination;
         }
-        else if (isAttack)
-        {
-            destination = localPirate.transform.position;
-            pirateController.agentTarget = localPirate.transform;
-        }
-        agent.Warp(destination);
-        pirateController.destination = destination;
     }
 
     public IEnumerator ResetConstraints (GameObject someTreasure)

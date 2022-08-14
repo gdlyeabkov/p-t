@@ -32,6 +32,10 @@ public class RoomController : UnityEngine.MonoBehaviour
             try
             {
                 PhotonNetwork.JoinRoom(roomName);
+
+                NetworkController networkController = GameObject.FindObjectOfType<NetworkController>();
+                networkController.buttonJoinedArena.GetComponent<Button>().interactable = false;
+
             }
             catch
             {
