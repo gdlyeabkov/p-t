@@ -50,6 +50,7 @@ public class GameManager : PunBehaviour
     public GameObject treasureInst;
     public List<GameObject> boats;
     public GameObject pirateEnemyResourse;
+    public bool isInit = false;
 
     void Start()
     {
@@ -132,7 +133,7 @@ public class GameManager : PunBehaviour
         bots = new List<GameObject>();
         Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
         Quaternion baseRotation = Quaternion.identity;
-        cross = Instantiate(pirateCrossPrefab, crossBasePosition, baseRotation);
+        // cross = Instantiate(pirateCrossPrefab, crossBasePosition, baseRotation);
         float randomCoordX = 0f;
         Transform crossTransform = cross.transform;
         Vector3 crossTransformPosition = crossTransform.position;
@@ -427,7 +428,7 @@ public class GameManager : PunBehaviour
                 }
                 else
                 {
-                    StartCoroutine(ResetGame());
+                    // StartCoroutine(ResetGame());
                 }
             }
             catch (System.InvalidCastException)
@@ -491,7 +492,8 @@ public class GameManager : PunBehaviour
             AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
             bool isPull = animatorStateInfo.IsName("Pull");
             bool isDig = animatorStateInfo.IsName("Dig");
-            bool isStop = isWin || isDig || isPull;
+            bool isAttack = animatorStateInfo.IsName("Attack");
+            bool isStop = isWin || isDig || isPull || isAttack;
             if (isStop)
             {
                 agent.speed = 0;
@@ -524,7 +526,7 @@ public class GameManager : PunBehaviour
                 bool isUpdateBot = isTargetExists && isOnNavMesh;
                 if (isUpdateBot)
                 {
-                    agent.speed = 10;
+                    agent.speed = 1;
                     agent.angularSpeed = 30;
                     agent.acceleration = 30;
                     NavMeshPath path = new NavMeshPath();
@@ -536,7 +538,20 @@ public class GameManager : PunBehaviour
                     Vector3 velocity = agent.velocity;
                     Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
                     pirate.transform.rotation = lookRotation;
+
+                    // if (agent.remainingDistance > 2f)
+                    // if (agent.remainingDistance > 0.5f && !animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig"))
+                    if (agent.speed > 0f && !animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig"))
+                    {
+                        pirateAnimator.Play("Walk");
+                    }
+                    else if (pirateController.agentTarget == null)
+                    {
+                        pirateAnimator.Play("Idle");
+                    }
+
                 }
+
             }
 
             pirateWrapTransform.GetChild(0).localPosition = Vector3.zero;
@@ -625,7 +640,10 @@ public class GameManager : PunBehaviour
                 Vector3 randomPiratePosition = randomPirateTransform.position;
                 destination = randomPiratePosition;
             }
-            agent.Warp(destination);
+            if (!isInit)
+            {
+                agent.Warp(destination);
+            }
             pirateController.destination = destination;
         }
     }

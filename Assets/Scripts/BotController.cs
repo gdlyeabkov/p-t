@@ -25,6 +25,7 @@ public class BotController : MonoBehaviour
                 bool isStop = isBot && isMissionComplete;
                 if (isStop)
                 {
+                    Debug.LogWarning("Атакую");
                     pirateController.DoAttack();
                     pirateController.gameManager.GiveOrder(gameObject);
                 }

@@ -222,6 +222,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: boat
       objectReference: {fileID: 0}
+    - target: {fileID: 3606969719304215719, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d23fb4781f538124380ce5c3480ab28e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2404a636182706d4a9c3d0c3a3aaabbe, type: 3}
 --- !u!4 &108050983 stripped
@@ -247,7 +252,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: -5}
 --- !u!54 &108050986
 Rigidbody:
@@ -670,58 +675,63 @@ PrefabInstance:
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 60.8
+      value: 49.13417
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.9
+      value: -4.18
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.8
+      value: -2.4278927
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.40013337
+      value: 0.64210206
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.13104548
+      value: -0.031210225
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8965995
+      value: 0.7634643
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.13722196
+      value: -0.062074076
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 8.117001
+      value: 3.1360002
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 130.438
+      value: 99.66901
       objectReference: {fileID: 0}
     - target: {fileID: 2853121488286603670, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -20.383
+      value: -7.3290005
       objectReference: {fileID: 0}
     - target: {fileID: 3230068620967740204, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
         type: 3}
       propertyPath: m_Name
       value: boat
       objectReference: {fileID: 0}
+    - target: {fileID: 3606969719304215719, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 92386cd4f4b345449a050bc4171467eb, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2404a636182706d4a9c3d0c3a3aaabbe, type: 3}
 --- !u!4 &457442836 stripped
@@ -747,7 +757,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: -5}
 --- !u!54 &457442839
 Rigidbody:
@@ -1297,7 +1307,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.7009093, y: -0.0000007974215, z: 0.000000783624, w: 0.7132504}
+  m_LocalRotation: {x: 0.7009093, y: 0.0000007974192, z: -0.00000078362183, w: 0.7132504}
   m_LocalPosition: {x: 0, y: 175, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1327,7 +1337,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 4ddfcb62f56575b4eb02b178c5cb5285, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 28b5942b5e88aa84da6d07282b8a55e4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.2
   m_Pitch: 1
@@ -1744,6 +1754,7 @@ MonoBehaviour:
   - {fileID: 457442837}
   pirateEnemyResourse: {fileID: 8879629114365677999, guid: 4735fa6839bd6714489cd9230660ee37,
     type: 3}
+  isInit: 0
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
@@ -1913,7 +1924,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243612734}
-  m_LocalRotation: {x: 0.7009093, y: -0.0000007974215, z: 0.000000783624, w: 0.7132504}
+  m_LocalRotation: {x: 0.7009093, y: 0.0000007974192, z: -0.00000078362183, w: 0.7132504}
   m_LocalPosition: {x: 0, y: 175, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2515,6 +2526,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: boat
       objectReference: {fileID: 0}
+    - target: {fileID: 3606969719304215719, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dabf8a7974ecc4844b2df9d3a1346e0c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2404a636182706d4a9c3d0c3a3aaabbe, type: 3}
 --- !u!4 &1781723234 stripped
@@ -2540,7 +2556,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: -5}
 --- !u!54 &1781723237
 Rigidbody:
@@ -2786,6 +2802,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: boat
       objectReference: {fileID: 0}
+    - target: {fileID: 3606969719304215719, guid: 2404a636182706d4a9c3d0c3a3aaabbe,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b3eeaf2c3ffa3be40afb0363098a65be, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2404a636182706d4a9c3d0c3a3aaabbe, type: 3}
 --- !u!4 &2311168621773062501 stripped
@@ -2811,7 +2832,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: -5}
 --- !u!54 &2311168621773062504
 Rigidbody:
