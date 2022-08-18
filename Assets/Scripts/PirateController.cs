@@ -460,7 +460,10 @@ public class PirateController : MonoBehaviour
                                         List<Transform> respawnPoints = gameManager.respawnPoints;
                                         Transform respawnPoint = respawnPoints[pirateLocalIndex];
                                         randomPosition = respawnPoint.position;
-                                        colliderObject.transform.position = randomPosition;
+                                        // colliderObject.transform.position = randomPosition;
+
+                                        StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+                                        
                                         if (isStandardMode)
                                         {
                                             object[] networkData = new object[] { pirateLocalIndex };
@@ -526,7 +529,8 @@ public class PirateController : MonoBehaviour
                     if (isMotion || isBot)
                     {
                         bool isPaint = animatorStateInfo.IsName("Paint");
-                        bool isDoWalk = !isPaint;
+                        bool isAttack = animatorStateInfo.IsName("Attack");
+                        bool isDoWalk = !isPaint && !isAttack;
                         Transform parent = transform.parent;
                         GameObject rawParent = null;
                         NavMeshAgent botController = null;
@@ -541,7 +545,7 @@ public class PirateController : MonoBehaviour
                         bool isHaveVelocity = botVelocityZ != 0f;
                         bool isNotWin = !gameManager.isWin;
                         bool isPlayerWalk = isDoWalk && isNotBot && isNotWin;
-                        bool isBotWalk = isBot && isHaveVelocity && isNotWin;
+                        bool isBotWalk = isDoWalk && isBot && isHaveVelocity && isNotWin;
                         bool isWalk = isPlayerWalk || isBotWalk;
                         if (isWalk)
                         {
@@ -1922,7 +1926,10 @@ public class PirateController : MonoBehaviour
                     List<Transform> respawnPoints = gameManager.respawnPoints;
                     Transform respawnPoint = respawnPoints[pirateLocalIndex];
                     randomPosition = respawnPoint.position;
-                    colliderObject.transform.position = randomPosition;
+                    // colliderObject.transform.position = randomPosition;
+
+                    StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+
                     if (isStandardMode)
                     {
                         object[] networkData = new object[] { pirateLocalIndex };
@@ -2071,6 +2078,27 @@ public class PirateController : MonoBehaviour
         gameManager.viewCamera.Follow = head;
         gameManager.viewCamera.LookAt = head;
         gameManager.isInit = true;
+    }
+
+    public IEnumerator RespawnPirate (GameObject colliderObject, Vector3 randomPosition)
+    {
+        GameObject pirate = colliderObject;
+        if (colliderObject.transform.parent != null)
+        {
+            pirate = colliderObject.transform.parent.gameObject;
+        }
+        pirate.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        for (int i = 0; i < colliderObject.transform.childCount; i++)
+        {
+            colliderObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        yield return new WaitForSeconds(10f);
+        pirate.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        for (int i = 0; i < colliderObject.transform.childCount; i++)
+        {
+            colliderObject.transform.GetChild(i).gameObject.SetActive(true);
+        }
+        colliderObject.transform.position = randomPosition;
     }
 
 }
