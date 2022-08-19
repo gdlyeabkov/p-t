@@ -112,10 +112,10 @@ MonoBehaviour:
     y: 30
     width: 1536
     height: 731
-  m_MinSize: {x: 679, y: 492}
-  m_MaxSize: {x: 14002, y: 14042}
+  m_MinSize: {x: 678, y: 492}
+  m_MaxSize: {x: 14001, y: 14042}
   vertical: 0
-  controlID: 127
+  controlID: 47
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 492}
   m_MaxSize: {x: 10001, y: 14042}
   vertical: 1
-  controlID: 128
+  controlID: 48
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_MinSize: {x: 403, y: 221}
   m_MaxSize: {x: 8003, y: 4021}
   vertical: 0
-  controlID: 129
+  controlID: 49
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -335,7 +335,7 @@ MonoBehaviour:
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
     m_HSlider: 0
-    m_VSlider: 1
+    m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
     m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
@@ -348,18 +348,18 @@ MonoBehaviour:
       y: 21
       width: 795
       height: 367
-    m_Scale: {x: 0.42615062, y: 0.42615062}
-    m_Translation: {x: 397.5, y: 183.26736}
+    m_Scale: {x: 0.4247685, y: 0.4247685}
+    m_Translation: {x: 397.5, y: 183.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -932.7688
-      y: -430.05304
-      width: 1865.5376
-      height: 861.1979
+      x: -935.80383
+      y: -432
+      width: 1871.6077
+      height: 864
     m_MinimalGUI: 1
   m_defaultScale: 0.4247685
   m_LastWindowPixelSize: {x: 993.75, y: 485}
@@ -399,7 +399,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: e4e6ffffa0e8ffff8cf1ffffb4faffff48fbffff
+      m_ExpandedIDs: 5067ffff5e67ffff346dffffde77ffffec77ffffc27dffff8e95ffff9c95fffff496ffff0297ffff729bffff3ca0ffffaca4ffffe0b0ffff3cb6ffff12bcffff9ad7ffff00d9ffff66daffff70ddffffd2e0ffffa8e6fffff8e9ffffceefffffa2f4ffff12f9ffff48fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -459,9 +459,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0, y: 175, z: -3}
+    m_Target: {x: -16.090445, y: 6.172434, z: -24.927708}
     speed: 2
-    m_Value: {x: 0, y: 175, z: -3}
+    m_Value: {x: -16.090445, y: 6.172434, z: -24.927708}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -507,13 +507,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.40562004, y: 0.22511491, z: -0.10378788, w: 0.87978613}
+    m_Target: {x: 0.121411555, y: -0.20830187, z: 0.02606838, w: 0.97014946}
     speed: 2
-    m_Value: {x: 0.40562007, y: 0.22511493, z: -0.103787884, w: 0.8797862}
+    m_Value: {x: 0.12141156, y: -0.20830189, z: 0.026068382, w: 0.9701495}
   m_Size:
-    m_Target: 10
+    m_Target: 14.335933
     speed: 2
-    m_Value: 10
+    m_Value: 14.335933
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -667,19 +667,19 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Prefabs
   m_ViewMode: 1
   m_StartGridSize: 58
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Prefabs
   m_LastFoldersGridSize: 58
   m_LastProjectPath: C:\unity_projects\CarambaOnline
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 103}
-    m_SelectedIDs: 06430000
-    m_LastClickedID: 17158
+    scrollPos: {x: 0, y: 119}
+    m_SelectedIDs: 02430000
+    m_LastClickedID: 17154
     m_ExpandedIDs: 00000000d0420000d2420000d4420000d6420000d8420000da420000dc420000de420000e042000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0

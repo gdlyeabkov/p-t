@@ -577,6 +577,9 @@ public class GameManager : PunBehaviour
 
                 }
             }
+
+            pirateWrapTransform.GetChild(0).localPosition = Vector3.zero;
+
         }
     }
 

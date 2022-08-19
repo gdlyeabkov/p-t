@@ -929,7 +929,12 @@ public class PirateController : MonoBehaviour
                                 agent.Warp(foundedShovel.position);
                                 // transform.parent.gameObject.GetComponent<Rigidbody>().position = foundedShovel.gameObject.GetComponent<Rigidbody>().position;
                                 agent.updatePosition = true;
-                                StartCoroutine(GetShovelForBot());
+                                
+                                if (gameObject.activeSelf)
+                                {
+                                    StartCoroutine(GetShovelForBot());
+                                }
+
                             }
                         }
                     }
@@ -1090,8 +1095,18 @@ public class PirateController : MonoBehaviour
                                     Transform respawnPoint = respawnPoints[pirateLocalIndex];
                                     randomPosition = respawnPoint.position;
 
-                                    colliderObject.transform.position = randomPosition;
+                                    // colliderObject.transform.position = randomPosition;
                                     // StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+                                    
+                                    //if (gameObject.activeSelf)
+                                    if (colliderObject.GetComponent<NavMeshAgent>() != null && colliderObject.activeSelf)
+                                    {
+                                        StartCoroutine(RespawnPirate(colliderObject.transform.GetChild(0).gameObject, randomPosition));
+                                    }
+                                    else if (colliderObject.activeSelf)
+                                    {
+                                        StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+                                    }
 
                                     if (isStandardMode)
                                     {
@@ -1567,7 +1582,18 @@ public class PirateController : MonoBehaviour
                     List<Transform> respawnPoints = gameManager.respawnPoints;
                     Transform respawnPoint = respawnPoints[pirateLocalIndex];
                     randomPosition = respawnPoint.position;
-                    colliderObject.transform.position = randomPosition;
+
+                    // colliderObject.transform.position = randomPosition;
+                    // if (gameObject.activeSelf)
+                    if (colliderObject.GetComponent<NavMeshAgent>() != null && colliderObject.activeSelf)
+                    {
+                        StartCoroutine(RespawnPirate(colliderObject.transform.GetChild(0).gameObject, randomPosition));
+                    }
+                    else if (colliderObject.activeSelf)
+                    {
+                        StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+                    }
+
                     if (isStandardMode)
                     {
                         object[] networkData = new object[] { pirateLocalIndex };
@@ -1647,12 +1673,34 @@ public class PirateController : MonoBehaviour
         }
     }
 
-    public IEnumerator RespawnPirate (GameObject pirate, Vector3 randomPosition)
+    // public IEnumerator RespawnPirate (GameObject pirate, Vector3 randomPosition)
+    public IEnumerator RespawnPirate (GameObject colliderObject, Vector3 randomPosition)
     {
+        /*
         pirate.SetActive(false);
         yield return new WaitForSeconds(10f);
         pirate.transform.position = randomPosition;
         pirate.SetActive(true);
+        */
+
+        GameObject pirate = colliderObject;
+        if (colliderObject.transform.parent != null)
+        {
+            pirate = colliderObject.transform.parent.gameObject;
+        }
+        pirate.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        for (int i = 0; i < colliderObject.transform.childCount; i++)
+        {
+            colliderObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        yield return new WaitForSeconds(10f);
+        pirate.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        for (int i = 0; i < colliderObject.transform.childCount; i++)
+        {
+            colliderObject.transform.GetChild(i).gameObject.SetActive(true);
+        }
+        colliderObject.transform.position = randomPosition;
+
     }
 
     public IEnumerator SetPlayerCamera()
