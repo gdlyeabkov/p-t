@@ -112,22 +112,50 @@ public class BotController : MonoBehaviour
         bool isOnNavMesh = agent.isOnNavMesh;
         if (isOnNavMesh)
         {
-            // if (agent.remainingDistance <= 3f)
-            if (false)
+            
+            GameObject pirate = transform.GetChild(0).gameObject;
+            PirateController pirateController = pirate.GetComponent<PirateController>();
+            Animator pirateAnimator = pirate.GetComponent<Animator>();
+            AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
+            bool isPull = animatorStateInfo.IsName("Pull");
+            bool isDig = animatorStateInfo.IsName("Dig");
+            bool isAttack = animatorStateInfo.IsName("Attack");
+            GameManager gameManager = pirateController.gameManager;
+            bool isWin = gameManager.isWin;
+            bool isStop = isWin || isDig || isPull || isAttack;
+            if (isStop)
             {
-                Transform pirateTransform = transform.GetChild(0);
-                GameObject pirate = pirateTransform.gameObject;
-                Animator pirateAnimator = pirate.GetComponent<Animator>();
-                AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
-                bool isAttack = animatorStateInfo.IsName("Attack");
-                bool isNotAttack = !isAttack;
-                if (isNotAttack)
+
+            }
+            else
+            {
+                agent.updatePosition = true;
+                Transform agentTarget = pirateController.agentTarget;
+                bool isUpdateBot = pirateController.networkIndex != 0;
+                if (isUpdateBot)
                 {
-                    PirateController pirateController = pirate.GetComponent<PirateController>();
-                    pirateController.DoAttack();
-                    pirateController.gameManager.GiveOrder(gameObject);
+                    agent.speed = 1;
+                    agent.angularSpeed = 30;
+                    agent.acceleration = 30;
+                    NavMeshPath path = new NavMeshPath();
+                    agent.CalculatePath(agentTarget.position, path);
+                    agent.ResetPath();
+                    agent.SetPath(path);
+                    Vector3 yAxis = Vector3.up;
+                    Rigidbody pirateWrapRB = GetComponent<Rigidbody>();
+                    Vector3 velocity = agent.velocity;
+                    Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
+                    pirate.transform.rotation = lookRotation;
+                    if (!animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig"))
+                    {
+                        if (gameManager.globalNetworkIndex != 0)
+                        {
+                            pirateAnimator.Play("Walk");
+                        }
+                    }
                 }
             }
+
         }
     }
 

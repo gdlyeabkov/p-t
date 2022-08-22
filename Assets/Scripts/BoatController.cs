@@ -39,6 +39,11 @@ public class BoatController : MonoBehaviour
                 {
                     gameManager.ShowWin(localIndex, networkIndex);
                     pirateController.gameObject.GetComponent<Animator>().Play("Victory");
+                    object[] networkData = new object[] { pirateController.localIndex, "Victory" };
+                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                    {
+                        Receivers = ReceiverGroup.Others
+                    });
                     pirateController.miniGameCursor = 0;
                     pirateController.isMiniGame = false;
                     pirateController.isStopped = false;
@@ -95,6 +100,15 @@ public class BoatController : MonoBehaviour
                         else
                         {
                             somePirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                            if (localIndex != pirate.localIndex)
+                            {
+                                pirate.GetComponent<Animator>().Play("Loose");
+                                networkData = new object[] { pirate.localIndex, "Loose" };
+                                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                {
+                                    Receivers = ReceiverGroup.Others
+                                });
+                            }
                         }
                         try
                         {
@@ -119,6 +133,7 @@ public class BoatController : MonoBehaviour
                         {
                             Animator localPirateAnimator = localPirate.GetComponent<Animator>();
                             localPirateAnimator.Play("Loose");
+                            botController = localBot.GetComponent<NavMeshAgent>();
                             isOnNavMesh = botController.isOnNavMesh;
                             if (isOnNavMesh)
                             {
@@ -129,18 +144,8 @@ public class BoatController : MonoBehaviour
                     }
                     AudioSource botAudio = pirateController.GetComponent<AudioSource>();
                     botAudio.Stop();
-
-                    bool isPlayerLooser = 0 != localIndex;
-                    if (isPlayerLooser)
-                    {
-                        Animator localPirateAnimator = gameManager.localPirate.GetComponent<Animator>();
-                        localPirateAnimator.Play("Loose");
-                    }
-
                 }
-
             }
-
         }
     }
 
