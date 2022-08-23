@@ -688,7 +688,7 @@ public class PirateController : MonoBehaviour
                 bool isLocalPiratePlayer = isLocalPlayer && isLocalPirate;
                 if (isLocalPiratePlayer)
                 {
-
+                    /*
                     PhotonNetwork.SetMasterClient(currentPlayer);
                     Vector3 currentPosition = transform.position;
                     float coordX = currentPosition.x;
@@ -748,9 +748,8 @@ public class PirateController : MonoBehaviour
                         }
                     }
                     gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                    */
                     GetComponent<AudioSource>().Stop();
-
-
                 }
             }
             catch (System.InvalidCastException e)
@@ -1205,8 +1204,6 @@ public class PirateController : MonoBehaviour
             isHaveShovel = true;
             GameObject rawFoundedShovel = foundedShovel.gameObject;
             Destroy(rawFoundedShovel);
-            destination = gameManager.cross.transform.position;
-            agentTarget = gameManager.cross.transform;
         }
         SetIKController();
         PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
@@ -1246,7 +1243,14 @@ public class PirateController : MonoBehaviour
             {
                 Vector3 treasurePosition = gameManager.cross.transform.position;
                 Quaternion baseRotation = Quaternion.identity;
-                gameManager.treasureInst = Instantiate(gameManager.treasure, treasurePosition, baseRotation);
+                
+                // gameManager.treasureInst = Instantiate(gameManager.treasure, treasurePosition, baseRotation);
+                bool isHost = PhotonNetwork.isMasterClient;
+                if (isHost)
+                {
+                    gameManager.treasureInst = PhotonNetwork.Instantiate("treasure", treasurePosition, baseRotation, 0);
+                }
+
                 StartCoroutine(gameManager.ResetConstraints(gameManager.treasureInst));
                 agentTarget = gameManager.boats[localIndex].transform;
                 destination = gameManager.boats[localIndex].transform.position;
