@@ -237,7 +237,7 @@ public class PirateController : MonoBehaviour
                                     });
                                     isCrossFound = false;
                                 }
-                                else
+                                else if (gameManager.treasureInst == null)
                                 {
                                     isMiniGame = true;
                                     GameObject miniGame = gameManager.miniGame;
@@ -382,7 +382,17 @@ public class PirateController : MonoBehaviour
                                 float coordY = currentPiratePosition.y + 0.1f;
                                 float coordZ = currentPiratePosition.z;
                                 Vector3 crossTrapPosition = new Vector3(coordX, coordY, coordZ);
-                                GameObject crossTrapInst = PhotonNetwork.Instantiate("pirate_cross_trap", crossTrapPosition, baseRotation, 0);
+
+                                GameObject crossTrapInst = null;
+                                if (isStandardMode)
+                                {
+                                    crossTrapInst = PhotonNetwork.Instantiate("pirate_cross_trap", crossTrapPosition, baseRotation, 0);
+                                }
+                                else
+                                {
+                                    crossTrapInst = Instantiate(gameManager.pirateCrossTrapPrefab, crossTrapPosition, baseRotation);
+                                }
+
                                 CrossController crossController = crossTrapInst.GetComponent<CrossController>();
                                 crossController.isOwner = true;
                                 Ray ray = new Ray(crossTrapInst.transform.position, Vector3.up);
@@ -1046,10 +1056,23 @@ public class PirateController : MonoBehaviour
                     }
                     gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
                     GetComponent<AudioSource>().Stop();
+
+                    /*
+                    if (isStandardMode)
+                    {
+                        Destroy(foundedCross.gameObject);
+                    }
+                    else
+                    {
+                        PhotonNetwork.Destroy(foundedCross.gameObject);
+                    }
+                    */
+
                 }
-                else
+                else if (transform.parent != null)
                 {
-                    transform.parent.GetChild(0).gameObject.GetComponent<Animator>().Play("Idle");
+                    // transform.parent.GetChild(0).gameObject.GetComponent<Animator>().Play("Idle");
+                    gameObject.GetComponent<Animator>().Play("Idle");
                 }
 
             }

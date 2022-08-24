@@ -78,7 +78,8 @@ public class GameManager : PunBehaviour
                 float coordY = -0.9f;
                 float randomCoordZ = 0f;
                 Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-                float randomRotation = Random.Range(-5, 5);
+                // float randomRotation = Random.Range(-5, 5);
+                float randomRotation = Random.Range(-4.5f, 4.5f);
                 Vector3 islandSphereTransformPosition = islandSphereTransform.position;
                 cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
                 Ray ray = new Ray(cross.transform.position, Vector3.down);
@@ -205,13 +206,14 @@ public class GameManager : PunBehaviour
         }
         randomCoordX = Random.Range(-45, 45);
         crossTransform = cross.transform;
-        crossTransformPosition = crossTransform.position;
         coordY = 6f;
         randomCoordZ = Random.Range(-45, 45);
         Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
         Transform respawnPoint = respawnPoints[0];
         randomPosition = respawnPoint.position;
         baseRotation = Quaternion.identity;
+        Instantiate(piratePrefab, randomPosition, baseRotation);
+        /*
         GameObject pirate = Instantiate(piratePrefab, randomPosition, baseRotation);
         randomCoordX = Random.Range(-45, 45);
         crossTransform = cross.transform;
@@ -262,6 +264,7 @@ public class GameManager : PunBehaviour
         pirateAnimator = pirate.GetComponent<Animator>();
         pirateAnimator.Play("Walk");
         StartCoroutine(GiveOrders());
+        */
     }
 
     public void ShowWin(int localIndex, int networkIndex)
@@ -291,8 +294,6 @@ public class GameManager : PunBehaviour
                     localPirate.GetComponent<Animator>().Play("Loose");
                 }
                 StartCoroutine(ResetGame());
-                Vector3 treasurePosition = cross.transform.position;
-                Quaternion baseRotation = Quaternion.identity;
             }
 
         }
@@ -347,7 +348,8 @@ public class GameManager : PunBehaviour
                 object[] data = (object[])content;
                 int index = (int)data[0];
                 int localNetworkIndex = (int)data[1];
-                bool isLooser = globalNetworkIndex != localNetworkIndex;
+                // bool isLooser = globalNetworkIndex != localNetworkIndex;
+                bool isLooser = globalNetworkIndex != index;
                 if (isLooser)
                 {
                     mainCameraAudio.clip = looseSound;
@@ -558,8 +560,11 @@ public class GameManager : PunBehaviour
             {
                 if (pirateController.isHaveShovel)
                 {
-                    destination = cross.transform.position;
-                    pirateController.agentTarget = cross.transform;
+                    if (cross != null)
+                    {
+                        destination = cross.transform.position;
+                        pirateController.agentTarget = cross.transform;
+                    }
                 }
                 else if (shovel != null)
                 {
@@ -612,6 +617,9 @@ public class GameManager : PunBehaviour
             {
                 agent.Warp(destination);
             }
+
+            // StartCoroutine(SetBotDestination(agent, destination));
+
             pirateController.destination = destination;
 
             object[] networkData = new object[] { pirateController.localIndex };
@@ -641,6 +649,15 @@ public class GameManager : PunBehaviour
         if (isBot)
         {
             bots.Add(go);
+        }
+    }
+
+    public IEnumerator SetBotDestination(NavMeshAgent agent, Vector3 destination)
+    {
+        return new WaitWhile(() => !isInit);
+        if (!isInit)
+        {
+            agent.Warp(destination);
         }
     }
 
