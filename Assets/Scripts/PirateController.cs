@@ -40,6 +40,7 @@ public class PirateController : MonoBehaviour
     public Vector3 destination = Vector3.zero;
     public Transform agentTarget;
     public TextMesh numberLabel;
+    public Transform numberLabelWrap;
 
     void Start()
     {
@@ -96,10 +97,28 @@ public class PirateController : MonoBehaviour
         {
             networkIndex = updatedPiratesCursor;
         }
+        else if (localIndex != networkIndex)
+        {
+            bool isBot = localIndex >= PhotonNetwork.playerList.Length;
+            if (isBot)
+            {
+                /*
+                numberLabel.text = "Бот";
+                numberLabelWrap.transform.position = new Vector3(transform.position.x, numberLabelWrap.position.y, numberLabelWrap.position.z);
+                */
+            }
+            else
+            {
+                numberLabel.text = PhotonNetwork.playerList[localIndex].name;
+                numberLabelWrap.transform.position = new Vector3(transform.position.x, numberLabelWrap.position.y, numberLabelWrap.position.z);
+            }
+        }
+        /*
         else
         {
             numberLabel.text = PhotonNetwork.playerList[localIndex].name;
         }
+        */
 
     }
 

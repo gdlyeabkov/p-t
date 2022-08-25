@@ -43,16 +43,7 @@ public class NetworkController : PunBehaviour
 
 	public void LoadArena()
 	{
-		if (PhotonNetwork.room.playerCount >= maxCountPlayers)
-        {
-			PhotonNetwork.LoadLevel("SampleScene");
-		}
-		else
-        {
-			string message = "Minimum " + maxCountPlayers + " Players required to Load Arena!";
-			string debugAddress = "http://unity3d.com/" + message;
-			Application.OpenURL(debugAddress);
-		}
+		PhotonNetwork.LoadLevel("SampleScene");
 	}
 	public override void OnConnectedToMaster()
 	{
@@ -244,7 +235,7 @@ public class NetworkController : PunBehaviour
 		customProperties.Add("index", playerCursor);
 		PhotonNetwork.player.SetCustomProperties(customProperties);
 
-		buttonJoinedArena.GetComponent<Button>().interactable = false;
+		// buttonJoinedArena.GetComponent<Button>().interactable = false;
 
 	}
 

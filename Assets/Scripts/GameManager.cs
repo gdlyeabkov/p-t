@@ -126,6 +126,9 @@ public class GameManager : PunBehaviour
                     Quaternion baseRotation = Quaternion.identity;
                     GameObject pirate = PhotonNetwork.Instantiate("fixed_pirate", randomPosition, baseRotation, 0);
                 }
+                
+                CreateNetworkBots();
+
             }
         }
         else
@@ -175,6 +178,8 @@ public class GameManager : PunBehaviour
             Transform respawnPoint = respawnPoints[0];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
+            Instantiate(piratePrefab, randomPosition, baseRotation);
+            /*
             GameObject pirate = Instantiate(piratePrefab, randomPosition, baseRotation);
             randomCoordX = Random.Range(-45, 45);
             crossTransform = cross.transform;
@@ -228,6 +233,7 @@ public class GameManager : PunBehaviour
             pirateAnimator.Play("Walk");
 
             StartCoroutine(GiveOrders());
+            */
 
         }
     }
@@ -590,6 +596,54 @@ public class GameManager : PunBehaviour
             yield return new WaitForSeconds(1f);
             someTreasure.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
+    }
+
+    public void CreateNetworkBots()
+    {
+        bots = new List<GameObject>();
+        Vector3 crossBasePosition = new Vector3(0f, -0.9f, 0f);
+        Quaternion baseRotation = Quaternion.identity;
+        float randomCoordX = 0f;
+        Transform crossTransform = cross.transform;
+        Vector3 crossTransformPosition = crossTransform.position;
+        float coordY = -0.9f;
+        float randomCoordZ = 0f;
+        Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        float randomRotation = Random.Range(-5, 5);
+        Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+        cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
+        Ray ray = new Ray(cross.transform.position, Vector3.down);
+        RaycastHit hit = new RaycastHit();
+        bool isDetectIsland = Physics.Raycast(ray, out hit, Mathf.Infinity);
+        if (isDetectIsland)
+        {
+            Vector3 hitPoint = hit.point;
+            cross.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
+        }
+        int countPaints = Random.Range(0, 5);
+        for (int i = 0; i < countPaints; i++)
+        {
+            StartCoroutine(GeneratePaint());
+        }
+
+        for (int i = PhotonNetwork.room.playerCount; i < 4; i++)
+        {
+            baseRotation = Quaternion.identity;
+            randomCoordX = Random.Range(-45, 45);
+            crossTransform = cross.transform;
+            crossTransformPosition = crossTransform.position;
+            coordY = 6f;
+            randomCoordZ = Random.Range(-45, 45);
+            Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+            Transform respawnPoint = respawnPoints[1];
+            randomPosition = respawnPoint.position;
+            baseRotation = Quaternion.identity;
+            GameObject pirateWrap = PhotonNetwork.Instantiate("fixedatePirateEnemyWrapResourse", randomPosition, baseRotation, 0);
+            NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
+            agent.speed = 0.1f;
+            bots.Add(pirateWrap);
+        }
+        StartCoroutine(GiveOrders());
     }
 
 }
