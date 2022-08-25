@@ -23,9 +23,9 @@ public class BotController : MonoBehaviour
                 Transform detectedObjectTransform = detectedObject.transform;
                 bool isMissionComplete = pirateController.agentTarget == detectedObjectTransform;
                 bool isStop = isBot && isMissionComplete;
+                // bool isStop = isBot && isMissionComplete && detectedObjectTransform.GetChild(0).gameObject.activeSelf;
                 if (isStop)
                 {
-                    Debug.LogWarning("Атакую");
                     pirateController.DoAttack();
                     pirateController.gameManager.GiveOrder(gameObject);
                 }

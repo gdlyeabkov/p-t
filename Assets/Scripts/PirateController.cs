@@ -212,7 +212,8 @@ public class PirateController : MonoBehaviour
                         bool isQKeyDown = Input.GetKeyDown(qKey);
                         bool isEKeyUp = Input.GetKeyUp(eKey);
                         KeyCode spaceKey = KeyCode.Space;
-                        bool isSpaceKeyUp = Input.GetKeyDown(spaceKey);
+                        // bool isSpaceKeyUp = Input.GetKeyDown(spaceKey);
+                        bool isSpaceKeyUp = Input.GetKeyUp(spaceKey);
                         bool isFreeHands = !isHaveShovel;
                         AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                         bool isAlreadyAttack = animatorStateInfo.IsName("Attack");
@@ -404,6 +405,16 @@ public class PirateController : MonoBehaviour
                                     crossTrapInst.transform.position = new Vector3(hitPoint.x, hitPoint.y + 0.1f, hitPoint.z);
                                 }
                                 GetComponent<Animator>().Play("Paint");
+
+                                if (isStandardMode)
+                                {
+                                    object[] networkData = new object[] { localIndex, "Paint" };
+                                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                    {
+                                        Receivers = ReceiverGroup.Others
+                                    });
+                                }
+
                                 Transform islandSphereTransform = gameManager.islandSphereTransform;
                                 Vector3 islandSphereTransformPosition = islandSphereTransform.position;
                             }
@@ -1947,6 +1958,14 @@ public class PirateController : MonoBehaviour
         gameManager.viewCamera.Follow = head;
         gameManager.viewCamera.LookAt = head;
         gameManager.isInit = true;
+
+        /*
+        if (transform.parent != null)
+        {
+            transform.parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        }
+        */
+
     }
 
     public IEnumerator RespawnPirate(GameObject colliderObject, Vector3 randomPosition)
