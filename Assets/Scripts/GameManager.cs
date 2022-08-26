@@ -179,62 +179,6 @@ public class GameManager : PunBehaviour
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
             Instantiate(piratePrefab, randomPosition, baseRotation);
-            /*
-            GameObject pirate = Instantiate(piratePrefab, randomPosition, baseRotation);
-            randomCoordX = Random.Range(-45, 45);
-            crossTransform = cross.transform;
-            crossTransformPosition = crossTransform.position;
-            coordY = 6f;
-            randomCoordZ = Random.Range(-45, 45);
-            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            respawnPoint = respawnPoints[1];
-            randomPosition = respawnPoint.position;
-            baseRotation = Quaternion.identity;
-            GameObject pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
-            agent.speed = 0.1f;
-            bots.Add(pirateWrap);
-            Transform pirateWrapTransform = pirateWrap.transform;
-            Transform pirateTransform = pirateWrapTransform.GetChild(0);
-            pirate = pirateTransform.gameObject;
-            Animator pirateAnimator = pirate.GetComponent<Animator>();
-            pirateAnimator.Play("Walk");
-            randomCoordX = Random.Range(-45, 45);
-            crossTransform = cross.transform;
-            crossTransformPosition = crossTransform.position;
-            coordY = 6f;
-            randomCoordZ = Random.Range(-45, 45);
-            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            respawnPoint = respawnPoints[2];
-            randomPosition = respawnPoint.position;
-            baseRotation = Quaternion.identity;
-            pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            bots.Add(pirateWrap);
-            pirateWrapTransform = pirateWrap.transform;
-            pirateTransform = pirateWrapTransform.GetChild(0);
-            pirate = pirateTransform.gameObject;
-            pirateAnimator = pirate.GetComponent<Animator>();
-            pirateAnimator.Play("Walk");
-            randomCoordX = Random.Range(-45, 45);
-            crossTransform = cross.transform;
-            crossTransformPosition = crossTransform.position;
-            coordY = 6f;
-            randomCoordZ = Random.Range(-45, 45);
-            randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            respawnPoint = respawnPoints[3];
-            randomPosition = respawnPoint.position;
-            baseRotation = Quaternion.identity;
-            pirateWrap = Instantiate(pirateEnemyPrefab, randomPosition, baseRotation);
-            bots.Add(pirateWrap);
-            pirateWrapTransform = pirateWrap.transform;
-            pirateTransform = pirateWrapTransform.GetChild(0);
-            pirate = pirateTransform.gameObject;
-            pirateAnimator = pirate.GetComponent<Animator>();
-            pirateAnimator.Play("Walk");
-
-            StartCoroutine(GiveOrders());
-            */
-
         }
     }
     
@@ -500,14 +444,6 @@ public class GameManager : PunBehaviour
         pirateController.destination = destination;
     }
 
-    public void FixedUpdate()
-    {
-        /*foreach (GameObject pirateWrap in bots)
-        {
-            pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(pirateWrap.GetComponent<Rigidbody>().velocity, maxSpeed);
-        }*/
-    }
-
     public void Update()
     {
         foreach (GameObject pirateWrap in bots)
@@ -555,31 +491,31 @@ public class GameManager : PunBehaviour
                 bool isUpdateBot = isTargetExists && isOnNavMesh;
                 if (isUpdateBot)
                 {
-
-                    // agent.speed = 30;
-                    // agent.speed = 10;
                     agent.speed = 1;
                     agent.angularSpeed = 30;
-                    // agent.angularSpeed = 5;
                     agent.acceleration = 30;
-                    // agent.acceleration = 5;
-
-                    // agent.velocity = Vector3.zero;
-                    // pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    // pirateWrap.GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(pirateWrap.GetComponent<Rigidbody>().velocity, 0.05f);
-
                     NavMeshPath path = new NavMeshPath();
                     agent.CalculatePath(agentTarget.position, path);
                     agent.ResetPath();
                     agent.SetPath(path);
                     Vector3 yAxis = Vector3.up;
                     Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
-                    // Vector3 velocity = pirateWrapRB.velocity;
                     Vector3 velocity = agent.velocity;
                     Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
                     pirate.transform.rotation = lookRotation;
 
-                    pirate.GetComponent<Animator>().Play("Walk");
+                    // pirate.GetComponent<Animator>().Play("Walk");
+                    if (!animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig"))
+                    {
+                        if (agent.speed > 0f)
+                        {
+                            pirateAnimator.Play("Walk");
+                        }
+                    }
+                    else if (pirateController.agentTarget == null && globalNetworkIndex == 0)
+                    {
+                        pirateAnimator.Play("Idle");
+                    }
 
                 }
             }

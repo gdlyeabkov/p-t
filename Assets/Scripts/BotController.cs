@@ -84,6 +84,7 @@ public class BotController : MonoBehaviour
         }
     }
 
+    /*
     public void Update()
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
@@ -108,5 +109,6 @@ public class BotController : MonoBehaviour
             }
         }
     }
+    */
 
 }
