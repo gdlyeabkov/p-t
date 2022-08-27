@@ -819,7 +819,6 @@ public class PirateController : MonoBehaviour
                         }
                         else if (isShovelFound)
                         {
-                            Debug.LogWarning("Вытаскиваю лопату");
                             Transform botTransform = transform.parent;
                             bool isBot = botTransform != null;
                             isMiniGame = true;
@@ -1705,7 +1704,6 @@ public class PirateController : MonoBehaviour
                         audio.loop = false;
                         audio.Play();
                     }
-                    Debug.Log("Удар мечом");
                 }
             }
         }

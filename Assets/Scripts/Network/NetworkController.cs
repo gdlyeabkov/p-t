@@ -43,7 +43,8 @@ public class NetworkController : PunBehaviour
 
 	public void LoadArena()
 	{
-		PhotonNetwork.LoadLevel("SampleScene");
+		// PhotonNetwork.LoadLevel("SampleScene");
+		PhotonNetwork.LoadLevel("Main");
 	}
 	public override void OnConnectedToMaster()
 	{

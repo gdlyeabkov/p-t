@@ -19,12 +19,21 @@ public class RoomController : UnityEngine.MonoBehaviour
     {
         if (PhotonNetwork.connected)
         {
-            // SetPlayerName(SystemInfo.deviceName);
-			string nickName = PlayerPrefs.GetString("nickName");
+            string nickName = PlayerPrefs.GetString("nickName");
             SetPlayerName(nickName);
             PhotonNetwork.player.NickName = playerName;
             string roomName = GetComponent<Text>().text.Split(new string[] { ":" }, StringSplitOptions.None)[0];
-            PhotonNetwork.JoinRoom(roomName);
+            // PhotonNetwork.JoinRoom(roomName);
+            try
+            {
+                PhotonNetwork.JoinRoom(roomName);
+                NetworkController networkController = GameObject.FindObjectOfType<NetworkController>();
+                networkController.buttonJoinedArena.GetComponent<Button>().interactable = false;
+            }
+            catch
+            {
+                Debug.Log("Комната заполнена");
+            }
         }
     }
 

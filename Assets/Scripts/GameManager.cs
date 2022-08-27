@@ -229,7 +229,6 @@ public class GameManager : PunBehaviour
             coordY += verticalOffset;
             Vector3 treasurePosition = new Vector3(coordX, coordY, coordZ);
             Quaternion baseRotation = Quaternion.identity;
-            Instantiate(treasure, treasurePosition, baseRotation);
             StartCoroutine(ResetGame());
         }
     }
