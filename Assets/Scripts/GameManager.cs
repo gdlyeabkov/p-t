@@ -300,10 +300,36 @@ public class GameManager : PunBehaviour
                     });
 
                 }
+                /*
                 else
                 {
                     StartCoroutine(ResetGame());
                 }
+                */
+
+                foreach (GameObject localBot in bots)
+                {
+                    Transform localBotTransform = localBot.transform;
+                    Transform localPirateTransform = localBotTransform.GetChild(0);
+                    GameObject localPirate = localPirateTransform.gameObject;
+                    PirateController localPirateController = localPirate.GetComponent<PirateController>();
+                    int localPirateIndex = localPirateController.localIndex;
+                    bool isBotLooser = localPirateIndex != index;
+                    if (isBotLooser)
+                    {
+                        Animator localPirateAnimator = localPirate.GetComponent<Animator>();
+                        localPirateAnimator.Play("Loose");
+                        NavMeshAgent botController = localBot.GetComponent<NavMeshAgent>();
+                        bool isOnNavMesh = botController.isOnNavMesh;
+                        if (isOnNavMesh)
+                        {
+                            botController.isStopped = true;
+                        }
+                        viewCamera.Follow = null;
+                    }
+                }
+                isWin = true;
+
             }
             catch (System.InvalidCastException)
             {
@@ -475,9 +501,13 @@ public class GameManager : PunBehaviour
                 }
                 else if (isDig)
                 {
-                    Transform crossTransform = cross.transform;
-                    Vector3 crossPosition = crossTransform.position;
-                    agent.Warp(crossPosition);
+                    bool isCrossExists = cross != null;
+                    if (isCrossExists)
+                    {
+                        Transform crossTransform = cross.transform;
+                        Vector3 crossPosition = crossTransform.position;
+                        agent.Warp(crossPosition);
+                    }
                 }
             }
             else
@@ -487,21 +517,29 @@ public class GameManager : PunBehaviour
                 Transform agentTarget = pirateController.agentTarget;
                 bool isTargetExists = agentTarget != null;
                 bool isOnNavMesh = agent.isOnNavMesh;
-                bool isUpdateBot = isTargetExists && isOnNavMesh;
+                // bool isUpdateBot = isTargetExists && isOnNavMesh;
+                bool isUpdateBot = (isTargetExists && isOnNavMesh) || (pirateController.networkIndex != 0);
                 if (isUpdateBot)
                 {
                     agent.speed = 1;
                     agent.angularSpeed = 30;
                     agent.acceleration = 30;
                     NavMeshPath path = new NavMeshPath();
-                    agent.CalculatePath(agentTarget.position, path);
-                    agent.ResetPath();
-                    agent.SetPath(path);
-                    Vector3 yAxis = Vector3.up;
-                    Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
-                    Vector3 velocity = agent.velocity;
-                    Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
-                    pirate.transform.rotation = lookRotation;
+                    if (agentTarget != null)
+                    {
+                        Vector3 destination = agentTarget.position;
+                        agent.CalculatePath(destination, path);
+                    }
+                    if (isOnNavMesh)
+                    {
+                        agent.ResetPath();
+                        agent.SetPath(path);
+                        Vector3 yAxis = Vector3.up;
+                        Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
+                        Vector3 velocity = agent.velocity;
+                        Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
+                        pirate.transform.rotation = lookRotation;
+                    }
 
                     // pirate.GetComponent<Animator>().Play("Walk");
                     if (!animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig"))

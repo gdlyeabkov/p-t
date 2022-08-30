@@ -120,6 +120,12 @@ public class PirateController : MonoBehaviour
         }
         */
 
+        bool isLocalBot = transform.parent != null;
+        if (isLocalBot)
+        {
+            gameManager.bots.Add(transform.parent.gameObject);
+        }
+
     }
 
     void Update()
@@ -933,7 +939,7 @@ public class PirateController : MonoBehaviour
         bool isLocalPirate = localIndex == networkIndex;
         if (isLocalPirate || (!isLocalPirate && transform.parent != null))
         {
-                bool isGameManagerExists = gameManager != null;
+            bool isGameManagerExists = gameManager != null;
             if (isGameManagerExists)
             {
                 bool isWin = gameManager.isWin;
@@ -944,6 +950,16 @@ public class PirateController : MonoBehaviour
                     if (isNotMiniGame)
                     {
                         GetComponent<Animator>().Play("Attack");
+
+                        if (isStandardMode)
+                        {
+                            object[] networkData = new object[] { localIndex, "Attack" };
+                            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                            {
+                                Receivers = ReceiverGroup.Others
+                            });
+                        }
+
                     }
                     else if (transform.parent == null)
                     {
@@ -1128,6 +1144,13 @@ public class PirateController : MonoBehaviour
         isStopped = false;
         isShovelFound = false;
         GetComponent<Animator>().Play("Idle");
+
+        object[] networkData = new object[] { localIndex, "Idle" };
+        PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+        {
+            Receivers = ReceiverGroup.Others
+        });
+
         Transform botTransform = transform.parent;
         GameObject bot = botTransform.gameObject;
         NavMeshAgent agent = bot.GetComponent<NavMeshAgent>();
@@ -1136,8 +1159,8 @@ public class PirateController : MonoBehaviour
             isHaveShovel = true;
             GameObject rawFoundedShovel = foundedShovel.gameObject;
             Destroy(rawFoundedShovel);
-            destination = gameManager.cross.transform.position;
-            agentTarget = gameManager.cross.transform;
+            /*destination = gameManager.cross.transform.position;
+            agentTarget = gameManager.cross.transform;*/
         }
         SetIKController();
         PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
@@ -1418,6 +1441,7 @@ public class PirateController : MonoBehaviour
                 }
             }
         }
+        /*
         if (isStandardMode)
         {
             object[] networkData = new object[] { localIndex, "Attack" };
@@ -1426,6 +1450,7 @@ public class PirateController : MonoBehaviour
                 Receivers = ReceiverGroup.Others
             });
         }
+        */
     }
 
     public IEnumerator RespawnPirate (GameObject colliderObject, Vector3 randomPosition)

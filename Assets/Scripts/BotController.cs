@@ -81,6 +81,13 @@ public class BotController : MonoBehaviour
                     pirateController.DoAction();
                 }
             }
+            else if (pirateController.networkIndex != 0)
+            {
+                pirateController.gameManager.GiveOrder(gameObject);
+                pirateController.isShovelFound = true;
+                pirateController.foundedShovel = detectedObject.transform;
+                pirateController.DoAction();
+            }
         }
     }
 
