@@ -18,7 +18,13 @@ public class ShovelController : MonoBehaviour
             try
             {
                 object[] data = (object[])content;
+
+                PhotonPlayer currentPlayer = PhotonNetwork.player;
+                PhotonNetwork.SetMasterClient(currentPlayer);
+
                 PhotonNetwork.Destroy(gameObject);
+                // Destroy(gameObject);
+
             }
             catch (System.InvalidCastException e)
             {

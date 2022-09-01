@@ -371,7 +371,8 @@ public class NetworkController : PunBehaviour
 	public void DoTrain()
     {
 		PlayerPrefs.SetString("Mode", "Train");
-		PhotonNetwork.LoadLevel("SampleScene");
+		// PhotonNetwork.LoadLevel("SampleScene");
+		PhotonNetwork.LoadLevel("Main");
 	}
 
 	public void SetNickName()

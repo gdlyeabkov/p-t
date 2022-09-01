@@ -41,6 +41,7 @@ public class PirateController : MonoBehaviour
     public Transform agentTarget;
     public TextMesh numberLabel;
     public Transform numberLabelWrap;
+    private Coroutine answersCoroutine;
 
     void Start()
     {
@@ -476,6 +477,12 @@ public class PirateController : MonoBehaviour
                     rig = handController.GetComponent<Rig>();
                     rig.weight = 0.0f;
 
+                    bool isIdle = name == "Idle";
+                    if(isIdle)
+                    {
+                        GetComponent<AudioSource>().Stop();
+                    }
+
                 }
             }
             catch (System.InvalidCastException)
@@ -655,6 +662,13 @@ public class PirateController : MonoBehaviour
                         GameObject miniGame = gameManager.miniGame;
                         miniGame.SetActive(false);
                         GetComponent<Animator>().Play("Idle");
+
+                        object[] networkData = new object[] { localIndex, "Idle" };
+                        PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                        {
+                            Receivers = ReceiverGroup.Others
+                        });
+
                         SetIKController();
                         foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                         {
@@ -676,6 +690,14 @@ public class PirateController : MonoBehaviour
                                 }
                             }
                         }
+
+                        if (answersCoroutine != null)
+                        {
+                            StopCoroutine(answersCoroutine);
+                        }
+
+                        GetComponent<AudioSource>().Stop();
+
                     }
                     else
                     {
@@ -704,7 +726,7 @@ public class PirateController : MonoBehaviour
                                 if (isNotBot)
                                 {
                                     miniGame.SetActive(true);
-                                    StartCoroutine(PlayAnswers());
+                                    answersCoroutine = StartCoroutine(PlayAnswers());
                                 }
                                 else
                                 {
@@ -824,7 +846,7 @@ public class PirateController : MonoBehaviour
                             if (isNotBot)
                             {
                                 miniGame.SetActive(true);
-                                StartCoroutine(PlayAnswers());
+                                answersCoroutine = StartCoroutine(PlayAnswers());
                             }
                             else
                             {
@@ -996,17 +1018,100 @@ public class PirateController : MonoBehaviour
             miniGame.SetActive(false);
             if (isCrossFound)
             {
+                /*
                 gameManager.ShowWin(localIndex, networkIndex);
                 GetComponent<Animator>().Play("Victory");
-
                 object[] networkData = new object[] { localIndex, "Victory" };
                 PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
                 {
                     Receivers = ReceiverGroup.Others
                 });
-
                 AudioSource audio = GetComponent<AudioSource>();
                 audio.Stop();
+                */
+
+                if (gameManager.treasureInst == null)
+                {
+                    Vector3 treasurePosition = Vector3.zero;
+                    if (gameManager.cross != null)
+                    {
+                        treasurePosition = gameManager.cross.transform.position;
+                    }
+                    else
+                    {
+                        treasurePosition = transform.position;
+                    }
+                    Quaternion baseRotation = Quaternion.identity;
+                    if (isStandardMode)
+                    {
+                        gameManager.treasureInst = PhotonNetwork.Instantiate("treasure", treasurePosition, baseRotation, 0);
+                    }
+                    else
+                    {
+                        gameManager.treasureInst = Instantiate(gameManager.treasure, treasurePosition, baseRotation);
+                    }
+                    StartCoroutine(gameManager.ResetConstraints(gameManager.treasureInst));
+                    agentTarget = gameManager.boats[localIndex].transform;
+                    destination = gameManager.boats[localIndex].transform.position;
+                    GetComponent<Animator>().Play("Walk");
+                    miniGameCursor = 0;
+                    isMiniGame = false;
+                    isStopped = false;
+                    isShovelFound = false;
+                    Transform botTransform = transform.parent;
+                    GameObject bot = null;
+                    NavMeshAgent agent = null;
+                    if (botTransform)
+                    {
+                        bot = botTransform.gameObject;
+                        agent = bot.GetComponent<NavMeshAgent>();
+                    }
+                    SetIKController();
+                    PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+                    CapsuleCollider pirateCollider = GetComponent<CapsuleCollider>();
+                    foreach (PirateController pirate in pirates)
+                    {
+                        GameObject rawPirate = pirate.gameObject;
+                        CapsuleCollider localCollider = null;
+                        CapsuleCollider somePirateCollider = null;
+                        bool isBot = botTransform != null;
+                        if (isBot)
+                        {
+                            localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                        }
+                        else
+                        {
+                            localCollider = GetComponent<CapsuleCollider>();
+                        }
+                        isBot = rawPirate.transform.parent != null;
+                        if (isBot)
+                        {
+                            somePirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                        }
+                        else
+                        {
+                            somePirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                        }
+                        Physics.IgnoreCollision(localCollider, somePirateCollider, false);
+                    }
+                    List<GameObject> bots = gameManager.bots;
+                    foreach (GameObject localBot in bots)
+                    {
+                        int botIndex = localBot.transform.GetChild(0).gameObject.GetComponent<PirateController>().localIndex;
+                        bool isOtherBot = localIndex != botIndex;
+                        if (isOtherBot)
+                        {
+                            gameManager.GiveOrder(localBot);
+                        }
+                    }
+                    gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                    GetComponent<AudioSource>().Stop();
+
+                }
+                else if (transform.parent != null)
+                {
+                    gameObject.GetComponent<Animator>().Play("Idle");
+                }
 
             }
             else
@@ -1017,9 +1122,15 @@ public class PirateController : MonoBehaviour
                 if (isStandardMode)
                 {
                     object[] networkData = new object[] { };
-                    PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
+
+                    /*PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
                     {
                         Receivers = ReceiverGroup.All
+                    });*/
+
+                    PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
+                    {
+                        Receivers = ReceiverGroup.MasterClient
                     });
                 }
                 else
