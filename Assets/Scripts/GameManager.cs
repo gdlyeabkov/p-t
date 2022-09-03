@@ -189,6 +189,7 @@ public class GameManager : PunBehaviour
         {
             isWin = true;
 
+            /*
             bool isCrossFound = localPirate.isCrossFound;
             if (isCrossFound)
             {
@@ -200,7 +201,6 @@ public class GameManager : PunBehaviour
                 mainCameraAudio.clip = looseSound;
                 mainCameraAudio.Play();
             }
-
             object[] networkData = new object[] { localIndex, networkIndex };
             PhotonNetwork.RaiseEvent(196, networkData, true, new RaiseEventOptions
             {
@@ -230,6 +230,30 @@ public class GameManager : PunBehaviour
             Vector3 treasurePosition = new Vector3(coordX, coordY, coordZ);
             Quaternion baseRotation = Quaternion.identity;
             StartCoroutine(ResetGame());
+            */
+
+            mainCameraAudio.clip = winSound;
+            mainCameraAudio.Play();
+            if (isStandardMode)
+            {
+                object[] networkData = new object[] { localIndex, networkIndex };
+                PhotonNetwork.RaiseEvent(196, networkData, true, new RaiseEventOptions
+                {
+                    Receivers = ReceiverGroup.All
+                });
+            }
+            else
+            {
+                bool isLooser = networkIndex != localIndex;
+                if (isLooser)
+                {
+                    mainCameraAudio.clip = looseSound;
+                    mainCameraAudio.Play();
+                    localPirate.GetComponent<Animator>().Play("Loose");
+                }
+                StartCoroutine(ResetGame());
+            }
+
         }
     }
 

@@ -1269,9 +1269,13 @@ public class PirateController : MonoBehaviour
         {
             isHaveShovel = true;
             GameObject rawFoundedShovel = foundedShovel.gameObject;
-            Destroy(rawFoundedShovel);
-            /*destination = gameManager.cross.transform.position;
-            agentTarget = gameManager.cross.transform;*/
+            // Destroy(rawFoundedShovel);
+
+            PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.MasterClient
+            });
+
         }
         SetIKController();
         PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
@@ -1503,6 +1507,21 @@ public class PirateController : MonoBehaviour
                         {
                             Receivers = ReceiverGroup.All
                         });
+
+                        if (gameManager.treasureInst != null)
+                        {
+                            if (transform.parent != null)
+                            {
+                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                            }
+                            else
+                            {
+                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                            }
+                            destination = gameManager.boats[localIndex].transform.position;
+                            agentTarget = gameManager.boats[localIndex].transform;
+                        }
+
                     }
                     else
                     {
@@ -1548,6 +1567,21 @@ public class PirateController : MonoBehaviour
                         audio.clip = dieSound;
                         audio.loop = false;
                         audio.Play();
+
+                        GetComponent<Animator>().Play("Idle");
+                        gameManager.GiveOrder(colliderObject);
+                        if (gameManager.treasureInst != null)
+                        {
+                            if (transform.parent != null)
+                            {
+                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                            }
+                            else
+                            {
+                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                            }
+                        }
+
                     }
                 }
             }
