@@ -268,7 +268,8 @@ public class PirateController : MonoBehaviour
                         bool isAttack = animatorStateInfo.IsName("Attack");
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isLoose = animatorStateInfo.IsName("Loose");
-                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose;
+                        bool isWin = animatorStateInfo.IsName("Win");
+                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose && !isWin;
                         if (isDoIdle)
                         {
                             GetComponent<Animator>().Play("Idle");
@@ -1451,23 +1452,27 @@ public class PirateController : MonoBehaviour
         Transform foreArm = arm.GetChild(0);
         Transform hand = foreArm.GetChild(0);
         Vector3 handPosition = hand.position;
-        Collider[] colliders = Physics.OverlapSphere(handPosition, 5f);
+        // Collider[] colliders = Physics.OverlapSphere(handPosition, 5f);
+        Collider[] colliders = Physics.OverlapSphere(handPosition, 1f);
         foreach (Collider collider in colliders)
         {
             GameObject colliderObject = collider.gameObject;
-            string name = colliderObject.name;
-            PirateController pirate = colliderObject.GetComponent<PirateController>();
-            bool isBot = colliderObject.GetComponent<NavMeshAgent>();
-            if (isBot)
+            // PirateController pirate = colliderObject.GetComponent<PirateController>();
+            PirateController pirate = null;
+            if (gameObject.activeSelf && colliderObject.activeSelf)
             {
-                Transform botTransform = colliderObject.transform;
-                Transform pirateTransform = botTransform.GetChild(0);
-                GameObject rawPirate = pirateTransform.gameObject;
-                pirate = rawPirate.GetComponent<PirateController>();
-            }
-            else
-            {
-                pirate = colliderObject.GetComponent<PirateController>();
+                bool isBot = colliderObject.GetComponent<NavMeshAgent>();
+                if (isBot)
+                {
+                    Transform botTransform = colliderObject.transform;
+                    Transform pirateTransform = botTransform.GetChild(0);
+                    GameObject rawPirate = pirateTransform.gameObject;
+                    pirate = rawPirate.GetComponent<PirateController>();
+                }
+                else
+                {
+                    pirate = colliderObject.GetComponent<PirateController>();
+                }
             }
             bool isPirate = pirate != null;
             if (isPirate)

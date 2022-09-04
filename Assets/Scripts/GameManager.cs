@@ -400,6 +400,19 @@ public class GameManager : PunBehaviour
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         Vector3 shovelRotationAxes = new Vector3(1f, 1f, 0f);
         shovel.transform.RotateAround(islandSphereTransformPosition, shovelRotationAxes, randomRotation);
+
+        if (isStandardMode)
+        {
+            StartCoroutine(SyncShovelPlacement(randomRotation));
+            /*object[] networkData = new object[] { randomRotation };
+            PhotonNetwork.RaiseEvent(190, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.All
+            });*/
+        }
+
+        shovel.GetComponent<ShovelController>().gameManager = this;
+
     }
 
     public void DoAction()
@@ -549,20 +562,20 @@ public class GameManager : PunBehaviour
                     agent.angularSpeed = 30;
                     agent.acceleration = 30;
                     NavMeshPath path = new NavMeshPath();
-                    if (agentTarget != null)
-                    {
-                        Vector3 destination = agentTarget.position;
-                        agent.CalculatePath(destination, path);
-                    }
                     if (isOnNavMesh)
                     {
-                        agent.ResetPath();
-                        agent.SetPath(path);
-                        Vector3 yAxis = Vector3.up;
-                        Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
-                        Vector3 velocity = agent.velocity;
-                        Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
-                        pirate.transform.rotation = lookRotation;
+                        if (agentTarget != null)
+                        {
+                            Vector3 destination = agentTarget.position;
+                            agent.CalculatePath(destination, path);
+                            agent.ResetPath();
+                            agent.SetPath(path);
+                            Vector3 yAxis = Vector3.up;
+                            Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
+                            Vector3 velocity = agent.velocity;
+                            Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
+                            pirate.transform.rotation = lookRotation;
+                        }
                     }
 
                     // pirate.GetComponent<Animator>().Play("Walk");
@@ -641,6 +654,17 @@ public class GameManager : PunBehaviour
             bots.Add(pirateWrap);
         }
         StartCoroutine(GiveOrders());
+    }
+
+    public IEnumerator SyncShovelPlacement (float randomRotation)
+    {
+        yield return new WaitForSeconds(10f);
+        object[] networkData = new object[] { randomRotation };
+        PhotonNetwork.RaiseEvent(190, networkData, true, new RaiseEventOptions
+        {
+            // Receivers = ReceiverGroup.All
+            Receivers = ReceiverGroup.Others
+        });
     }
 
 }

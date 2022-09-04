@@ -24,8 +24,11 @@ public class BotController : MonoBehaviour
                 bool isStop = isBot && isMissionComplete;
                 if (isStop)
                 {
-                    pirateController.DoAttack();
-                    pirateController.gameManager.GiveOrder(gameObject);
+                    if (gameObject.activeSelf && detectedObject.activeSelf)
+                    {
+                        pirateController.DoAttack();
+                        pirateController.gameManager.GiveOrder(gameObject);
+                    }
                 }
             }
         }
