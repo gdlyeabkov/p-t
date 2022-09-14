@@ -658,13 +658,19 @@ public class GameManager : PunBehaviour
 
     public IEnumerator SyncShovelPlacement (float randomRotation)
     {
-        yield return new WaitForSeconds(10f);
+        // yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
         object[] networkData = new object[] { randomRotation };
         PhotonNetwork.RaiseEvent(190, networkData, true, new RaiseEventOptions
         {
             // Receivers = ReceiverGroup.All
             Receivers = ReceiverGroup.Others
         });
+    }
+
+    public void DestroyShovel(GameObject shovel)
+    {
+        PhotonNetwork.Destroy(shovel);
     }
 
 }

@@ -40,85 +40,65 @@ public class BotController : MonoBehaviour
         string detectedObjectTag = detectedObject.tag;
         bool isCross = detectedObjectTag == "Cross";
         bool isShovel = detectedObjectTag == "Shovel";
-        if (isCross)
+        Camera mainCamera = Camera.main;
+        GameObject rawMainCamera = mainCamera.gameObject;
+        CameraTracker cameraTracker = rawMainCamera.GetComponent<CameraTracker>();
+        GameManager gameManager = cameraTracker.gameManager;
+        bool isInit = gameManager.isInit;
+        if (isInit)
         {
-            Transform detectedObjectTransform = detectedObject.transform;
-            Transform rawPirateTransform = transform.GetChild(0);
-            GameObject rawPirate = rawPirateTransform.gameObject;
-            PirateController pirateController = rawPirate.GetComponent<PirateController>();
-            CrossController crossController = detectedObject.GetComponent<CrossController>();
-            Transform agentTarget = pirateController.agentTarget;
-            bool isHaveTarget = agentTarget != null;
-            if (isHaveTarget)
+            if (isCross)
             {
-                bool isMissionComplete = agentTarget == detectedObjectTransform;
-                if (isMissionComplete)
+                Transform detectedObjectTransform = detectedObject.transform;
+                Transform rawPirateTransform = transform.GetChild(0);
+                GameObject rawPirate = rawPirateTransform.gameObject;
+                PirateController pirateController = rawPirate.GetComponent<PirateController>();
+                CrossController crossController = detectedObject.GetComponent<CrossController>();
+                Transform agentTarget = pirateController.agentTarget;
+                bool isHaveTarget = agentTarget != null;
+                if (isHaveTarget)
                 {
-                    NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                    // agent.isStopped = true;
-                    pirateController.gameManager.GiveOrder(gameObject);
-                    pirateController.isCrossFound = true;
-                    pirateController.foundedCross = crossController;
-                    pirateController.DoAction();
+                    bool isMissionComplete = agentTarget == detectedObjectTransform;
+                    if (isMissionComplete)
+                    {
+                        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+                        pirateController.gameManager.GiveOrder(gameObject);
+                        pirateController.isCrossFound = true;
+                        pirateController.foundedCross = crossController;
+                        pirateController.DoAction();
+                    }
                 }
             }
-        }
-        else if (isShovel)
-        {
-            Transform detectedObjectTransform = detectedObject.transform;
-            Transform rawPirateTransform = transform.GetChild(0);
-            GameObject rawPirate = rawPirateTransform.gameObject;
-            PirateController pirateController = rawPirate.GetComponent<PirateController>();
-            Transform agentTarget = pirateController.agentTarget;
-            bool isHaveTarget = agentTarget != null;
-            if (isHaveTarget)
+            else if (isShovel)
             {
-                bool isMissionComplete = agentTarget == detectedObjectTransform;
-                if (isMissionComplete)
+                Transform detectedObjectTransform = detectedObject.transform;
+                Transform rawPirateTransform = transform.GetChild(0);
+                GameObject rawPirate = rawPirateTransform.gameObject;
+                PirateController pirateController = rawPirate.GetComponent<PirateController>();
+                Transform agentTarget = pirateController.agentTarget;
+                bool isHaveTarget = agentTarget != null;
+                if (isHaveTarget)
                 {
-                    NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                    // agent.isStopped = true;
+                    bool isMissionComplete = agentTarget == detectedObjectTransform;
+                    if (isMissionComplete)
+                    {
+                        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+                        // agent.isStopped = true;
+                        pirateController.gameManager.GiveOrder(gameObject);
+                        pirateController.isShovelFound = true;
+                        pirateController.foundedShovel = detectedObject.transform;
+                        pirateController.DoAction();
+                    }
+                }
+                else if (pirateController.networkIndex != 0)
+                {
                     pirateController.gameManager.GiveOrder(gameObject);
                     pirateController.isShovelFound = true;
                     pirateController.foundedShovel = detectedObject.transform;
                     pirateController.DoAction();
                 }
             }
-            else if (pirateController.networkIndex != 0)
-            {
-                pirateController.gameManager.GiveOrder(gameObject);
-                pirateController.isShovelFound = true;
-                pirateController.foundedShovel = detectedObject.transform;
-                pirateController.DoAction();
-            }
         }
     }
-
-    /*
-    public void Update()
-    {
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        bool isOnNavMesh = agent.isOnNavMesh;
-        if (isOnNavMesh)
-        {
-            if (agent.remainingDistance <= 3f)
-            // if (false)
-            {
-                Transform pirateTransform = transform.GetChild(0);
-                GameObject pirate = pirateTransform.gameObject;
-                Animator pirateAnimator = pirate.GetComponent<Animator>();
-                AnimatorStateInfo animatorStateInfo = pirateAnimator.GetCurrentAnimatorStateInfo(0);
-                bool isAttack = animatorStateInfo.IsName("Attack");
-                bool isNotAttack = !isAttack;
-                if (isNotAttack)
-                {
-                    PirateController pirateController = pirate.GetComponent<PirateController>();
-                    pirateController.DoAttack();
-                    pirateController.gameManager.GiveOrder(gameObject);
-                }
-            }
-        }
-    }
-    */
 
 }

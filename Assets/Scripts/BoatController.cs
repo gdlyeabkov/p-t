@@ -156,6 +156,7 @@ public class BoatController : MonoBehaviour
                             {
                                 Animator localPirateAnimator = localPirate.GetComponent<Animator>();
                                 localPirateAnimator.Play("Loose");
+                                botController = localBot.GetComponent<NavMeshAgent>();
                                 isOnNavMesh = botController.isOnNavMesh;
                                 if (isOnNavMesh)
                                 {

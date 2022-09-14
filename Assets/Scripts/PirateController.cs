@@ -114,15 +114,12 @@ public class PirateController : MonoBehaviour
                 numberLabelWrap.transform.position = new Vector3(transform.position.x, numberLabelWrap.position.y, numberLabelWrap.position.z);
             }
         }
-        /*
-        else
-        {
-            numberLabel.text = PhotonNetwork.playerList[localIndex].name;
-        }
-        */
-
+        
         bool isLocalBot = transform.parent != null;
-        if (isLocalBot)
+        bool isHost = PhotonNetwork.isMasterClient;
+        bool isNotHost = !isHost;
+        bool isAddBot = isLocalBot && isNotHost;
+        if (isAddBot)
         {
             gameManager.bots.Add(transform.parent.gameObject);
         }
@@ -211,6 +208,7 @@ public class PirateController : MonoBehaviour
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isAttack = animatorStateInfo.IsName("Attack");
                         bool isPull = animatorStateInfo.IsName("Pull");
+                        bool isIdle = animatorStateInfo.IsName("Idle");
                         bool isDoWalk = !isPaint && !isAttack && !isPull;
                         Transform parent = transform.parent;
                         GameObject rawParent = null;
@@ -268,8 +266,8 @@ public class PirateController : MonoBehaviour
                         bool isAttack = animatorStateInfo.IsName("Attack");
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isLoose = animatorStateInfo.IsName("Loose");
-                        bool isWin = animatorStateInfo.IsName("Win");
-                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose && !isWin;
+                        bool isVictory = animatorStateInfo.IsName("Victory");
+                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose && !isVictory;
                         if (isDoIdle)
                         {
                             GetComponent<Animator>().Play("Idle");
@@ -1019,18 +1017,6 @@ public class PirateController : MonoBehaviour
             miniGame.SetActive(false);
             if (isCrossFound)
             {
-                /*
-                gameManager.ShowWin(localIndex, networkIndex);
-                GetComponent<Animator>().Play("Victory");
-                object[] networkData = new object[] { localIndex, "Victory" };
-                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
-                {
-                    Receivers = ReceiverGroup.Others
-                });
-                AudioSource audio = GetComponent<AudioSource>();
-                audio.Stop();
-                */
-
                 if (gameManager.treasureInst == null)
                 {
                     Vector3 treasurePosition = Vector3.zero;
@@ -1123,11 +1109,6 @@ public class PirateController : MonoBehaviour
                 if (isStandardMode)
                 {
                     object[] networkData = new object[] { };
-
-                    /*PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
-                    {
-                        Receivers = ReceiverGroup.All
-                    });*/
 
                     PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
                     {
@@ -1270,8 +1251,7 @@ public class PirateController : MonoBehaviour
         {
             isHaveShovel = true;
             GameObject rawFoundedShovel = foundedShovel.gameObject;
-            // Destroy(rawFoundedShovel);
-
+            
             PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
             {
                 Receivers = ReceiverGroup.MasterClient
@@ -1452,12 +1432,10 @@ public class PirateController : MonoBehaviour
         Transform foreArm = arm.GetChild(0);
         Transform hand = foreArm.GetChild(0);
         Vector3 handPosition = hand.position;
-        // Collider[] colliders = Physics.OverlapSphere(handPosition, 5f);
         Collider[] colliders = Physics.OverlapSphere(handPosition, 1f);
         foreach (Collider collider in colliders)
         {
             GameObject colliderObject = collider.gameObject;
-            // PirateController pirate = colliderObject.GetComponent<PirateController>();
             PirateController pirate = null;
             if (gameObject.activeSelf && colliderObject.activeSelf)
             {
@@ -1537,7 +1515,7 @@ public class PirateController : MonoBehaviour
                         GameObject miniGame = pirate.gameManager.miniGame;
                         miniGame.SetActive(false);
                         bool isHaveShovel = pirate.isHaveShovel;
-                        if (isHaveShovel)
+                        if (isHaveShovel && gameManager.treasureInst == null)
                         {
                             gameManager.GenerateShovel();
                         }

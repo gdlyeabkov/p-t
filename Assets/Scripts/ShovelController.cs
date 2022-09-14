@@ -29,8 +29,7 @@ public class ShovelController : MonoBehaviour
                 PhotonPlayer currentPlayer = PhotonNetwork.player;
                 PhotonNetwork.SetMasterClient(currentPlayer);
 
-                PhotonNetwork.Destroy(gameObject);
-                // Destroy(gameObject);
+                gameManager.DestroyShovel(gameObject);
 
             }
             catch (System.InvalidCastException e)
@@ -43,6 +42,9 @@ public class ShovelController : MonoBehaviour
                 string photonError = "Не могу передать photon данные";
                 Debug.Log(photonError);
             }
+
+            Debug.LogWarning("isRemoveShovelEvent");
+
         }
         else if (isShovelPlacementEvent)
         {
@@ -57,7 +59,9 @@ public class ShovelController : MonoBehaviour
                     islandSphereTransformPosition = islandSphereTransform.position;
                 }
                 Vector3 shovelRotationAxes = new Vector3(1f, 1f, 0f);
+                gameObject.GetComponent<BoxCollider>().enabled = false;
                 transform.RotateAround(islandSphereTransformPosition, shovelRotationAxes, randomRotation);
+                gameObject.GetComponent<BoxCollider>().enabled = true;
             }
             catch (System.InvalidCastException)
             {
@@ -69,6 +73,7 @@ public class ShovelController : MonoBehaviour
                 string photonError = "Не могу передать photon данные";
                 Debug.Log(photonError);
             }
+            Debug.LogWarning("isShovelPlacementEvent");
         }
     }
 
