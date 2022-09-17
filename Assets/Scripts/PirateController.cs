@@ -1036,6 +1036,9 @@ public class PirateController : MonoBehaviour
                     else
                     {
                         gameManager.treasureInst = Instantiate(gameManager.treasure, treasurePosition, baseRotation);
+                        
+                        Physics.IgnoreCollision(gameManager.treasureInst.GetComponent<BoxCollider>(), gameManager.localPirate.GetComponent<CapsuleCollider>(), true);
+
                     }
                     StartCoroutine(gameManager.ResetConstraints(gameManager.treasureInst));
                     agentTarget = gameManager.boats[localIndex].transform;
