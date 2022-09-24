@@ -208,7 +208,6 @@ public class PirateController : MonoBehaviour
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isAttack = animatorStateInfo.IsName("Attack");
                         bool isPull = animatorStateInfo.IsName("Pull");
-                        bool isIdle = animatorStateInfo.IsName("Idle");
                         bool isDoWalk = !isPaint && !isAttack && !isPull;
                         Transform parent = transform.parent;
                         GameObject rawParent = null;
@@ -255,7 +254,17 @@ public class PirateController : MonoBehaviour
                             if (isNotBot)
                             {
                                 rb.MovePosition(updatedPosition);
-                                GetComponent<Animator>().Play("Walk");
+                                if (gameManager.treasureInst != null)
+                                {
+                                    if (gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == GetComponent<Rigidbody>())
+                                    {
+                                        GetComponent<Animator>().Play("Grab_Walk");
+                                    }
+                                }
+                                else
+                                {
+                                    GetComponent<Animator>().Play("Walk");
+                                }
                             }
                         }
                     }
@@ -270,12 +279,27 @@ public class PirateController : MonoBehaviour
                         bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose && !isVictory;
                         if (isDoIdle)
                         {
-                            GetComponent<Animator>().Play("Idle");
-                            object[] networkData = new object[] { localIndex, "Idle" };
-                            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                            if (gameManager.treasureInst != null)
                             {
-                                Receivers = ReceiverGroup.Others
-                            });
+                                if (gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == GetComponent<Rigidbody>())
+                                {
+                                    GetComponent<Animator>().Play("Grab_Idle");
+                                    object[] networkData = new object[] { localIndex, "Grab_Idle" };
+                                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                    {
+                                        Receivers = ReceiverGroup.Others
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                GetComponent<Animator>().Play("Idle");
+                                object[] networkData = new object[] { localIndex, "Idle" };
+                                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                {
+                                    Receivers = ReceiverGroup.Others
+                                });
+                            }
                         }
                     }
                 }
@@ -501,7 +525,9 @@ public class PirateController : MonoBehaviour
             {
                 object[] data = (object[])content;
                 int index = (int)data[0];
+                int killerIndex = (int)data[1];
                 bool isLocalPirate = index == localIndex;
+                bool isKiller = killerIndex == localIndex;
                 if (isLocalPirate)
                 {
                     miniGameCursor = 0;
@@ -530,6 +556,24 @@ public class PirateController : MonoBehaviour
                     audio.clip = dieSound;
                     audio.loop = false;
                     audio.Play();
+                }
+                else if (isKiller)
+                {
+                    if (gameManager.treasureInst != null)
+                    {
+                        Transform armature = transform.GetChild(0);
+                        Transform hips = armature.GetChild(0);
+                        Transform spine = hips.GetChild(2);
+                        Transform spine1 = spine.GetChild(0);
+                        Transform spine2 = spine1.GetChild(0);
+                        Transform rightSholder = spine2.GetChild(2);
+                        Transform rightArm = rightSholder.GetChild(0);
+                        Transform rightForeArm = rightArm.GetChild(0);
+                        Transform rightHand = rightForeArm.GetChild(0);
+                        Transform treasureTransform = rightHand.GetChild(2);
+                        GameObject treasure = treasureTransform.gameObject;
+                        treasure.SetActive(true);
+                    }
                 }
             }
             catch (System.InvalidCastException)
@@ -970,15 +1014,24 @@ public class PirateController : MonoBehaviour
                     bool isNotMiniGame = !isMiniGame;
                     if (isNotMiniGame)
                     {
-                        GetComponent<Animator>().Play("Attack");
 
-                        if (isStandardMode)
+                        AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                        bool isGrabWalk = animatorStateInfo.IsName("Grab_Walk");
+                        bool isGrabIdle = animatorStateInfo.IsName("Grab_Idle");
+                        bool isGrab = isGrabWalk || isGrabIdle;
+                        bool isNotGrab = !isGrab;
+                        if (isNotGrab)
                         {
-                            object[] networkData = new object[] { localIndex, "Attack" };
-                            PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                            GetComponent<Animator>().Play("Attack");
+
+                            if (isStandardMode)
                             {
-                                Receivers = ReceiverGroup.Others
-                            });
+                                object[] networkData = new object[] { localIndex, "Attack" };
+                                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                {
+                                    Receivers = ReceiverGroup.Others
+                                });
+                            }
                         }
 
                     }
@@ -1102,6 +1155,20 @@ public class PirateController : MonoBehaviour
                 {
                     gameObject.GetComponent<Animator>().Play("Idle");
                 }
+                GetComponent<Animator>().SetBool("isGrab", true);
+
+                Transform armature = transform.GetChild(0);
+                Transform hips = armature.GetChild(0);
+                Transform spine = hips.GetChild(2);
+                Transform spine1 = spine.GetChild(0);
+                Transform spine2 = spine1.GetChild(0);
+                Transform rightSholder = spine2.GetChild(2);
+                Transform rightArm = rightSholder.GetChild(0);
+                Transform rightForeArm = rightArm.GetChild(0);
+                Transform rightHand = rightForeArm.GetChild(0);
+                Transform treasureTransform = rightHand.GetChild(2);
+                GameObject treasure = treasureTransform.gameObject;
+                treasure.SetActive(true);
 
             }
             else
@@ -1488,7 +1555,7 @@ public class PirateController : MonoBehaviour
 
                     if (isStandardMode)
                     {
-                        object[] networkData = new object[] { pirateLocalIndex };
+                        object[] networkData = new object[] { pirateLocalIndex, localIndex };
                         PhotonNetwork.RaiseEvent(193, networkData, true, new RaiseEventOptions
                         {
                             Receivers = ReceiverGroup.All
@@ -1506,6 +1573,20 @@ public class PirateController : MonoBehaviour
                             }
                             destination = gameManager.boats[localIndex].transform.position;
                             agentTarget = gameManager.boats[localIndex].transform;
+
+                            Transform localArmature = transform.GetChild(0);
+                            Transform localHips = localArmature.GetChild(0);
+                            Transform localSpine = localHips.GetChild(2);
+                            Transform localSpine1 = localSpine.GetChild(0);
+                            Transform localSpine2 = localSpine1.GetChild(0);
+                            Transform localRightSholder = localSpine2.GetChild(2);
+                            Transform localRightArm = localRightSholder.GetChild(0);
+                            Transform localRightForeArm = localRightArm.GetChild(0);
+                            Transform localRightHand = localRightForeArm.GetChild(0);
+                            Transform treasureTransform = localRightHand.GetChild(2);
+                            GameObject treasure = treasureTransform.gameObject;
+                            treasure.SetActive(false);
+
                         }
 
                     }
@@ -1582,6 +1663,16 @@ public class PirateController : MonoBehaviour
             });
         }
         */
+
+        Transform pirateArmature = transform.GetChild(0);
+        Transform pirateHips = pirateArmature.GetChild(0);
+        Transform pirateSpine = pirateHips.GetChild(2);
+        Transform pirateSpine1 = pirateSpine.GetChild(0);
+        Transform pirateSpine2 = pirateSpine1.GetChild(0);
+        Transform saberTransform = pirateSpine2.GetChild(0);
+        GameObject saber = saberTransform.gameObject;
+        saber.SetActive(false);
+
     }
 
     public IEnumerator RespawnPirate (GameObject colliderObject, Vector3 randomPosition)
@@ -1590,6 +1681,7 @@ public class PirateController : MonoBehaviour
         if (colliderObject.transform.parent != null)
         {
             pirate = colliderObject.transform.parent.gameObject;
+            pirate.GetComponent<NavMeshAgent>().enabled = false;
         }
         pirate.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         for (int i = 0; i < colliderObject.transform.childCount; i++)
@@ -1603,7 +1695,18 @@ public class PirateController : MonoBehaviour
             colliderObject.transform.GetChild(i).gameObject.SetActive(true);
         }
         colliderObject.GetComponent<PirateController>().StopAllCoroutines();
-        colliderObject.transform.position = randomPosition;
+        if (colliderObject.transform.parent != null)
+        {
+            pirate.GetComponent<NavMeshAgent>().enabled = true;
+            // pirate.GetComponent<NavMeshAgent>().SetDestination(randomPosition);
+            pirate.GetComponent<NavMeshAgent>().nextPosition = randomPosition;
+        }
+        else
+        {
+            colliderObject.transform.position = randomPosition;
+        }
+        // colliderObject.transform.position = randomPosition;
+
     }
 
     public IEnumerator SetPlayerCamera()

@@ -168,6 +168,20 @@ public class BoatController : MonoBehaviour
                         AudioSource botAudio = pirateController.GetComponent<AudioSource>();
                         botAudio.Stop();
 
+                        /*Transform pirateControllerTransform = pirateController.transform;
+                        Transform armature = pirateControllerTransform.GetChild(0);
+                        Transform hips = armature.GetChild(0);
+                        Transform spine = hips.GetChild(2);
+                        Transform spine1 = spine.GetChild(0);
+                        Transform spine2 = spine1.GetChild(0);
+                        Transform rightSholder = spine2.GetChild(2);
+                        Transform rightArm = rightSholder.GetChild(0);
+                        Transform rightForeArm = rightArm.GetChild(0);
+                        Transform rightHand = rightForeArm.GetChild(0);
+                        Transform treasureTransform = rightHand.GetChild(2);
+                        GameObject treasure = treasureTransform.gameObject;
+                        treasure.SetActive(false);*/
+
                     }
                 }
             }

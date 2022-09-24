@@ -80,7 +80,7 @@ public class GameManager : PunBehaviour
                 float coordY = -0.9f;
                 float randomCoordZ = 0f;
                 Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-                float randomRotation = Random.Range(-5, 5);
+                float randomRotation = Random.Range(-4.5f, 4.5f);
                 Vector3 islandSphereTransformPosition = islandSphereTransform.position;
                 Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
                 cross.transform.RotateAround(islandSphereTransformPosition, crossRotationAxes, randomRotation);
@@ -124,7 +124,8 @@ public class GameManager : PunBehaviour
                     Transform respawnPoint = respawnPoints[i];
                     randomPosition = respawnPoint.position;
                     Quaternion baseRotation = Quaternion.identity;
-                    GameObject pirate = PhotonNetwork.Instantiate("fixed_pirate", randomPosition, baseRotation, 0);
+                    // GameObject pirate = PhotonNetwork.Instantiate("fixed_pirate", randomPosition, baseRotation, 0);
+                    GameObject pirate = PhotonNetwork.Instantiate("animated_pirate", randomPosition, baseRotation, 0);
                 }
                 
                 CreateNetworkBots();
@@ -144,7 +145,7 @@ public class GameManager : PunBehaviour
             float coordY = -0.9f;
             float randomCoordZ = 0f;
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            float randomRotation = Random.Range(-5, 5);
+            float randomRotation = Random.Range(-4.5f, 4.5f);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
             Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
             cross.transform.RotateAround(islandSphereTransformPosition, crossRotationAxes, randomRotation);
@@ -519,7 +520,6 @@ public class GameManager : PunBehaviour
             bool isPull = animatorStateInfo.IsName("Pull");
             bool isDig = animatorStateInfo.IsName("Dig");
             bool isAttack = animatorStateInfo.IsName("Attack");
-            // bool isStop = isWin || isDig || isPull;
             bool isStop = isWin || isDig || isPull || isAttack;
             if (isStop)
             {
@@ -583,7 +583,22 @@ public class GameManager : PunBehaviour
                     {
                         if (agent.speed > 0f)
                         {
-                            pirateAnimator.Play("Walk");
+                            // pirateAnimator.Play("Walk");
+                            if (treasureInst != null)
+                            {
+                                if (treasureInst.GetComponent<SpringJoint>().connectedBody == pirateController.GetComponent<Rigidbody>())
+                                {
+                                    pirateAnimator.Play("Grab_Walk");
+                                }
+                                else
+                                {
+                                    pirateAnimator.Play("Walk");
+                                }
+                            }
+                            else
+                            {
+                                pirateAnimator.Play("Walk");
+                            }
                         }
                     }
                     else if (pirateController.agentTarget == null && globalNetworkIndex == 0)
@@ -648,7 +663,8 @@ public class GameManager : PunBehaviour
             Transform respawnPoint = respawnPoints[1];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
-            GameObject pirateWrap = PhotonNetwork.Instantiate("fixedatePirateEnemyWrapResourse", randomPosition, baseRotation, 0);
+            // GameObject pirateWrap = PhotonNetwork.Instantiate("fixedatePirateEnemyWrapResourse", randomPosition, baseRotation, 0);
+            GameObject pirateWrap = PhotonNetwork.Instantiate("bot", randomPosition, baseRotation, 0);
             NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
             agent.speed = 0.1f;
             bots.Add(pirateWrap);
