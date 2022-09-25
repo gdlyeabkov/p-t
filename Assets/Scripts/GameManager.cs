@@ -586,7 +586,7 @@ public class GameManager : PunBehaviour
                             // pirateAnimator.Play("Walk");
                             if (treasureInst != null)
                             {
-                                if (treasureInst.GetComponent<SpringJoint>().connectedBody == pirateController.GetComponent<Rigidbody>())
+                                if (treasureInst.GetComponent<SpringJoint>().connectedBody == pirateController.transform.parent.gameObject.GetComponent<Rigidbody>())
                                 {
                                     pirateAnimator.Play("Grab_Walk");
                                 }

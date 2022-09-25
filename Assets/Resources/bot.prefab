@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 339449139744223506}
   - component: {fileID: 7525079249961741996}
   m_Layer: 0
-  m_Name: bot Variant
+  m_Name: bot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -406,7 +406,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: animated_pirate
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5813748776686646972, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
+    - {fileID: 490304960949352587, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
+    - {fileID: 5437583414343405462, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
+    - {fileID: 1636855566704404488, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
+    - {fileID: 2484576745769999358, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
+    - {fileID: 5027676822177527748, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
+    - {fileID: 8680512291566986016, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7d5d3d2d8dd39d2458be234373f3925b, type: 3}
 --- !u!224 &7071647201790394373 stripped
 RectTransform:
