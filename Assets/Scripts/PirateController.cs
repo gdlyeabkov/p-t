@@ -318,6 +318,15 @@ public class PirateController : MonoBehaviour
                                         Receivers = ReceiverGroup.Others
                                     });
                                 }
+                                else
+                                {
+                                    GetComponent<Animator>().Play("Idle");
+                                    object[] networkData = new object[] { localIndex, "Idle" };
+                                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                    {
+                                        Receivers = ReceiverGroup.Others
+                                    });
+                                }
                             }
                             else
                             {
