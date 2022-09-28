@@ -84,7 +84,7 @@ public class BotController : MonoBehaviour
                     {
                         NavMeshAgent agent = GetComponent<NavMeshAgent>();
                         // agent.isStopped = true;
-                        pirateController.gameManager.GiveOrder(gameObject);
+                        // pirateController.gameManager.GiveOrder(gameObject);
                         pirateController.isShovelFound = true;
                         pirateController.foundedShovel = detectedObject.transform;
                         pirateController.DoAction();
