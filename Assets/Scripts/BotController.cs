@@ -40,6 +40,7 @@ public class BotController : MonoBehaviour
         string detectedObjectTag = detectedObject.tag;
         bool isCross = detectedObjectTag == "Cross";
         bool isShovel = detectedObjectTag == "Shovel";
+        bool isPaint = detectedObjectTag == "Paint";
         Camera mainCamera = Camera.main;
         GameObject rawMainCamera = mainCamera.gameObject;
         CameraTracker cameraTracker = rawMainCamera.GetComponent<CameraTracker>();
@@ -96,6 +97,27 @@ public class BotController : MonoBehaviour
                     pirateController.isShovelFound = true;
                     pirateController.foundedShovel = detectedObject.transform;
                     pirateController.DoAction();
+                }
+            }
+            else if (isPaint)
+            {
+                Transform detectedObjectTransform = detectedObject.transform;
+                Transform rawPirateTransform = transform.GetChild(0);
+                GameObject rawPirate = rawPirateTransform.gameObject;
+                PirateController pirateController = rawPirate.GetComponent<PirateController>();
+                Transform agentTarget = pirateController.agentTarget;
+                bool isHaveTarget = agentTarget != null;
+                if (isHaveTarget)
+                {
+                    bool isMissionComplete = agentTarget == detectedObjectTransform;
+                    if (isMissionComplete)
+                    {
+                        pirateController.DoPaint();
+                    }
+                }
+                else if (pirateController.networkIndex != 0)
+                {
+                    pirateController.DoPaint();
                 }
             }
         }

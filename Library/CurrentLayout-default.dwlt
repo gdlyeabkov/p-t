@@ -304,7 +304,7 @@ MonoBehaviour:
   m_ViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -7516
+  m_LastSelectedObjectID: -33766
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -428,7 +428,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: de7cffff2688ffffd289ffffec89ffff828effff868effffc890ffff4292ffffec96ffff76b4ffff90b4ffff26b9ffff2cb9ffff12c2fffffecdffff46ceffff4aceffff4cceffff5eceffff60ceffff6aceffffe0ceffffecceffff22cfffffe6d8ffff0ce4ffff48fbffff
+      m_ExpandedIDs: 0242ffff2648ffffcc4fffff4651ffff7654ffff8c5affff065cffffb060ffffde6affff3c6fffff3072ffff6075ffff327cffffac7dffffdc80ffff3a87ffffe48bffffe490ffff5e92ffffd893ffff0897ffffb8a0fffffca5fffff0a8ffff20acffffaeb3ffffdeb6fffffcc0ffff1cc6ffff40ccffff52d8ffffd4e1ffffaae8ffff54edffff94f3ffff3ef8ffff48fbfffff4ffffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -488,9 +488,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -40.76425, y: -1.6262403, z: 40.76425}
+    m_Target: {x: -0.9011186, y: 0.48929918, z: 0.588944}
     speed: 2
-    m_Value: {x: -40.76425, y: -1.6262403, z: 40.76425}
+    m_Value: {x: -0.9011186, y: 0.48929918, z: 0.588944}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -536,17 +536,17 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.014181379, y: 0.894572, z: -0.44579095, w: 0.02845776}
+    m_Target: {x: 0.17399822, y: -0.010339592, z: 0.0018271109, w: 0.9846897}
     speed: 2
-    m_Value: {x: 0.014181382, y: 0.8945722, z: -0.44579104, w: 0.028457766}
+    m_Value: {x: 0.17399827, y: -0.010339594, z: 0.0018271115, w: 0.98469}
   m_Size:
-    m_Target: 8.785032
+    m_Target: 1.7475667
     speed: 2
-    m_Value: 8.785032
+    m_Value: 1.7475667
   m_Ortho:
-    m_Target: 0
+    m_Target: 1
     speed: 2
-    m_Value: 0
+    m_Value: 1
   m_CameraSettings:
     m_Speed: 0.2
     m_SpeedNormalized: 0.08523715
@@ -597,14 +597,14 @@ MonoBehaviour:
     m_KeySerializationHelper:
     - {fileID: -9161519154120533740, guid: 02f6ba2f1f435f84db26133357307534, type: 2}
     m_ValueSerializationHelper:
-    - e00: 0.4775794
+    - e00: 0.3203348
       e01: 0
       e02: 0
-      e03: -152.34784
+      e03: -13.812042
       e10: 0
-      e11: 0.4775794
+      e11: 0.3203348
       e12: 0
-      e13: 55.09559
+      e13: 98.62602
       e20: 0
       e21: 0
       e22: 1
@@ -670,20 +670,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Resources
   m_ViewMode: 1
   m_StartGridSize: 58
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Resources
   m_LastFoldersGridSize: 58
   m_LastProjectPath: C:\unity_projects\CarambaOnline
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 253}
-    m_SelectedIDs: ee420000
-    m_LastClickedID: 17134
-    m_ExpandedIDs: 00000000da420000dc420000de420000e0420000e2420000e4420000e6420000e8420000ea420000ec420000ee420000f0420000f842000000ca9a3b
+    m_SelectedIDs: 14430000
+    m_LastClickedID: 17172
+    m_ExpandedIDs: 00000000da420000dc420000de420000e0420000e2420000e4420000e6420000e8420000ea420000ec420000ee420000f042000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

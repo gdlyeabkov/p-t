@@ -42,6 +42,7 @@ public class PirateController : MonoBehaviour
     public TextMesh numberLabel;
     public Transform numberLabelWrap;
     private Coroutine answersCoroutine;
+    public float ratio = 1f;
 
     void Start()
     {
@@ -244,7 +245,16 @@ public class PirateController : MonoBehaviour
                             }
                             Vector3 currentPosition = rb.position;
                             Vector3 forwardDirection = Vector3.forward;
-                            Vector3 speedforwardDirection = forwardDirection * speed;
+                            Animator animator = GetComponent<Animator>();
+                            bool isGrab = animator.GetBool("isGrab");
+                            ratio = 1f;
+                            if (isGrab)
+                            {
+                                ratio = 0.5f;
+                            }
+                            float speedRatio = speed * ratio;
+                            Vector3 speedforwardDirection = forwardDirection * speedRatio;
+                            // Vector3 speedforwardDirection = forwardDirection * speed;
                             Vector3 boostMotion = speedforwardDirection * Time.fixedDeltaTime;
                             Vector3 localOffset = transform.TransformDirection(boostMotion);
                             Vector3 updatedPosition = currentPosition + localOffset;
@@ -465,9 +475,7 @@ public class PirateController : MonoBehaviour
                     StartCoroutine(gameManager.ResetConstraints(gameManager.treasureInst));
                     agentTarget = gameManager.boats[localIndex].transform;
                     destination = gameManager.boats[localIndex].transform.position;
-                    miniGameCursor = 0;
-                    isMiniGame = false;
-                    isStopped = false;
+                    StopMiniGame();
                     isShovelFound = false;
                     Transform botTransform = transform.parent;
                     GameObject bot = botTransform.gameObject;
@@ -596,9 +604,7 @@ public class PirateController : MonoBehaviour
                 bool isKiller = killerIndex == localIndex;
                 if (isLocalPirate)
                 {
-                    miniGameCursor = 0;
-                    isMiniGame = false;
-                    isStopped = false;
+                    StopMiniGame();
                     isShovelFound = false;
                     GameObject miniGame = gameManager.miniGame;
                     miniGame.SetActive(false);
@@ -820,19 +826,10 @@ public class PirateController : MonoBehaviour
                 {
                     if (isMiniGame)
                     {
-                        miniGameCursor = 0;
-                        isMiniGame = false;
-                        isStopped = false;
+                        StopMiniGame();
                         GameObject miniGame = gameManager.miniGame;
                         miniGame.SetActive(false);
-                        GetComponent<Animator>().Play("Idle");
-
-                        object[] networkData = new object[] { localIndex, "Idle" };
-                        PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
-                        {
-                            Receivers = ReceiverGroup.Others
-                        });
-
+                        
                         SetIKController();
                         foreach (PirateController pirate in GameObject.FindObjectsOfType<PirateController>())
                         {
@@ -1035,7 +1032,7 @@ public class PirateController : MonoBehaviour
     public void DoPaint()
     {
         bool isLocalPirate = localIndex == networkIndex;
-        if (isLocalPirate)
+        if (isLocalPirate || (!isLocalPirate && transform.parent != null))
         {
             bool isGameManagerExists = gameManager != null;
             if (isGameManagerExists)
@@ -1218,9 +1215,7 @@ public class PirateController : MonoBehaviour
                     agentTarget = gameManager.boats[localIndex].transform;
                     destination = gameManager.boats[localIndex].transform.position;
                     GetComponent<Animator>().Play("Walk");
-                    miniGameCursor = 0;
-                    isMiniGame = false;
-                    isStopped = false;
+                    StopMiniGame();
                     isShovelFound = false;
                     Transform botTransform = transform.parent;
                     GameObject bot = null;
@@ -1415,9 +1410,7 @@ public class PirateController : MonoBehaviour
     public IEnumerator GetShovelForBot()
     {
         yield return new WaitForSeconds(10f);
-        miniGameCursor = 0;
-        isMiniGame = false;
-        isStopped = false;
+        StopMiniGame();
         isShovelFound = false;
         GetComponent<Animator>().Play("Idle");
 
@@ -1466,7 +1459,8 @@ public class PirateController : MonoBehaviour
                 somePirateCollider = rawPirate.GetComponent<CapsuleCollider>();
             }
         }
-        gameManager.GiveOrder(transform.parent.gameObject);
+        // gameManager.GiveOrder(transform.parent.gameObject);
+        // gameManager.GiveOrders();
     }
 
     public IEnumerator GetCrossForBot()
@@ -1492,9 +1486,7 @@ public class PirateController : MonoBehaviour
                 {
                     Receivers = ReceiverGroup.Others
                 });
-                miniGameCursor = 0;
-                isMiniGame = false;
-                isStopped = false;
+                StopMiniGame();
                 isShovelFound = false;
                 Transform botTransform = transform.parent;
                 GameObject bot = botTransform.gameObject;
@@ -1550,9 +1542,7 @@ public class PirateController : MonoBehaviour
             agentTarget = gameManager.boats[localIndex].transform;
             destination = gameManager.boats[localIndex].transform.position;
             GetComponent<Animator>().Play("Walk");
-            miniGameCursor = 0;
-            isMiniGame = false;
-            isStopped = false;
+            StopMiniGame();
             isShovelFound = false;
             Transform botTransform = transform.parent;
             GameObject bot = botTransform.gameObject;
@@ -1661,10 +1651,18 @@ public class PirateController : MonoBehaviour
                     if (isAgentExists && isObjectActive)
                     {
                         colliderObject.transform.GetChild(0).gameObject.GetComponent<PirateController>().StartCoroutine(RespawnPirate(colliderObject.transform.GetChild(0).gameObject, randomPosition));
+                        if (gameManager.treasureInst != null)
+                        {
+                            colliderObject.transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isGrab", false);
+                        }
                     }
                     else if (isObjectActive)
                     {
                         colliderObject.GetComponent<PirateController>().StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+                        if (gameManager.treasureInst != null)
+                        {
+                            colliderObject.GetComponent<Animator>().SetBool("isGrab", false);
+                        }
                     }
 
                     if (isStandardMode)
@@ -1706,9 +1704,7 @@ public class PirateController : MonoBehaviour
                     }
                     else
                     {
-                        pirate.miniGameCursor = 0;
-                        pirate.isMiniGame = false;
-                        pirate.isStopped = false;
+                        StopMiniGame();
                         pirate.isShovelFound = false;
                         GameObject miniGame = pirate.gameManager.miniGame;
                         miniGame.SetActive(false);
@@ -1864,6 +1860,13 @@ public class PirateController : MonoBehaviour
         ik = rightHandController.GetChild(0);
         target = ik.GetChild(0); ;
         target.localPosition = origin;
+    }
+
+    public void StopMiniGame ()
+    {
+        miniGameCursor = 0;
+        isMiniGame = false;
+        isStopped = false;
     }
 
 }

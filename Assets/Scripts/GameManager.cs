@@ -473,6 +473,12 @@ public class GameManager : PunBehaviour
                 destination = agentTarget.position;
                 pirateController.agentTarget = agentTarget;
             }
+            else
+            {
+                Transform agentTarget = localPirate.transform;
+                destination = agentTarget.position;
+                pirateController.agentTarget = agentTarget;
+            }
         }
         else if (isCapturePaint)
         {
@@ -488,13 +494,27 @@ public class GameManager : PunBehaviour
                     destination = agentTarget.position;
                     pirateController.agentTarget = agentTarget;
                 }
+                else
+                {
+                    Transform agentTarget = localPirate.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
+                }
             }
             else
             {
-                GiveOrder(pirateWrap);
+                Transform agentTarget = localPirate.transform;
+                destination = agentTarget.position;
+                pirateController.agentTarget = agentTarget;
             }
         }
         else if (isAttack)
+        {
+            Transform agentTarget = localPirate.transform;
+            destination = agentTarget.position;
+            pirateController.agentTarget = agentTarget;
+        }
+        else
         {
             Transform agentTarget = localPirate.transform;
             destination = agentTarget.position;
@@ -687,6 +707,9 @@ public class GameManager : PunBehaviour
     public void DestroyShovel(GameObject shovel)
     {
         PhotonNetwork.Destroy(shovel);
+
+        StartCoroutine(GiveOrders());
+
     }
 
 }
