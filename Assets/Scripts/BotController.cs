@@ -129,7 +129,8 @@ public class BotController : MonoBehaviour
                             Destroy(detectedObject);
                         }
                         pirateController.DoPaint();
-                        gameManager.GiveOrder(gameObject);
+                        // gameManager.GiveOrder(gameObject);
+                        StartCoroutine(gameManager.GiveOrders());
                     }
                 }
                 else if (pirateController.networkIndex != 0)

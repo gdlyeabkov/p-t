@@ -647,18 +647,42 @@ public class PirateController : MonoBehaviour
                 {
                     if (gameManager.treasureInst != null)
                     {
-                        Transform armature = transform.GetChild(0);
-                        Transform hips = armature.GetChild(0);
-                        Transform spine = hips.GetChild(2);
-                        Transform spine1 = spine.GetChild(0);
-                        Transform spine2 = spine1.GetChild(0);
-                        Transform rightSholder = spine2.GetChild(2);
-                        Transform rightArm = rightSholder.GetChild(0);
-                        Transform rightForeArm = rightArm.GetChild(0);
-                        Transform rightHand = rightForeArm.GetChild(0);
-                        Transform treasureTransform = rightHand.GetChild(2);
-                        GameObject treasure = treasureTransform.gameObject;
-                        treasure.SetActive(true);
+                        if (transform.parent != null)
+                        {
+                            if (gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == transform.parent.gameObject.GetComponent<Rigidbody>())
+                            {
+                                Transform armature = transform.GetChild(0);
+                                Transform hips = armature.GetChild(0);
+                                Transform spine = hips.GetChild(2);
+                                Transform spine1 = spine.GetChild(0);
+                                Transform spine2 = spine1.GetChild(0);
+                                Transform rightSholder = spine2.GetChild(2);
+                                Transform rightArm = rightSholder.GetChild(0);
+                                Transform rightForeArm = rightArm.GetChild(0);
+                                Transform rightHand = rightForeArm.GetChild(0);
+                                Transform treasureTransform = rightHand.GetChild(2);
+                                GameObject treasure = treasureTransform.gameObject;
+                                treasure.SetActive(true);
+                            }
+                        }
+                        else
+                        {
+                            if (gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == GetComponent<Rigidbody>())
+                            {
+                                Transform armature = transform.GetChild(0);
+                                Transform hips = armature.GetChild(0);
+                                Transform spine = hips.GetChild(2);
+                                Transform spine1 = spine.GetChild(0);
+                                Transform spine2 = spine1.GetChild(0);
+                                Transform rightSholder = spine2.GetChild(2);
+                                Transform rightArm = rightSholder.GetChild(0);
+                                Transform rightForeArm = rightArm.GetChild(0);
+                                Transform rightHand = rightForeArm.GetChild(0);
+                                Transform treasureTransform = rightHand.GetChild(2);
+                                GameObject treasure = treasureTransform.gameObject;
+                                treasure.SetActive(true);
+                            }
+                        }
                     }
                 }
             }
@@ -1468,6 +1492,9 @@ public class PirateController : MonoBehaviour
         yield return new WaitForSeconds(10f);
         if (isStandardMode)
         {
+
+            object[] networkData = null;
+
             if (gameManager.treasureInst == null)
             {
                 Vector3 treasurePosition = gameManager.cross.transform.position;
@@ -1480,12 +1507,25 @@ public class PirateController : MonoBehaviour
                 StartCoroutine(gameManager.ResetConstraints(gameManager.treasureInst));
                 agentTarget = gameManager.boats[localIndex].transform;
                 destination = gameManager.boats[localIndex].transform.position;
-                GetComponent<Animator>().Play("Walk");
-                object[] networkData = new object[] { localIndex, "Walk" };
-                PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+
+                if (gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == GetComponent<Rigidbody>())
                 {
-                    Receivers = ReceiverGroup.Others
-                });
+                    GetComponent<Animator>().Play("Grab_Walk");
+                    networkData = new object[] { localIndex, "Grab_Walk" };
+                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                    {
+                        Receivers = ReceiverGroup.Others
+                    });
+                }
+                else
+                {
+                    GetComponent<Animator>().Play("Walk");
+                    networkData = new object[] { localIndex, "Walk" };
+                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                    {
+                        Receivers = ReceiverGroup.Others
+                    });
+                }
                 StopMiniGame();
                 isShovelFound = false;
                 Transform botTransform = transform.parent;
@@ -1532,6 +1572,13 @@ public class PirateController : MonoBehaviour
                 gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
                 GetComponent<AudioSource>().Stop();
             }
+            
+            networkData = new object[] { localIndex };
+            PhotonNetwork.RaiseEvent(189, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.All
+            });
+
         }
         else if (gameManager.treasureInst == null)
         {
@@ -1648,21 +1695,37 @@ public class PirateController : MonoBehaviour
                     NavMeshAgent agent = colliderObject.GetComponent<NavMeshAgent>();
                     bool isAgentExists = agent != null;
                     bool isObjectActive = colliderObject.activeSelf;
+                    if (gameManager.treasureInst != null)
+                    {
+                        Rigidbody body = null;
+                        if (transform.parent != null)
+                        {
+                            body = transform.parent.gameObject.GetComponent<Rigidbody>();
+                        }
+                        else
+                        {
+                            body = GetComponent<Rigidbody>();
+                        }
+                        bool isEnemyTreasureOwner = gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == body;
+                        if (isEnemyTreasureOwner)
+                        {
+                            if (isAgentExists && isObjectActive)
+                            {
+                                colliderObject.transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isGrab", false);
+                            }
+                            else if (isObjectActive)
+                            {
+                                colliderObject.GetComponent<Animator>().SetBool("isGrab", false);
+                            }
+                        }
+                    }
                     if (isAgentExists && isObjectActive)
                     {
                         colliderObject.transform.GetChild(0).gameObject.GetComponent<PirateController>().StartCoroutine(RespawnPirate(colliderObject.transform.GetChild(0).gameObject, randomPosition));
-                        if (gameManager.treasureInst != null)
-                        {
-                            colliderObject.transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isGrab", false);
-                        }
                     }
                     else if (isObjectActive)
                     {
                         colliderObject.GetComponent<PirateController>().StartCoroutine(RespawnPirate(colliderObject, randomPosition));
-                        if (gameManager.treasureInst != null)
-                        {
-                            colliderObject.GetComponent<Animator>().SetBool("isGrab", false);
-                        }
                     }
 
                     if (isStandardMode)
@@ -1675,30 +1738,43 @@ public class PirateController : MonoBehaviour
 
                         if (gameManager.treasureInst != null)
                         {
+                            Rigidbody body = null;
                             if (transform.parent != null)
                             {
-                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                                body = transform.parent.gameObject.GetComponent<Rigidbody>();
                             }
                             else
                             {
-                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                                body = GetComponent<Rigidbody>();
                             }
-                            destination = gameManager.boats[localIndex].transform.position;
-                            agentTarget = gameManager.boats[localIndex].transform;
+                            bool isEnemyTreasureOwner = gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == body;
+                            if (isEnemyTreasureOwner)
+                            {
+                                if (transform.parent != null)
+                                {
+                                    gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                                }
+                                else
+                                {
+                                    gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                                }
+                                destination = gameManager.boats[localIndex].transform.position;
+                                agentTarget = gameManager.boats[localIndex].transform;
 
-                            Transform localArmature = transform.GetChild(0);
-                            Transform localHips = localArmature.GetChild(0);
-                            Transform localSpine = localHips.GetChild(2);
-                            Transform localSpine1 = localSpine.GetChild(0);
-                            Transform localSpine2 = localSpine1.GetChild(0);
-                            Transform localRightSholder = localSpine2.GetChild(2);
-                            Transform localRightArm = localRightSholder.GetChild(0);
-                            Transform localRightForeArm = localRightArm.GetChild(0);
-                            Transform localRightHand = localRightForeArm.GetChild(0);
-                            Transform treasureTransform = localRightHand.GetChild(2);
-                            GameObject treasure = treasureTransform.gameObject;
-                            treasure.SetActive(false);
+                                Transform localArmature = transform.GetChild(0);
+                                Transform localHips = localArmature.GetChild(0);
+                                Transform localSpine = localHips.GetChild(2);
+                                Transform localSpine1 = localSpine.GetChild(0);
+                                Transform localSpine2 = localSpine1.GetChild(0);
+                                Transform localRightSholder = localSpine2.GetChild(2);
+                                Transform localRightArm = localRightSholder.GetChild(0);
+                                Transform localRightForeArm = localRightArm.GetChild(0);
+                                Transform localRightHand = localRightForeArm.GetChild(0);
+                                Transform treasureTransform = localRightHand.GetChild(2);
+                                GameObject treasure = treasureTransform.gameObject;
+                                treasure.SetActive(false);
 
+                            }
                         }
 
                     }
