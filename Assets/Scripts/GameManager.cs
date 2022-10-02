@@ -540,7 +540,8 @@ public class GameManager : PunBehaviour
             bool isPull = animatorStateInfo.IsName("Pull");
             bool isDig = animatorStateInfo.IsName("Dig");
             bool isAttack = animatorStateInfo.IsName("Attack");
-            bool isStop = isWin || isDig || isPull || isAttack;
+            bool isPaint = animatorStateInfo.IsName("Paint");
+            bool isStop = isWin || isDig || isPull || isAttack || isPaint;
             if (isStop)
             {
                 agent.speed = 0;
@@ -599,7 +600,7 @@ public class GameManager : PunBehaviour
                     }
 
                     // pirate.GetComponent<Animator>().Play("Walk");
-                    if (!animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig"))
+                    if (!animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig") && !animatorStateInfo.IsName("Paint"))
                     {
                         if (agent.speed > 0f)
                         {

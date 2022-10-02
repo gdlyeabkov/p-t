@@ -112,7 +112,24 @@ public class BotController : MonoBehaviour
                     bool isMissionComplete = agentTarget == detectedObjectTransform;
                     if (isMissionComplete)
                     {
+                        // pirateController.DoPaint();
+                        pirateController.isHavePaint = true;
+                        PaintController paintController = detectedObject.GetComponent<PaintController>();
+                        int paintIndex = paintController.localIndex;
+                        if (pirateController.isStandardMode)
+                        {
+                            object[] networkData = new object[] { paintIndex };
+                            PhotonNetwork.RaiseEvent(197, networkData, true, new RaiseEventOptions
+                            {
+                                Receivers = ReceiverGroup.All
+                            });
+                        }
+                        else
+                        {
+                            Destroy(detectedObject);
+                        }
                         pirateController.DoPaint();
+                        gameManager.GiveOrder(gameObject);
                     }
                 }
                 else if (pirateController.networkIndex != 0)
