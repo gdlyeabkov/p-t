@@ -428,7 +428,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: ccc3ffffdadfffff0ae3ffff7eeaffffaeedffff24f3ffff48f9ffff48fbffffe4440000
+      m_ExpandedIDs: 84ebffffccebffffd0ebffffd2ebffffe4ebffffe6ebfffff0ebffff66ecffff72ecffffa8ecffff66f8ffff48fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -488,9 +488,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -23.515366, y: 10.142771, z: -28.908525}
+    m_Target: {x: 0.18218988, y: 0.93716854, z: 0.24722996}
     speed: 2
-    m_Value: {x: -23.515366, y: 10.142771, z: -28.908525}
+    m_Value: {x: 0.18218988, y: 0.93716854, z: 0.24722996}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -536,13 +536,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.16306084, y: -0.20265222, z: 0.034243815, w: 0.96497446}
+    m_Target: {x: 0.1695723, y: -0.005912941, z: 0.0010174566, w: 0.98550344}
     speed: 2
-    m_Value: {x: 0.16306044, y: -0.20265171, z: 0.03424373, w: 0.964972}
+    m_Value: {x: 0.16957165, y: -0.0059129186, z: 0.0010174528, w: 0.9854997}
   m_Size:
-    m_Target: 18.273518
+    m_Target: 1.801597
     speed: 2
-    m_Value: 18.273518
+    m_Value: 1.801597
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -670,19 +670,19 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Prefabs
   m_ViewMode: 1
   m_StartGridSize: 58
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Prefabs
   m_LastFoldersGridSize: 58
   m_LastProjectPath: C:\unity_projects\CarambaOnline
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 141}
-    m_SelectedIDs: ee420000
-    m_LastClickedID: 17134
+    scrollPos: {x: 0, y: 148.50012}
+    m_SelectedIDs: ec420000
+    m_LastClickedID: 17132
     m_ExpandedIDs: 00000000da420000dc420000de420000e0420000e2420000e4420000e6420000e8420000ea420000ec420000ee420000f042000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -830,7 +830,7 @@ MonoBehaviour:
     m_PrefName: Preview_InspectorPreview
   m_PreviewWindow: {fileID: 0}
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 0
+  m_LastVerticalScrollValue: 100
 --- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52

@@ -535,7 +535,8 @@ public class PirateController : MonoBehaviour
                     Transform rightHand = rightForeArm.GetChild(0);
                     Transform treasureTransform = rightHand.GetChild(2);
                     GameObject treasure = treasureTransform.gameObject;
-                    treasure.SetActive(true);
+                    // показывает сундук бота при достижении лодки - так быть не должно
+                    // treasure.SetActive(true);
                 }
 
             }

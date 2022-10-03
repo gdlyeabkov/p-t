@@ -8,6 +8,7 @@ TagManager:
   - Paint
   - Shovel
   - Island
+  - Treasure
   layers:
   - Default
   - TransparentFX

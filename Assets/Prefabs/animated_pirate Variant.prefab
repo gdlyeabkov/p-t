@@ -1300,9 +1300,10 @@ GameObject:
   - component: {fileID: 7763123901212760534}
   - component: {fileID: 8263204820503054489}
   - component: {fileID: 917425329804238880}
+  - component: {fileID: 9081495870942703423}
   m_Layer: 0
   m_Name: treasure_chest_closed
-  m_TagString: Untagged
+  m_TagString: Treasure
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1369,6 +1370,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &9081495870942703423
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4648453527373519758}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4360479, y: 0.3022959, z: 0.46089593}
+  m_Center: {x: -0.21826166, y: 1.7026112, z: 0.051562086}
 --- !u!1 &4728413515903641956
 GameObject:
   m_ObjectHideFlags: 0
@@ -2465,6 +2479,7 @@ MonoBehaviour:
   agentTarget: {fileID: 0}
   numberLabel: {fileID: 795646931514102411}
   numberLabelWrap: {fileID: 3763975986269427587}
+  ratio: 1
 --- !u!1 &7098798365238591653
 GameObject:
   m_ObjectHideFlags: 0

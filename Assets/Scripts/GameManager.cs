@@ -640,7 +640,7 @@ public class GameManager : PunBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-            someTreasure.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            // someTreasure.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
     }
 

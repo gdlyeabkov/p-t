@@ -17,8 +17,11 @@ public class BoatController : MonoBehaviour
         if (isTreasureExists)
         {
             GameObject detectedObject = other.gameObject;
-            SpringJoint joint = detectedObject.GetComponent<SpringJoint>();
-            bool isTreasure = joint != null;
+            // SpringJoint joint = detectedObject.GetComponent<SpringJoint>();
+            // bool isTreasure = joint != null;
+            SpringJoint joint = gameManager.treasureInst.GetComponent<SpringJoint>();
+            string detectedObjectTag = detectedObject.tag;
+            bool isTreasure = detectedObjectTag == "Treasure";
             if (isTreasure)
             {
                 Rigidbody rb = joint.connectedBody;

@@ -32,6 +32,11 @@ PrefabInstance:
       propertyPath: ObservedComponents.Array.data[2]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 147009432369504712, guid: 1d8889e352dcca7428392f173b68038c,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
     - target: {fileID: 7387377059574586836, guid: 1d8889e352dcca7428392f173b68038c,
         type: 3}
       propertyPath: m_Enabled
