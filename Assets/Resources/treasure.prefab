@@ -102,7 +102,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!65 &-2571335590036926012
 BoxCollider:
@@ -297,7 +297,7 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
-  m_Spring: 999
+  m_Spring: 0
   m_Damper: 0.2
   m_MinDistance: 0
   m_MaxDistance: 0

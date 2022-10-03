@@ -1291,6 +1291,19 @@ public class PirateController : MonoBehaviour
                     gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
                     GetComponent<AudioSource>().Stop();
 
+                    Transform localArmature = transform.GetChild(0);
+                    Transform localHips = localArmature.GetChild(0);
+                    Transform localSpine = localHips.GetChild(2);
+                    Transform localSpine1 = localSpine.GetChild(0);
+                    Transform localSpine2 = localSpine1.GetChild(0);
+                    Transform localRightSholder = localSpine2.GetChild(2);
+                    Transform localRightArm = localRightSholder.GetChild(0);
+                    Transform localRightForeArm = localRightArm.GetChild(0);
+                    Transform localRightHand = localRightForeArm.GetChild(0);
+                    Transform treasureTransform = localRightHand.GetChild(2);
+                    GameObject treasure = treasureTransform.gameObject;
+                    treasure.SetActive(true);
+
                 }
                 else if (transform.parent != null)
                 {
