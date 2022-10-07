@@ -49,7 +49,6 @@ public class WeaponSwitcher : StateMachineBehaviour
         {
             treasure.SetActive(false);
         }
-        Debug.LogWarning("treasureName: " + treasure.name + " (isGrabIdle || isGrabWalk): " + (isGrabIdle || isGrabWalk).ToString() + " isGrabIdle: " + isGrabIdle.ToString() + " isGrabWalk: " + isGrabWalk.ToString());
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -24,7 +24,7 @@ public class BotController : MonoBehaviour
                 bool isStop = isBot && isMissionComplete;
                 if (isStop)
                 {
-                    if (gameObject.activeSelf && detectedObject.activeSelf)
+                    if (GetComponent<NavMeshAgent>().enabled && gameObject.activeSelf && detectedObject.activeSelf)
                     {
                         pirateController.DoAttack();
                         pirateController.gameManager.GiveOrder(gameObject);
