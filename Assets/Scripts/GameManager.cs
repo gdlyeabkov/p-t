@@ -21,7 +21,7 @@ public class GameManager : PunBehaviour
     public int paintCursor = -1;
     public int globalNetworkIndex = 0;
     private Camera mainCamera;
-    private AudioSource mainCameraAudio;
+    public AudioSource mainCameraAudio;
     public PirateController localPirate;
     public Transform islandSphereTransform;
     public List<Transform> respawnPoints;
@@ -189,50 +189,6 @@ public class GameManager : PunBehaviour
         if (isNotWin)
         {
             isWin = true;
-
-            /*
-            bool isCrossFound = localPirate.isCrossFound;
-            if (isCrossFound)
-            {
-                mainCameraAudio.clip = winSound;
-                mainCameraAudio.Play();
-            }
-            else
-            {
-                mainCameraAudio.clip = looseSound;
-                mainCameraAudio.Play();
-            }
-            object[] networkData = new object[] { localIndex, networkIndex };
-            PhotonNetwork.RaiseEvent(196, networkData, true, new RaiseEventOptions
-            {
-                Receivers = ReceiverGroup.All
-            });
-            
-            GameObject rawObject = null;
-            if (isStandardMode)
-            {
-                rawObject = localPirate.gameObject;
-            }
-            else
-            {
-                // int botIndex = localIndex - 1;
-                int botIndex = localIndex;
-                GameObject bot = bots[botIndex];
-                rawObject = bot;
-            }
-
-            Transform rawObjectTransform = rawObject.transform;
-            Vector3 currentPosition = rawObjectTransform.position;
-            float coordX = currentPosition.x;
-            float coordY = currentPosition.y;
-            float verticalOffset = 1f;
-            float coordZ = currentPosition.z;
-            coordY += verticalOffset;
-            Vector3 treasurePosition = new Vector3(coordX, coordY, coordZ);
-            Quaternion baseRotation = Quaternion.identity;
-            StartCoroutine(ResetGame());
-            */
-
             mainCameraAudio.clip = winSound;
             mainCameraAudio.Play();
             if (isStandardMode)
@@ -529,6 +485,7 @@ public class GameManager : PunBehaviour
 
     public void Update()
     {
+        bool isHost = PhotonNetwork.isMasterClient;
         foreach (GameObject pirateWrap in bots)
         {
             Transform pirateWrapTransform = pirateWrap.transform;
@@ -595,7 +552,10 @@ public class GameManager : PunBehaviour
                             Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
                             Vector3 velocity = agent.velocity;
                             Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
-                            pirate.transform.rotation = lookRotation;
+                            if (isHost)
+                            {
+                                pirate.transform.rotation = lookRotation;
+                            }
                         }
                     }
 

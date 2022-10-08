@@ -1649,7 +1649,7 @@ ScriptsOnlyBuild:
     className: InstantiateCube
   - hash:
       serializedVersion: 2
-      Hash: 85b1476727e49507f8e5f60bdfc3ad71
+      Hash: 40b06a84c97dd87e711db847a319a4ca
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager

@@ -447,6 +447,7 @@ public class PirateController : MonoBehaviour
     public void OnEvent(byte eventCode, object content, int senderId)
     {
         bool isGameOverEvent = eventCode == 196;
+        bool isRemoveShovelEvent = eventCode == 195;
         bool isPirateAnimationEvent = eventCode == 194;
         bool isDieEvent = eventCode == 193;
         bool isDigEvent = eventCode == 192;
@@ -555,6 +556,32 @@ public class PirateController : MonoBehaviour
                 Debug.Log(photonError);
             }
         }
+        else if(isRemoveShovelEvent)
+        {
+            try
+            {
+                object[] data = (object[])content;
+                int index = (int)data[0];
+                bool isLocalPirate = index == localIndex;
+                if (isLocalPirate)
+                {
+                    isHaveShovel = true;
+                }
+            }
+            catch (System.InvalidCastException e)
+            {
+                string castError = "Ошибка с привидением типа photon. Не могу передать photon данные";
+                Debug.Log(castError);
+            }
+            catch (System.Exception e)
+            {
+                string photonError = "Не могу передать photon данные";
+                Debug.Log(photonError);
+            }
+
+            Debug.LogWarning("isRemoveShovelEvent");
+
+        }
         else if (isPirateAnimationEvent)
         {
             try
@@ -563,6 +590,7 @@ public class PirateController : MonoBehaviour
                 int index = (int)data[0];
                 string name = (string)data[1];
                 bool isLocalPirate = index == localIndex;
+                bool isLocalPlayer = gameManager.globalNetworkIndex == localIndex;
                 if (isLocalPirate)
                 {
                     // gameObject.GetComponent<Animator>().Play(name);
@@ -586,6 +614,23 @@ public class PirateController : MonoBehaviour
                     }
 
                 }
+
+                if (isLocalPlayer)
+                {
+                    bool isVictory = name == "Victory";
+                    bool isLoose = name == "Loose";
+                    if (isVictory)
+                    {
+                        gameManager.mainCameraAudio.clip = gameManager.winSound;
+                        gameManager.mainCameraAudio.Play();
+                    }
+                    else if (isLoose)
+                    {
+                        gameManager.mainCameraAudio.clip = gameManager.looseSound;
+                        gameManager.mainCameraAudio.Play();
+                    }
+                }
+
             }
             catch (System.InvalidCastException)
             {
@@ -619,7 +664,10 @@ public class PirateController : MonoBehaviour
                         bool isHost = PhotonNetwork.isMasterClient;
                         if (isHost)
                         {
-                            gameManager.GenerateShovel();
+                            if (isHaveShovel)
+                            {
+                                gameManager.GenerateShovel();
+                            }
                         }
                     }
                     isHaveShovel = false;
@@ -1476,8 +1524,7 @@ public class PirateController : MonoBehaviour
                 isHaveShovel = true;
                 if (isStandardMode)
                 {
-                    networkData = new object[] { };
-
+                    networkData = new object[] { localIndex };
                     PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
                     {
                         Receivers = ReceiverGroup.MasterClient
@@ -1618,6 +1665,7 @@ public class PirateController : MonoBehaviour
             isHaveShovel = true;
             GameObject rawFoundedShovel = foundedShovel.gameObject;
             
+            networkData = new object[] { localIndex };
             PhotonNetwork.RaiseEvent(195, networkData, true, new RaiseEventOptions
             {
                 Receivers = ReceiverGroup.MasterClient

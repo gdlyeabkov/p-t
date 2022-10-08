@@ -55,7 +55,7 @@ public class BoatController : MonoBehaviour
                         object[] networkData = new object[] { pirateController.localIndex, "Victory" };
                         PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
                         {
-                            Receivers = ReceiverGroup.Others
+                            Receivers = ReceiverGroup.All
                         });
 
                         pirateController.miniGameCursor = 0;
