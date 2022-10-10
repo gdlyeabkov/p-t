@@ -615,7 +615,7 @@ public class PirateController : MonoBehaviour
 
                 }
 
-                if (isLocalPlayer)
+                /*if (isLocalPlayer && isLocalPirate)
                 {
                     bool isVictory = name == "Victory";
                     bool isLoose = name == "Loose";
@@ -630,6 +630,15 @@ public class PirateController : MonoBehaviour
                         gameManager.mainCameraAudio.Play();
                     }
                 }
+                else if (!isLocalPlayer && isLocalPirate)
+                {
+                    bool isLoose = name == "Loose";
+                    if (isLoose)
+                    {
+                        gameManager.mainCameraAudio.clip = gameManager.looseSound;
+                        gameManager.mainCameraAudio.Play();
+                    }
+                }*/
 
             }
             catch (System.InvalidCastException)
@@ -664,7 +673,7 @@ public class PirateController : MonoBehaviour
                         bool isHost = PhotonNetwork.isMasterClient;
                         if (isHost)
                         {
-                            if (isHaveShovel)
+                            if (gameManager.treasureInst == null)
                             {
                                 gameManager.GenerateShovel();
                             }

@@ -80,7 +80,8 @@ public class GameManager : PunBehaviour
                 float coordY = -0.9f;
                 float randomCoordZ = 0f;
                 Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-                float randomRotation = Random.Range(-4.5f, 4.5f);
+                // float randomRotation = Random.Range(-4.5f, 4.5f);
+                float randomRotation = Random.Range(-4.0f, 4.0f);
                 Vector3 islandSphereTransformPosition = islandSphereTransform.position;
                 Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
                 cross.transform.RotateAround(islandSphereTransformPosition, crossRotationAxes, randomRotation);
@@ -145,7 +146,8 @@ public class GameManager : PunBehaviour
             float coordY = -0.9f;
             float randomCoordZ = 0f;
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            float randomRotation = Random.Range(-4.5f, 4.5f);
+            // float randomRotation = Random.Range(-4.5f, 4.5f);
+            float randomRotation = Random.Range(-4.0f, 4.0f);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
             Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
             cross.transform.RotateAround(islandSphereTransformPosition, crossRotationAxes, randomRotation);
@@ -189,8 +191,16 @@ public class GameManager : PunBehaviour
         if (isNotWin)
         {
             isWin = true;
-            mainCameraAudio.clip = winSound;
-            mainCameraAudio.Play();
+            if (localIndex == networkIndex)
+            {
+                mainCameraAudio.clip = winSound;
+                mainCameraAudio.Play();
+            }
+            else
+            {
+                mainCameraAudio.clip = looseSound;
+                mainCameraAudio.Play();
+            }
             if (isStandardMode)
             {
                 object[] networkData = new object[] { localIndex, networkIndex };
@@ -248,7 +258,8 @@ public class GameManager : PunBehaviour
         }
         PaintController paintController = paintGo.GetComponent<PaintController>();
         paintController.isOwner = true;
-        float randomRotation = Random.Range(-5f, 5f);
+        // float randomRotation = Random.Range(-5f, 5f);
+        float randomRotation = Random.Range(-4.0f, 4.0f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         Vector3 paintRotationAxes = new Vector3(1f, 0f, 1f);
         paintGo.transform.RotateAround(islandSphereTransformPosition, paintRotationAxes, randomRotation);
@@ -260,6 +271,7 @@ public class GameManager : PunBehaviour
     public void OnEvent(byte eventCode, object content, int senderId)
     {
         bool isGameOverEvent = eventCode == 196;
+        bool isPirateAnimationEvent = eventCode == 194;
         if (isGameOverEvent)
         {
             try
@@ -270,8 +282,8 @@ public class GameManager : PunBehaviour
                 bool isLooser = globalNetworkIndex != localNetworkIndex;
                 if (isLooser)
                 {
-                    mainCameraAudio.clip = looseSound;
-                    mainCameraAudio.Play();
+                    /*mainCameraAudio.clip = looseSound;
+                    mainCameraAudio.Play();*/
                     localPirate.GetComponent<Animator>().Play("Loose");
                     int localPirateIndex = localPirate.localIndex;
                     object[] networkData = new object[] { localPirateIndex, "Loose" };
@@ -281,12 +293,12 @@ public class GameManager : PunBehaviour
                     });
 
                 }
-                /*
-                else
+
+                /*else
                 {
                     StartCoroutine(ResetGame());
-                }
-                */
+                }*/
+
 
                 foreach (GameObject localBot in bots)
                 {
@@ -311,6 +323,40 @@ public class GameManager : PunBehaviour
                 }
                 isWin = true;
 
+                if (localNetworkIndex != globalNetworkIndex)
+                {
+                    if (index == globalNetworkIndex)
+                    {
+                        mainCameraAudio.clip = winSound;
+                        mainCameraAudio.Play();
+                    }
+                    else
+                    {
+                        mainCameraAudio.clip = looseSound;
+                        mainCameraAudio.Play();
+                    }
+                }
+
+
+            }
+            catch (System.InvalidCastException)
+            {
+                string castError = "Ошибка с привидением типа photon. Не могу передать photon данные";
+                Debug.Log(castError);
+            }
+            catch (System.Exception)
+            {
+                string photonError = "Не могу передать photon данные";
+                Debug.Log(photonError);
+            }
+        }
+        else if (isPirateAnimationEvent)
+        {
+            try
+            {
+                object[] data = (object[])content;
+                int index = (int)data[0];
+                string name = (string)data[1];
             }
             catch (System.InvalidCastException)
             {
@@ -353,7 +399,8 @@ public class GameManager : PunBehaviour
             shovel = Instantiate(shovelPrefab, shovelPosition, shovelRotation);
         }
 
-        float randomRotation = Random.Range(-5f, 5f);
+        // float randomRotation = Random.Range(-5f, 5f);
+        float randomRotation = Random.Range(-4.0f, 4.0f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         Vector3 shovelRotationAxes = new Vector3(1f, 1f, 0f);
         shovel.transform.RotateAround(islandSphereTransformPosition, shovelRotationAxes, randomRotation);
@@ -615,7 +662,8 @@ public class GameManager : PunBehaviour
         float coordY = -0.9f;
         float randomCoordZ = 0f;
         Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-        float randomRotation = Random.Range(-5, 5);
+        // float randomRotation = Random.Range(-5, 5);
+        float randomRotation = Random.Range(-4.0f, 4.0f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
         Ray ray = new Ray(cross.transform.position, Vector3.down);

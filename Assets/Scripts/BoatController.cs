@@ -49,9 +49,17 @@ public class BoatController : MonoBehaviour
                     bool isPirateBoat = localIndex == number;
                     if (isPirateBoat)
                     {
+
                         gameManager.ShowWin(localIndex, networkIndex);
                         pirateController.gameObject.GetComponent<Animator>().Play("Victory");
-                        
+
+                        /*bool isLooser = networkIndex != localIndex;
+                        if (!isLooser)
+                        {
+                            gameManager.mainCameraAudio.clip = gameManager.winSound;
+                            gameManager.mainCameraAudio.Play();
+                        }*/
+
                         object[] networkData = new object[] { pirateController.localIndex, "Victory" };
                         PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
                         {
