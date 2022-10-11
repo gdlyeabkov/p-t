@@ -70,7 +70,7 @@ public class NetworkController : PunBehaviour
 		}
 	}
 
-	public void JoinRoom()
+	public void CreateRoom()
 	{
 		try
 		{
@@ -97,7 +97,7 @@ public class NetworkController : PunBehaviour
 				RoomInfo room = roomList.FirstOrDefault(r => r.Name == roomName);
 				bool isRoomNotExists = room == null;
 				if (isRoomNotExists)
-                {
+				{
 					RoomOptions roomOptions = new RoomOptions();
 					byte maxPlayers = ((byte)(maxCountPlayers));
 					roomOptions.maxPlayers = maxPlayers;
@@ -113,6 +113,27 @@ public class NetworkController : PunBehaviour
 			Debug.Log("ошибка создание комнаты");
 		}
 	}
+
+	public void JoinRoom()
+	{
+		if (PhotonNetwork.connected)
+		{
+			string nickName = PlayerPrefs.GetString("nickName");
+			SetPlayerName(nickName);
+			PhotonNetwork.player.NickName = playerName;
+			try
+			{
+				PhotonNetwork.JoinRandomRoom();
+				NetworkController networkController = GameObject.FindObjectOfType<NetworkController>();
+				networkController.buttonJoinedArena.GetComponent<Button>().interactable = false;
+			}
+			catch
+			{
+				Debug.Log("Комната заполнена");
+			}
+		}
+	}
+	
 
 	public override void OnReceivedRoomListUpdate()
 	{

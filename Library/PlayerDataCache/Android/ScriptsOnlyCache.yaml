@@ -2929,4 +2929,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/Lobby.unity
   - Assets/Scenes/Main.unity
-  playerPath: C:/unity_builds/caramba_online/android/build(network_delivery_with_grab_anims).apk
+  playerPath: C:/unity_builds/caramba_online/android/build(random_room_connect).apk
