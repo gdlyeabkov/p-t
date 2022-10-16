@@ -53,6 +53,8 @@ public class BoatController : MonoBehaviour
                         gameManager.ShowWin(localIndex, networkIndex);
                         pirateController.gameObject.GetComponent<Animator>().Play("Victory");
 
+                        StartCoroutine(gameManager.ResetGame());
+
                         /*bool isLooser = networkIndex != localIndex;
                         if (!isLooser)
                         {

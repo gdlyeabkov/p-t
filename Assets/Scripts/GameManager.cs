@@ -329,6 +329,9 @@ public class GameManager : PunBehaviour
                     {
                         mainCameraAudio.clip = winSound;
                         mainCameraAudio.Play();
+
+                        // StartCoroutine(ResetGame());
+
                     }
                     else
                     {

@@ -148,7 +148,7 @@ public class PirateController : MonoBehaviour
                     if (isRotation)
                     {
                         // float mouseXDelta = Input.GetAxis("Mouse X");
-                        float mouseXDelta = joystickHorizontal / 10;
+                        float mouseXDelta = joystickHorizontal / 5;
                         float yawDelta = cameraRotationSpeed * mouseXDelta;
                         float mouseYDelta = Input.GetAxis("Mouse Y");
                         float pitchDelta = cameraRotationSpeed * mouseYDelta;
@@ -1057,7 +1057,11 @@ public class PirateController : MonoBehaviour
                         }
                         else
                         {
-                            if (isCrossFound && isHaveShovel && gameManager.treasureInst == null)
+                            // if (isCrossFound && isHaveShovel && gameManager.treasureInst == null)
+                            AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+                            bool isPaint = animatorStateInfo.IsName("Paint");
+                            bool isNotPaint = !isPaint;
+                            if (isCrossFound && isHaveShovel && gameManager.treasureInst == null && isNotPaint)
                             {
                                 bool isCrossTrap = foundedCross.isTrap;
                                 if (isCrossTrap)
@@ -1090,7 +1094,6 @@ public class PirateController : MonoBehaviour
                                         agent.Warp(cross.transform.position);
                                         StartCoroutine(GetCrossForBot());
                                     }
-                                    AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                                     bool isAlreadyDig = animatorStateInfo.IsName("Dig");
                                     bool isDoDig = !isAlreadyDig;
                                     if (isDoDig)
@@ -1149,7 +1152,6 @@ public class PirateController : MonoBehaviour
                                 bool isBot = botTransform != null;
                                 isMiniGame = true;
                                 GameObject miniGame = gameManager.miniGame;
-                                AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
                                 bool isAlreadyPull = animatorStateInfo.IsName("Pull");
                                 bool isDoPull = !isAlreadyPull;
                                 if (isDoPull)
@@ -2195,13 +2197,7 @@ public class PirateController : MonoBehaviour
     public IEnumerator SetPlayerCamera()
     {
         yield return new WaitForSeconds(5f);
-        Transform armature = transform.GetChild(0);
-        Transform hips = armature.GetChild(0);
-        Transform spine = hips.GetChild(2);
-        Transform spine1 = spine.GetChild(0);
-        Transform spine2 = spine1.GetChild(0);
-        Transform neck = spine2.GetChild(1);
-        Transform head = neck.GetChild(0);
+        Transform head = transform.GetChild(6);
         gameManager.viewCamera.Follow = head;
         gameManager.viewCamera.LookAt = head;
         gameManager.isInit = true;
