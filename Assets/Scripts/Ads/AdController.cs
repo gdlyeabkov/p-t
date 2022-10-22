@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class AdController : MonoBehaviour
 {
     
-    private string gameId = "4173107";
+    private string gameId = "4797832";
     public bool testingMode = true;
     public GameManager gameManager;
 
