@@ -110,6 +110,9 @@ public class NetworkController : PunBehaviour
 					TypedLobby typedLobby = new TypedLobby(roomName, LobbyType.Default);
 					SetRoomName(roomNameField.text);
 					PhotonNetwork.CreateRoom(roomName, roomOptions, typedLobby);
+
+					buttonJoinedArena.GetComponent<Button>().interactable = true;
+
 				}
 			}
 		}
@@ -302,7 +305,7 @@ public class NetworkController : PunBehaviour
 
 	public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
 	{
-			playerRoom.SetActive(true);
+		playerRoom.SetActive(true);
 		
 		int countPlayersOnline = PhotonNetwork.room.playerCount;
 		string parsedCountPlayersOnline = countPlayersOnline.ToString();
@@ -310,7 +313,8 @@ public class NetworkController : PunBehaviour
 		string playersCountContent = parsedCountPlayersOnline + "/" + parsedMaxCountPlayers;
 		playersCount.text = playersCountContent;
 
-		if (PhotonNetwork.room.playerCount >= countPlayers)
+		// if (PhotonNetwork.room.playerCount >= countPlayers)
+		if (PhotonNetwork.room.playerCount >= 2)
 		{
 			bool isRoot = PhotonNetwork.isMasterClient;
 			if (isRoot)
