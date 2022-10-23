@@ -604,7 +604,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 147909349}
   m_TextComponent: {fileID: 1980669413}
   m_Placeholder: {fileID: 1509222752}
@@ -1034,7 +1034,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 294234795}
   m_OnClick:
     m_PersistentCalls:
@@ -2980,7 +2980,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1640669664}
   m_OnClick:
     m_PersistentCalls:
@@ -3353,6 +3353,8 @@ MonoBehaviour:
   roomNameField: {fileID: 147909348}
   countPlayers: 0
   nickNameField: {fileID: 2119653021}
+  joinRoomBtn: {fileID: 294234794}
+  createRoomBtn: {fileID: 1640669663}
 --- !u!4 &1961700050
 Transform:
   m_ObjectHideFlags: 0
@@ -3903,7 +3905,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2119653022}
   m_TextComponent: {fileID: 252192501}
   m_Placeholder: {fileID: 1124976030}

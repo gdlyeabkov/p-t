@@ -24,6 +24,8 @@ public class NetworkController : PunBehaviour
 	public InputField roomNameField;
 	public int countPlayers = 0;
 	public InputField nickNameField;
+	public Button joinRoomBtn;
+	public Button createRoomBtn;
 
 	public void Start()
 	{
@@ -50,6 +52,9 @@ public class NetworkController : PunBehaviour
 	{
 		checkLobby = StartCoroutine(CheckLobby());
 		PhotonNetwork.JoinLobby();
+
+		ToggleNetworkUi(true);
+
 	}
 
 	public IEnumerator CheckLobby()
@@ -274,7 +279,18 @@ public class NetworkController : PunBehaviour
 		Text textedPlayersCount = playersCount.GetComponent<Text>();
 		string textedPlayersCountMessage = "1/" + parsedMaxCountPlayers;
 		textedPlayersCount.text = textedPlayersCountMessage;
+
+		ToggleNetworkUi(false);
+
 		checkLobby = StartCoroutine(CheckLobby());
+	}
+
+	public void ToggleNetworkUi(bool value)
+    {
+		createRoomBtn.interactable = value;
+		joinRoomBtn.interactable = value;
+		nickNameField.interactable = value;
+		roomNameField.interactable = value;
 	}
 
 	public void ExitFromRoom()
