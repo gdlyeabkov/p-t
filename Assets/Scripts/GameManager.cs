@@ -54,6 +54,7 @@ public class GameManager : PunBehaviour
     public GameObject treasureInst;
     public List<GameObject> boats;
     public bool isInit = false;
+    public int winAmount = 0;
 
     void Start()
     {
@@ -195,6 +196,11 @@ public class GameManager : PunBehaviour
             {
                 mainCameraAudio.clip = winSound;
                 mainCameraAudio.Play();
+
+                int moneys = PlayerPrefs.GetInt("Moneys");
+                int amount = moneys + winAmount;
+                PlayerPrefs.SetInt("Moneys", amount);
+
             }
             else
             {
@@ -329,9 +335,6 @@ public class GameManager : PunBehaviour
                     {
                         mainCameraAudio.clip = winSound;
                         mainCameraAudio.Play();
-
-                        // StartCoroutine(ResetGame());
-
                     }
                     else
                     {

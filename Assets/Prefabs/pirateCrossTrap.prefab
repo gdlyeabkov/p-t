@@ -65,7 +65,22 @@ PrefabInstance:
     - target: {fileID: 4111013406624543920, guid: cf5d8104af0f0e64f8141a4372de372b,
         type: 3}
       propertyPath: m_Name
-      value: pirate_cross_trap Variant
+      value: pirateCrossTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628419504008535555, guid: cf5d8104af0f0e64f8141a4372de372b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628419504008535555, guid: cf5d8104af0f0e64f8141a4372de372b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628419504008535555, guid: cf5d8104af0f0e64f8141a4372de372b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6969037322692721518, guid: cf5d8104af0f0e64f8141a4372de372b,
         type: 3}
