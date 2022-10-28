@@ -55,6 +55,12 @@ public class GameManager : PunBehaviour
     public List<GameObject> boats;
     public bool isInit = false;
     public int winAmount = 0;
+    public List<GameObject> pistols;
+    public GameObject pistolPrefab;
+    public int pistolCursor = -1;
+    public Button attackBtn;
+    public Sprite attackSaberSprite;
+    public Sprite attackPistolSprite;
 
     void Start()
     {
@@ -183,6 +189,13 @@ public class GameManager : PunBehaviour
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
             Instantiate(piratePrefab, randomPosition, baseRotation);
+
+            int countPistols = Random.Range(0, 5);
+            for (int i = 0; i < countPaints; i++)
+            {
+                StartCoroutine(GeneratePistol());
+            }
+
         }
     }
     
@@ -724,6 +737,34 @@ public class GameManager : PunBehaviour
         PhotonNetwork.Destroy(shovel);
 
         StartCoroutine(GiveOrders());
+
+    }
+
+    public IEnumerator GeneratePistol ()
+    {
+        yield return new WaitForSeconds(5f);
+        float randomCoordX = 0f;
+        float coordY = -0.9f;
+        float randomCoordZ = 0f;
+        Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        Quaternion pistolRotation = Quaternion.Euler(270f, 0f, 0f);
+        GameObject pistolGo = null;
+        if (isStandardMode)
+        {
+            pistolGo = PhotonNetwork.Instantiate("pistol", randomPosition, pistolRotation, 0);
+        }
+        else
+        {
+            pistolGo = Instantiate(pistolPrefab, randomPosition, pistolRotation);
+        }
+        PistolController pistolController = pistolGo.GetComponent<PistolController>();
+        pistolController.isOwner = true;
+        float randomRotation = Random.Range(-4.0f, 4.0f);
+        Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+        Vector3 pistolRotationAxes = new Vector3(1f, 0f, 1f);
+        pistolGo.transform.RotateAround(islandSphereTransformPosition, pistolRotationAxes, randomRotation);
+
+        pistols.Add(pistolGo);
 
     }
 

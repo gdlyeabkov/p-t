@@ -43,6 +43,7 @@ public class PirateController : MonoBehaviour
     public Transform numberLabelWrap;
     private Coroutine answersCoroutine;
     public float ratio = 1f;
+    public bool isHavePistol = false;
 
     void Start()
     {
@@ -367,6 +368,7 @@ public class PirateController : MonoBehaviour
         bool isCross = detectedObjectTag == "Cross";
         bool isPaint = detectedObjectTag == "Paint";
         bool isShovel = detectedObjectTag == "Shovel";
+        bool isPistol = detectedObjectTag == "Pistol";
         if (isCross)
         {
             isCrossFound = true;
@@ -408,6 +410,37 @@ public class PirateController : MonoBehaviour
         {
             isShovelFound = true;
             foundedShovel = detectedObject.transform;
+        }
+        else if (isPistol)
+        {
+            isHavePistol = true;
+            PistolController pistolController = detectedObject.GetComponent<PistolController>();
+            int pistolIndex = pistolController.localIndex;
+            if (isStandardMode)
+            {
+                object[] networkData = new object[] { pistolIndex };
+                PhotonNetwork.RaiseEvent(185, networkData, true, new RaiseEventOptions
+                {
+                    Receivers = ReceiverGroup.All
+                });
+            }
+            else
+            {
+                Destroy(detectedObject);
+            }
+            Transform botTransform = transform.parent;
+            bool isBot = botTransform != null;
+            Transform detectedObjectTransform = detectedObject.transform;
+            bool isMissionComplete = agentTarget == detectedObjectTransform;
+            bool isStop = isBot && isMissionComplete;
+            if (isStop)
+            {
+                NavMeshAgent agent = transform.parent.gameObject.GetComponent<NavMeshAgent>();
+                DoAttack();
+                GameObject bot = botTransform.gameObject;
+                gameManager.GiveOrder(bot);
+            }
+            gameManager.attackBtn.GetComponent<Image>().sprite = gameManager.attackPistolSprite;
         }
     }
 
@@ -1366,15 +1399,23 @@ public class PirateController : MonoBehaviour
                             bool isCanAttack = isNotGrab && isNotDoPaint;
                             if (isCanAttack)
                             {
-                                GetComponent<Animator>().Play("Attack");
-
-                                if (isStandardMode)
+                                if (isHavePistol)
                                 {
-                                    object[] networkData = new object[] { localIndex, "Attack" };
-                                    PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                    // Стрелять
+                                    gameManager.attackBtn.GetComponent<Image>().sprite = gameManager.attackSaberSprite;
+                                    isHavePistol = false;
+                                }
+                                else
+                                {
+                                    GetComponent<Animator>().Play("Attack");
+                                    if (isStandardMode)
                                     {
-                                        Receivers = ReceiverGroup.Others
-                                    });
+                                        object[] networkData = new object[] { localIndex, "Attack" };
+                                        PhotonNetwork.RaiseEvent(194, networkData, true, new RaiseEventOptions
+                                        {
+                                            Receivers = ReceiverGroup.Others
+                                        });
+                                    }
                                 }
                             }
 
