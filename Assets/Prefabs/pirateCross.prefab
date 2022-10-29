@@ -43,7 +43,7 @@ PrefabInstance:
     - target: {fileID: 3067625143118042699, guid: 871e30df69e843f42a5c7ae56e11ad49,
         type: 3}
       propertyPath: m_Name
-      value: pirateCross Variant
+      value: pirateCross
       objectReference: {fileID: 0}
     - target: {fileID: 3067625143118042705, guid: 871e30df69e843f42a5c7ae56e11ad49,
         type: 3}

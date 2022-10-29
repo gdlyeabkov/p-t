@@ -1151,6 +1151,13 @@ public class PirateController : MonoBehaviour
                                         Receivers = ReceiverGroup.All
                                     });
                                     isCrossFound = false;
+
+                                    bool isPlayer = localIndex == networkIndex;
+                                    if (isPlayer)
+                                    {
+                                        gameManager.digBtn.interactable = false;
+                                    }
+
                                 }
                                 else
                                 {
@@ -1494,6 +1501,8 @@ public class PirateController : MonoBehaviour
     public void IncreaseMiniGameCursor()
     {
 
+        bool isPlayer = localIndex == networkIndex;
+
         object[] networkData = null;
 
         miniGameCursor++;
@@ -1603,7 +1612,6 @@ public class PirateController : MonoBehaviour
                         Receivers = ReceiverGroup.All
                     });
 
-                    bool isPlayer = localIndex == networkIndex;
                     if (isPlayer)
                     {
                         gameManager.attackBtn.interactable = true;
@@ -1668,6 +1676,11 @@ public class PirateController : MonoBehaviour
             }
 
             ToggleMiniGame();
+            
+            if (isPlayer)
+            {
+                gameManager.digBtn.interactable = false;
+            }
 
         }
     }
@@ -2275,6 +2288,13 @@ public class PirateController : MonoBehaviour
         {
             colliderObject.transform.GetChild(i).gameObject.SetActive(false);
         }
+        /*
+        bool isPlayer = colliderObject.GetComponent<PirateController>().localIndex == colliderObject.GetComponent<PirateController>().networkIndex;
+        if (isPlayer)
+        {
+            gameManager.attackBtn.interactable = false;
+        }
+        */
         yield return new WaitForSeconds(10f);
         colliderObject.GetComponent<PirateController>().StopAllCoroutines();
         if (colliderObject.transform.parent != null)
@@ -2292,11 +2312,12 @@ public class PirateController : MonoBehaviour
             colliderObject.transform.GetChild(i).gameObject.SetActive(true);
         }
 
-        bool isPlayer = colliderObject.GetComponent<PirateController>().localIndex == colliderObject.GetComponent<PirateController>().networkIndex;
+        /*
         if (isPlayer)
         {
-            gameManager.attackBtn.interactable = false;
+            gameManager.attackBtn.interactable = true;
         }
+        */
 
     }
 

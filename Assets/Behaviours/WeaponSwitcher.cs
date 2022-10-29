@@ -12,6 +12,7 @@ public class WeaponSwitcher : StateMachineBehaviour
         bool isGrabIdle = stateInfo.IsName("Grab_Idle");
         bool isGrabWalk = stateInfo.IsName("Grab_Walk");
         bool isVictory = stateInfo.IsName("Victory");
+        bool isPull = stateInfo.IsName("Pull");
         GameObject pirate = animator.gameObject;
         Transform pirateTransform = pirate.transform;
         Transform armature = pirateTransform.GetChild(0);
@@ -46,6 +47,7 @@ public class WeaponSwitcher : StateMachineBehaviour
         // saber.SetActive(isAttack);
         // saber.SetActive(!animator.GetBool("isGrab") && !stateInfo.IsName("Dig"));
         saber.SetActive(stateInfo.IsName("Idle") || stateInfo.IsName("Walk") || stateInfo.IsName("Attack"));
+        // saber.SetActive((stateInfo.IsName("Idle") || stateInfo.IsName("Walk") || stateInfo.IsName("Attack")) && !isPull);
         // treasure.SetActive(isGrabIdle || isGrabWalk);
         if (isVictory)
         {
