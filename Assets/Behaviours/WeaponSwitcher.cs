@@ -43,7 +43,9 @@ public class WeaponSwitcher : StateMachineBehaviour
             Debug.Log("Это не анимация лопаты");
         }
         shovel.SetActive(isDig);
-        saber.SetActive(isAttack);
+        // saber.SetActive(isAttack);
+        // saber.SetActive(!animator.GetBool("isGrab") && !stateInfo.IsName("Dig"));
+        saber.SetActive(stateInfo.IsName("Idle") || stateInfo.IsName("Walk") || stateInfo.IsName("Attack"));
         // treasure.SetActive(isGrabIdle || isGrabWalk);
         if (isVictory)
         {

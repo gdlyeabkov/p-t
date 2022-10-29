@@ -372,6 +372,32 @@ public class PirateController : MonoBehaviour
             isCrossFound = true;
             CrossController crossController = detectedObject.GetComponent<CrossController>();
             foundedCross = crossController;
+
+            bool isPlayer = localIndex == networkIndex;
+            if (isPlayer)
+            {
+                if (isHaveShovel)
+                {
+                    GameObject treasureInst = gameManager.treasureInst;
+                    bool isTreasureFree = treasureInst != null;
+                    if (isTreasureFree)
+                    {
+                        Rigidbody pirateBody = GetComponent<Rigidbody>();
+                        SpringJoint joint = treasureInst.GetComponent<SpringJoint>();
+                        Rigidbody ownerBody = joint.connectedBody;
+                        bool isMeNotOwner = ownerBody != pirateBody;
+                        if (isMeNotOwner)
+                        {
+                            gameManager.digBtn.interactable = true;
+                        }
+                    }
+                    else
+                    {
+                        gameManager.digBtn.interactable = true;
+                    }
+                }
+            }
+
         }
         else if (isPaint)
         {
@@ -403,11 +429,40 @@ public class PirateController : MonoBehaviour
                 gameManager.GiveOrder(bot);
             }
 
+            bool isPlayer = localIndex == networkIndex;
+            if (isPlayer)
+            {
+                GameObject treasureInst = gameManager.treasureInst;
+                bool isTreasureFree = treasureInst != null;
+                if (isTreasureFree)
+                {
+                    Rigidbody pirateBody = GetComponent<Rigidbody>();
+                    SpringJoint joint = treasureInst.GetComponent<SpringJoint>();
+                    Rigidbody ownerBody = joint.connectedBody;
+                    bool isMeNotOwner = ownerBody != pirateBody;
+                    if (isMeNotOwner)
+                    {
+                        gameManager.paintBtn.interactable = true;
+                    }
+                }
+                else
+                {
+                    gameManager.paintBtn.interactable = true;
+                }
+            }
+
         }
         else if (isShovel)
         {
             isShovelFound = true;
             foundedShovel = detectedObject.transform;
+
+            bool isPlayer = localIndex == networkIndex;
+            if (isPlayer)
+            {
+                gameManager.digBtn.interactable = true;
+            }
+
         }
     }
 
@@ -421,10 +476,24 @@ public class PirateController : MonoBehaviour
         {
             isCrossFound = false;
             foundedCross = null;
+
+            bool isPlayer = localIndex == networkIndex;
+            if (isPlayer)
+            {
+                gameManager.digBtn.interactable = false;
+            }
+
         }
         else if (isShovel)
         {
             isShovelFound = false;
+            
+            bool isPlayer = localIndex == networkIndex;
+            if (isPlayer)
+            {
+                gameManager.digBtn.interactable = false;
+            }
+
         }
     }
 
@@ -944,6 +1013,13 @@ public class PirateController : MonoBehaviour
                         else
                         {
                             body = GetComponent<Rigidbody>();
+
+                            bool isPlayer = localIndex == networkIndex;
+                            if (isPlayer)
+                            {
+                                gameManager.attackBtn.interactable = true;
+                            }
+
                         }
                         gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = body;
                     }
@@ -1079,6 +1155,9 @@ public class PirateController : MonoBehaviour
                                 else
                                 {
                                     isMiniGame = true;
+
+                                    ToggleMiniGame();
+                                    
                                     GameObject miniGame = gameManager.miniGame;
                                     Transform botTransform = transform.parent;
                                     bool isBot = botTransform != null;
@@ -1151,6 +1230,9 @@ public class PirateController : MonoBehaviour
                                 Transform botTransform = transform.parent;
                                 bool isBot = botTransform != null;
                                 isMiniGame = true;
+                                
+                                ToggleMiniGame();
+
                                 GameObject miniGame = gameManager.miniGame;
                                 bool isAlreadyPull = animatorStateInfo.IsName("Pull");
                                 bool isDoPull = !isAlreadyPull;
@@ -1300,6 +1382,12 @@ public class PirateController : MonoBehaviour
                                     {
                                         Receivers = ReceiverGroup.Others
                                     });
+                                }
+
+                                bool isPlayer = localIndex == networkIndex;
+                                if (isPlayer)
+                                {
+                                    gameManager.paintBtn.interactable = false;
                                 }
 
                             }
@@ -1515,6 +1603,12 @@ public class PirateController : MonoBehaviour
                         Receivers = ReceiverGroup.All
                     });
 
+                    bool isPlayer = localIndex == networkIndex;
+                    if (isPlayer)
+                    {
+                        gameManager.attackBtn.interactable = true;
+                    }
+
                 }
                 else if (transform.parent != null)
                 {
@@ -1572,6 +1666,9 @@ public class PirateController : MonoBehaviour
                     }
                 }
             }
+
+            ToggleMiniGame();
+
         }
     }
 
@@ -2152,6 +2249,7 @@ public class PirateController : MonoBehaviour
         }
         */
 
+        /*
         Transform pirateArmature = transform.GetChild(0);
         Transform pirateHips = pirateArmature.GetChild(0);
         Transform pirateSpine = pirateHips.GetChild(2);
@@ -2160,6 +2258,7 @@ public class PirateController : MonoBehaviour
         Transform saberTransform = pirateSpine2.GetChild(0);
         GameObject saber = saberTransform.gameObject;
         saber.SetActive(false);
+        */
 
     }
 
@@ -2192,6 +2291,13 @@ public class PirateController : MonoBehaviour
         {
             colliderObject.transform.GetChild(i).gameObject.SetActive(true);
         }
+
+        bool isPlayer = colliderObject.GetComponent<PirateController>().localIndex == colliderObject.GetComponent<PirateController>().networkIndex;
+        if (isPlayer)
+        {
+            gameManager.attackBtn.interactable = false;
+        }
+
     }
 
     public IEnumerator SetPlayerCamera()
@@ -2239,6 +2345,9 @@ public class PirateController : MonoBehaviour
         miniGameCursor = 0;
         isMiniGame = false;
         isStopped = false;
+    
+        ToggleMiniGame();
+
     }
     public IEnumerator SyncKnockout ()
     {
@@ -2268,6 +2377,26 @@ public class PirateController : MonoBehaviour
         for (int i = 0; i < colliderObject.transform.childCount; i++)
         {
             colliderObject.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+    public void ToggleMiniGame()
+    {
+        bool isPlayer = localIndex == networkIndex;
+        if (isPlayer)
+        {
+            if (isMiniGame)
+            {
+                gameManager.digBtn.interactable = true;
+                gameManager.paintBtn.interactable = true;
+                gameManager.attackBtn.interactable = true;
+            }
+            else
+            {
+                gameManager.digBtn.interactable = (isCrossFound && isHaveShovel) || isShovelFound;
+                gameManager.paintBtn.interactable = isHavePaint;
+                gameManager.attackBtn.interactable = true;
+            }
         }
     }
 

@@ -2864,6 +2864,9 @@ MonoBehaviour:
   - {fileID: 886627804}
   - {fileID: 250158288}
   isInit: 0
+  digBtn: {fileID: 1638973891}
+  paintBtn: {fileID: 1264263178}
+  attackBtn: {fileID: 990699910}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
@@ -3348,7 +3351,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1264263179}
   m_OnClick:
     m_PersistentCalls:
@@ -3682,7 +3685,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1638973892}
   m_OnClick:
     m_PersistentCalls:

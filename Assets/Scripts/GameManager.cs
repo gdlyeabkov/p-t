@@ -54,6 +54,9 @@ public class GameManager : PunBehaviour
     public GameObject treasureInst;
     public List<GameObject> boats;
     public bool isInit = false;
+    public Button digBtn;
+    public Button paintBtn;
+    public Button attackBtn;
 
     void Start()
     {
