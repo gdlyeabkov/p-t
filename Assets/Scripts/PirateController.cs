@@ -321,7 +321,8 @@ public class PirateController : MonoBehaviour
                         bool isPaint = animatorStateInfo.IsName("Paint");
                         bool isLoose = animatorStateInfo.IsName("Loose");
                         bool isVictory = animatorStateInfo.IsName("Victory");
-                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose && !isVictory;
+                        bool isShoot = animatorStateInfo.IsName("Shoot");
+                        bool isDoIdle = !isAlreadyIdle && !isAttack && !isPaint && !isLoose && !isVictory && !isShoot;
                         if (isDoIdle)
                         {
                             if (gameManager.treasureInst != null)
@@ -1402,6 +1403,237 @@ public class PirateController : MonoBehaviour
                                 if (isHavePistol)
                                 {
                                     // Стрелять
+                                    GetComponent<Animator>().Play("Shoot");
+                                    RaycastHit hit;
+                                    if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+                                    {
+                                        Transform colliderObjectTransform = hit.transform;
+                                        GameObject colliderObject = colliderObjectTransform.gameObject;
+                                        /*PirateController pirateController = colliderObject.GetComponent<PirateController>();
+                                        bool isPirate = pirateController != null;
+                                        if (isPirate)*/
+                                        PirateController pirate = null;
+                                        if (gameObject.activeSelf && colliderObject.activeSelf)
+                                        {
+                                            bool isBot = colliderObject.GetComponent<NavMeshAgent>();
+                                            if (isBot)
+                                            {
+                                                Transform botTransform = colliderObject.transform;
+                                                Transform pirateTransform = botTransform.GetChild(0);
+                                                GameObject rawPirate = pirateTransform.gameObject;
+                                                pirate = rawPirate.GetComponent<PirateController>();
+                                            }
+                                            else
+                                            {
+                                                pirate = colliderObject.GetComponent<PirateController>();
+                                            }
+                                        }
+                                        bool isPirate = pirate != null;
+                                        if (isPirate)
+                                        {
+                                            int pirateLocalIndex = pirate.localIndex;
+                                            bool isEnemy = pirateLocalIndex != localIndex;
+                                            if (isEnemy)
+                                            {
+                                                if (isStandardMode)
+                                                {
+                                                    bool isHost = PhotonNetwork.isMasterClient;
+                                                    if (isHost)
+                                                    {
+                                                        int networkId = currentPlayer.ID;
+                                                        PhotonView localPhotonView = colliderObject.GetComponent<PhotonView>();
+                                                        localPhotonView.TransferOwnership(networkId);
+                                                    }
+                                                }
+                                                float coordY = 4.107f;
+                                                Vector3 randomPosition = new Vector3(0, coordY, 0);
+                                                List<Transform> respawnPoints = gameManager.respawnPoints;
+                                                Transform respawnPoint = respawnPoints[pirateLocalIndex];
+                                                randomPosition = respawnPoint.position;
+                                                NavMeshAgent agent = colliderObject.GetComponent<NavMeshAgent>();
+                                                bool isAgentExists = agent != null;
+                                                bool isObjectActive = colliderObject.activeSelf;
+                                                if (gameManager.treasureInst != null)
+                                                {
+                                                    body = null;
+                                                    if (pirate.transform.parent != null)
+                                                    {
+                                                        body = pirate.transform.parent.gameObject.GetComponent<Rigidbody>();
+                                                    }
+                                                    else
+                                                    {
+                                                        body = pirate.GetComponent<Rigidbody>();
+                                                    }
+                                                    bool isEnemyTreasureOwner = gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == body;
+                                                    if (isEnemyTreasureOwner)
+                                                    {
+                                                        if (isAgentExists && isObjectActive)
+                                                        {
+                                                            colliderObject.transform.GetChild(0).gameObject.GetComponent<Animator>().SetBool("isGrab", false);
+                                                            object[] networkData = new object[] { localIndex, true };
+                                                            PhotonNetwork.RaiseEvent(188, networkData, true, new RaiseEventOptions
+                                                            {
+                                                                Receivers = ReceiverGroup.All
+                                                            });
+                                                            networkData = new object[] { pirate.localIndex, false };
+                                                            PhotonNetwork.RaiseEvent(188, networkData, true, new RaiseEventOptions
+                                                            {
+                                                                Receivers = ReceiverGroup.All
+                                                            });
+                                                        }
+                                                        else if (isObjectActive)
+                                                        {
+                                                            colliderObject.GetComponent<Animator>().SetBool("isGrab", false);
+                                                            object[] networkData = new object[] { localIndex, true };
+                                                            PhotonNetwork.RaiseEvent(188, networkData, true, new RaiseEventOptions
+                                                            {
+                                                                Receivers = ReceiverGroup.All
+                                                            });
+                                                            networkData = new object[] { pirate.localIndex, false };
+                                                            PhotonNetwork.RaiseEvent(188, networkData, true, new RaiseEventOptions
+                                                            {
+                                                                Receivers = ReceiverGroup.All
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                                if (isAgentExists && isObjectActive)
+                                                {
+                                                    colliderObject.transform.GetChild(0).gameObject.GetComponent<PirateController>().StartCoroutine(RespawnPirate(colliderObject.transform.GetChild(0).gameObject, randomPosition));
+                                                    object[] networkData = new object[] { pirateLocalIndex };
+                                                    PhotonNetwork.RaiseEvent(186, networkData, true, new RaiseEventOptions
+                                                    {
+                                                        Receivers = ReceiverGroup.All
+                                                    });
+                                                }
+                                                else if (isObjectActive)
+                                                {
+                                                    colliderObject.GetComponent<PirateController>().StartCoroutine(RespawnPirate(colliderObject, randomPosition));
+                                                    object[] networkData = new object[] { pirateLocalIndex };
+                                                    PhotonNetwork.RaiseEvent(186, networkData, true, new RaiseEventOptions
+                                                    {
+                                                        Receivers = ReceiverGroup.All
+                                                    });
+                                                }
+
+                                                if (isStandardMode)
+                                                {
+                                                    object[] networkData = new object[] { pirateLocalIndex, localIndex };
+                                                    PhotonNetwork.RaiseEvent(193, networkData, true, new RaiseEventOptions
+                                                    {
+                                                        Receivers = ReceiverGroup.All
+                                                    });
+                                                    if (gameManager.treasureInst != null)
+                                                    {
+                                                        body = null;
+                                                        if (pirate.transform.parent != null)
+                                                        {
+                                                            body = pirate.transform.parent.gameObject.GetComponent<Rigidbody>();
+                                                        }
+                                                        else
+                                                        {
+                                                            body = pirate.GetComponent<Rigidbody>();
+                                                        }
+                                                        Debug.LogWarning("Pre isEnemyTreasureOwner");
+                                                        bool isEnemyTreasureOwner = gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody == body;
+                                                        if (isEnemyTreasureOwner)
+                                                        {
+                                                            Debug.LogWarning("isEnemyTreasureOwner");
+                                                            if (transform.parent != null)
+                                                            {
+                                                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                                                            }
+                                                            else
+                                                            {
+                                                                gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                                                            }
+                                                            networkData = new object[] { localIndex };
+                                                            PhotonNetwork.RaiseEvent(187, networkData, true, new RaiseEventOptions
+                                                            {
+                                                                Receivers = ReceiverGroup.All
+                                                            });
+                                                            destination = gameManager.boats[localIndex].transform.position;
+                                                            agentTarget = gameManager.boats[localIndex].transform;
+                                                            Transform localArmature = transform.GetChild(0);
+                                                            Transform localHips = localArmature.GetChild(0);
+                                                            Transform localSpine = localHips.GetChild(2);
+                                                            Transform localSpine1 = localSpine.GetChild(0);
+                                                            Transform localSpine2 = localSpine1.GetChild(0);
+                                                            Transform localRightSholder = localSpine2.GetChild(2);
+                                                            Transform localRightArm = localRightSholder.GetChild(0);
+                                                            Transform localRightForeArm = localRightArm.GetChild(0);
+                                                            Transform localRightHand = localRightForeArm.GetChild(0);
+                                                            Transform treasureTransform = localRightHand.GetChild(2);
+                                                            GameObject treasure = treasureTransform.gameObject;
+                                                            treasure.SetActive(false);
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    StopMiniGame();
+                                                    pirate.isShovelFound = false;
+                                                    GameObject miniGame = pirate.gameManager.miniGame;
+                                                    miniGame.SetActive(false);
+                                                    bool isHaveShovel = pirate.isHaveShovel;
+                                                    if (isHaveShovel && gameManager.treasureInst == null)
+                                                    {
+                                                        gameManager.GenerateShovel();
+                                                    }
+                                                    pirate.isHaveShovel = false;
+                                                    SetIKController();
+                                                    PirateController[] pirates = GameObject.FindObjectsOfType<PirateController>();
+                                                    foreach (PirateController localPirate in pirates)
+                                                    {
+                                                        GameObject rawPirate = localPirate.gameObject;
+                                                        CapsuleCollider localCollider = null;
+                                                        CapsuleCollider pirateCollider = null;
+                                                        bool isPirateBot = transform.parent != null;
+                                                        if (isPirateBot)
+                                                        {
+                                                            localCollider = transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                                                        }
+                                                        else
+                                                        {
+                                                            localCollider = GetComponent<CapsuleCollider>();
+                                                        }
+                                                        if (rawPirate.transform.parent != null)
+                                                        {
+                                                            pirateCollider = rawPirate.transform.parent.gameObject.GetComponent<CapsuleCollider>();
+                                                        }
+                                                        else
+                                                        {
+                                                            pirateCollider = rawPirate.GetComponent<CapsuleCollider>();
+                                                        }
+                                                    }
+                                                    AudioSource audio = pirate.GetComponent<AudioSource>();
+                                                    AudioClip dieSound = pirate.gameManager.dieSound;
+                                                    audio.clip = dieSound;
+                                                    audio.loop = false;
+                                                    audio.Play();
+                                                    GetComponent<Animator>().Play("Idle");
+                                                    gameManager.GiveOrder(colliderObject);
+                                                    if (gameManager.treasureInst != null)
+                                                    {
+                                                        if (transform.parent != null)
+                                                        {
+                                                            gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = transform.parent.gameObject.GetComponent<Rigidbody>();
+                                                        }
+                                                        else
+                                                        {
+                                                            gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = GetComponent<Rigidbody>();
+                                                        }
+                                                        object[] networkData = new object[] { localIndex };
+                                                        PhotonNetwork.RaiseEvent(187, networkData, true, new RaiseEventOptions
+                                                        {
+                                                            Receivers = ReceiverGroup.All
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
                                     gameManager.attackBtn.GetComponent<Image>().sprite = gameManager.attackSaberSprite;
                                     isHavePistol = false;
                                 }

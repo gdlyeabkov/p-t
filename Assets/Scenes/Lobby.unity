@@ -3668,7 +3668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b1378a0e6425d240bf49576174e3a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameVersion: 1
+  gameVersion: 2
   maxCountPlayers: 4
   playerRoom: {fileID: 803309282}
   players: {fileID: 1989530281}

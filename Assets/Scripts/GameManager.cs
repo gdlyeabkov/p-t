@@ -114,6 +114,13 @@ public class GameManager : PunBehaviour
             {
                 StartCoroutine(GeneratePaint());
             }
+
+            int countPistols = Random.Range(0, 5);
+            for (int i = 0; i < 5; i++)
+            {
+                StartCoroutine(GeneratePistol());
+            }
+
             if (isHost)
             {
                 /*
@@ -132,10 +139,10 @@ public class GameManager : PunBehaviour
                     Transform respawnPoint = respawnPoints[i];
                     randomPosition = respawnPoint.position;
                     Quaternion baseRotation = Quaternion.identity;
-                    // GameObject pirate = PhotonNetwork.Instantiate("fixed_pirate", randomPosition, baseRotation, 0);
-                    GameObject pirate = PhotonNetwork.Instantiate("animated_pirate", randomPosition, baseRotation, 0);
+                    // GameObject pirate = PhotonNetwork.Instantiate("animated_pirate", randomPosition, baseRotation, 0);
+                    GameObject pirate = PhotonNetwork.Instantiate("shooted_grabbed_pirate", randomPosition, baseRotation, 0);
                 }
-                
+
                 CreateNetworkBots();
 
             }
@@ -191,7 +198,7 @@ public class GameManager : PunBehaviour
             Instantiate(piratePrefab, randomPosition, baseRotation);
 
             int countPistols = Random.Range(0, 5);
-            for (int i = 0; i < countPaints; i++)
+            for (int i = 0; i < 5; i++)
             {
                 StartCoroutine(GeneratePistol());
             }
@@ -711,8 +718,8 @@ public class GameManager : PunBehaviour
             Transform respawnPoint = respawnPoints[1];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
-            // GameObject pirateWrap = PhotonNetwork.Instantiate("fixedatePirateEnemyWrapResourse", randomPosition, baseRotation, 0);
-            GameObject pirateWrap = PhotonNetwork.Instantiate("bot", randomPosition, baseRotation, 0);
+            // GameObject pirateWrap = PhotonNetwork.Instantiate("bot", randomPosition, baseRotation, 0);
+            GameObject pirateWrap = PhotonNetwork.Instantiate("bot_2.0", randomPosition, baseRotation, 0);
             NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
             agent.speed = 0.1f;
             bots.Add(pirateWrap);

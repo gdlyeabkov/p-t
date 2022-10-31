@@ -2842,7 +2842,7 @@ MonoBehaviour:
   successSound: {fileID: 8300000, guid: a76252273f64d69479df44adf5d1679a, type: 3}
   pirateCrossPrefab: {fileID: 2039749418088098029, guid: e80d4a31d74c7654b80dbb36efcce75f,
     type: 3}
-  piratePrefab: {fileID: 7091777133301440557, guid: 2e3dbf6c95676ca49b2489b9d5e26121,
+  piratePrefab: {fileID: 2129599122884041984, guid: 902db379b73b1f247b590e72d5b62725,
     type: 3}
   shovelPrefab: {fileID: 3681321844266905192, guid: 44f82754333cd0748ad756244dab6c41,
     type: 3}
@@ -2871,8 +2871,7 @@ MonoBehaviour:
   pistolCursor: -1
   attackBtn: {fileID: 990699910}
   attackSaberSprite: {fileID: 21300000, guid: 5265cad7d4c26a74591b14d6af32288c, type: 3}
-  attackPistolSprite: {fileID: -3798294997260195130, guid: 1b5dfc9c762f17d48a7a34b1252640de,
-    type: 3}
+  attackPistolSprite: {fileID: 21300000, guid: 1b5dfc9c762f17d48a7a34b1252640de, type: 3}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0
