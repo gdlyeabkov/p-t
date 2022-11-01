@@ -37,6 +37,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pistol
       objectReference: {fileID: 0}
+    - target: {fileID: 3704180502566872521, guid: d4d14a30e3b40934e9f91ca3aac8c016,
+        type: 3}
+      propertyPath: m_TagString
+      value: Pistol
+      objectReference: {fileID: 0}
     - target: {fileID: 3704180502566872532, guid: d4d14a30e3b40934e9f91ca3aac8c016,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

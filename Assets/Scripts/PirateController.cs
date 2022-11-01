@@ -1405,7 +1405,11 @@ public class PirateController : MonoBehaviour
                                     // Стрелять
                                     GetComponent<Animator>().Play("Shoot");
                                     RaycastHit hit;
-                                    if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+                                    // Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * Mathf.Infinity, Color.blue);
+                                    Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+                                    Debug.DrawRay(ray.origin, ray.direction * Mathf.Infinity, Color.blue);
+                                    // if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+                                    if (Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity))
                                     {
                                         Transform colliderObjectTransform = hit.transform;
                                         GameObject colliderObject = colliderObjectTransform.gameObject;
@@ -2542,6 +2546,18 @@ public class PirateController : MonoBehaviour
         {
             colliderObject.transform.GetChild(i).gameObject.SetActive(true);
         }
+    }
+
+    public void OnDrawGizmos()
+    {
+        /*if (localIndex == 0)
+        {*/
+            // Ray ray = new Ray(transform.position, transform.TransformDirection(Vector3.forward) * Mathf.Infinity);
+            // Ray ray = new Ray(GetComponent<Rigidbody>().position, transform.TransformDirection(Vector3.forward) * Mathf.Infinity);
+            Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            Gizmos.color = Color.blue;
+            // Gizmos.DrawRay(ray);
+        // }
     }
 
 }
