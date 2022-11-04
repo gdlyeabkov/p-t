@@ -61,6 +61,7 @@ public class GameManager : PunBehaviour
     public Button attackBtn;
     public Sprite attackSaberSprite;
     public Sprite attackPistolSprite;
+    public Material fogSkyBox;
 
     void Start()
     {
@@ -108,6 +109,9 @@ public class GameManager : PunBehaviour
                     cross.transform.position = new Vector3(hitPointX, neededHitPointY, hitPointZ);
                 }
                 GenerateShovel();
+
+                GenerateFog();
+
             }
             int countPaints = Random.Range(0, 5);
             for (int i = 0; i < countPaints; i++)
@@ -181,6 +185,9 @@ public class GameManager : PunBehaviour
                 cross.transform.position = new Vector3(hitPointX, neededHitPointY, hitPointZ);
             }
             GenerateShovel();
+
+            GenerateFog();
+
             int countPaints = Random.Range(0, 5);
             for (int i = 0; i < countPaints; i++)
             {
@@ -481,11 +488,12 @@ public class GameManager : PunBehaviour
         GameObject pirate = pirateTransform.gameObject;
         PirateController pirateController = pirate.GetComponent<PirateController>();
         NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
-        float target = Random.Range(0, 3);
+        float target = Random.Range(0, 4);
         Vector3 destination = Vector3.zero;
         bool isCaptureCross = target == 0;
         bool isCapturePaint = target == 1;
         bool isAttack = target == 2;
+        bool isCapturePistol = target == 3;
         if (isCaptureCross)
         {
             bool isHaveShovel = pirateController.isHaveShovel;
@@ -543,6 +551,34 @@ public class GameManager : PunBehaviour
             destination = agentTarget.position;
             pirateController.agentTarget = agentTarget;
         }
+        else if (isCapturePistol)
+        {
+            int countPistols = pistols.Count;
+            bool isHavePistols = countPistols >= 1;
+            if (isHavePistols)
+            {
+                GameObject somePistol = pistols[0];
+                bool isPistolExists = somePistol != null;
+                if (isPistolExists)
+                {
+                    Transform agentTarget = somePistol.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
+                }
+                else
+                {
+                    Transform agentTarget = localPirate.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
+                }
+            }
+            else
+            {
+                Transform agentTarget = localPirate.transform;
+                destination = agentTarget.position;
+                pirateController.agentTarget = agentTarget;
+            }
+        }
         else
         {
             Transform agentTarget = localPirate.transform;
@@ -571,7 +607,8 @@ public class GameManager : PunBehaviour
             bool isDig = animatorStateInfo.IsName("Dig");
             bool isAttack = animatorStateInfo.IsName("Attack");
             bool isPaint = animatorStateInfo.IsName("Paint");
-            bool isStop = isWin || isDig || isPull || isAttack || isPaint;
+            bool isShoot = animatorStateInfo.IsName("Shoot");
+            bool isStop = isWin || isDig || isPull || isAttack || isPaint || isShoot;
             if (isStop)
             {
                 agent.speed = 0;
@@ -595,6 +632,29 @@ public class GameManager : PunBehaviour
                         Transform crossTransform = cross.transform;
                         Vector3 crossPosition = crossTransform.position;
                         agent.Warp(crossPosition);
+                    }
+                }
+                else if (isShoot)
+                {
+                    bool isOnNavMesh = agent.isOnNavMesh;
+                    NavMeshPath path = new NavMeshPath();
+                    if (isOnNavMesh)
+                    {
+                        if (pirateController.agentTarget != null)
+                        {
+                            Vector3 destination = pirateController.agentTarget.position;
+                            agent.CalculatePath(destination, path);
+                            agent.ResetPath();
+                            agent.SetPath(path);
+                            Vector3 yAxis = Vector3.up;
+                            Rigidbody pirateWrapRB = pirateWrap.GetComponent<Rigidbody>();
+                            Vector3 velocity = agent.velocity;
+                            Quaternion lookRotation = Quaternion.LookRotation(velocity, yAxis);
+                            if (isHost)
+                            {
+                                pirate.transform.rotation = lookRotation;
+                            }
+                        }
                     }
                 }
             }
@@ -773,6 +833,18 @@ public class GameManager : PunBehaviour
 
         pistols.Add(pistolGo);
 
+    }
+
+    public void GenerateFog ()
+    {
+        int fogCase = Random.Range(0, 2);
+        bool isFogEnable = fogCase == 1;
+        if (isFogEnable)
+        {
+            RenderSettings.fog = true;
+            RenderSettings.fogDensity = 0.3f;
+            RenderSettings.skybox = fogSkyBox;
+        }
     }
 
 }

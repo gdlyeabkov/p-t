@@ -41,6 +41,7 @@ public class BotController : MonoBehaviour
         bool isCross = detectedObjectTag == "Cross";
         bool isShovel = detectedObjectTag == "Shovel";
         bool isPaint = detectedObjectTag == "Paint";
+        bool isPistol = detectedObjectTag == "Pistol";
         Camera mainCamera = Camera.main;
         GameObject rawMainCamera = mainCamera.gameObject;
         CameraTracker cameraTracker = rawMainCamera.GetComponent<CameraTracker>();
@@ -136,6 +137,47 @@ public class BotController : MonoBehaviour
                 else if (pirateController.networkIndex != 0)
                 {
                     pirateController.DoPaint();
+                }
+            }
+            else if (isPistol)
+            {
+                Transform detectedObjectTransform = detectedObject.transform;
+                Transform rawPirateTransform = transform.GetChild(0);
+                GameObject rawPirate = rawPirateTransform.gameObject;
+                PirateController pirateController = rawPirate.GetComponent<PirateController>();
+                Transform agentTarget = pirateController.agentTarget;
+                bool isHaveTarget = agentTarget != null;
+                if (isHaveTarget)
+                {
+                    bool isMissionComplete = agentTarget == detectedObjectTransform;
+                    if (isMissionComplete)
+                    {
+                        pirateController.isHavePistol = true;
+                        PistolController pistolController = detectedObject.GetComponent<PistolController>();
+                        int pistolIndex = pistolController.localIndex;
+                        if (pirateController.isStandardMode)
+                        {
+                            object[] networkData = new object[] { pistolIndex };
+                            PhotonNetwork.RaiseEvent(185, networkData, true, new RaiseEventOptions
+                            {
+                                Receivers = ReceiverGroup.All
+                            });
+                        }
+                        else
+                        {
+                            Destroy(detectedObject);
+                        }
+                        Transform newAgentTarget = gameManager.localPirate.transform;
+                        Vector3 destination = newAgentTarget.position;
+                        pirateController.agentTarget = newAgentTarget;
+                        pirateController.destination = destination;
+                        pirateController.DoAttack();
+                        StartCoroutine(gameManager.GiveOrders());
+                    }
+                }
+                else if (pirateController.networkIndex != 0)
+                {
+                    pirateController.DoAttack();
                 }
             }
         }
