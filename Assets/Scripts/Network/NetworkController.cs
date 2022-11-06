@@ -27,7 +27,7 @@ public class NetworkController : PunBehaviour
 	public Button joinRoomBtn;
 	public Button createRoomBtn;
 	public GameObject shop;
-	public List<Image> products;
+	public List<GameObject> products;
 	public Color disabledColor;
 	public Color enabledColor;
 	public Button buyBtn;
@@ -40,6 +40,8 @@ public class NetworkController : PunBehaviour
 	public GameObject skin;
 	public List<Material> productHats;
 	public bool isDebug;
+	public Color selectedColor;
+	public Color unselectedColor;
 
 	public void Start()
 	{
@@ -464,16 +466,27 @@ public class NetworkController : PunBehaviour
 
 	public void SelectProduct(int index)
 	{
-		foreach (Image product in products)
+		Transform productImgTransform = null;
+		Image productImg = null;
+		foreach (GameObject product in products)
         {
-			product.GetComponent<Image>().sprite = unselectedProducts[product.gameObject.GetComponent<ProductController>().index];
-			product.GetComponent<Image>().color = disabledColor;
-			if (PlayerPrefs.GetInt("Hat_" + product.gameObject.GetComponent<ProductController>().index) == 1)
+			productImgTransform = product.transform.GetChild(0);
+			productImg = productImgTransform.GetComponent<Image>();
+
+			// productImg.sprite = unselectedProducts[product.GetComponent<ProductController>().index];
+			product.GetComponent<Image>().color = unselectedColor;
+
+			productImg.color = disabledColor;
+			if (PlayerPrefs.GetInt("Hat_" + product.GetComponent<ProductController>().index) == 1)
             {
-				product.GetComponent<Image>().color = enabledColor;
+				productImg.color = enabledColor;
 			}
 		}
-		products[index].GetComponent<Image>().color = enabledColor;
+		activeProductIndex = index;
+		productImgTransform = products[activeProductIndex].transform.GetChild(0);
+		productImg = productImgTransform.GetComponent<Image>();
+		productImg.color = enabledColor;
+
 		string rawIndex = index.ToString();
 		bool isPick = PlayerPrefs.GetInt("Hat_" + rawIndex) == 1;
 		if (isPick)
@@ -484,10 +497,11 @@ public class NetworkController : PunBehaviour
 		{
 			buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Buy";
 		}
-		activeProductIndex = index;
 		buyBtn.interactable = true;
-		
-		products[activeProductIndex].sprite = selectedProducts[activeProductIndex];
+
+		// productImg.sprite = selectedProducts[activeProductIndex];
+		products[activeProductIndex].GetComponent<Image>().color = selectedColor;
+
 	}
 
 	public void LoadProducts ()
@@ -504,17 +518,35 @@ public class NetworkController : PunBehaviour
 		{
 			PlayerPrefs.SetInt("PickedHat", 0);
 		}
-		foreach (Image product in products)
+		foreach (GameObject product in products)
         {
-			if (product.GetComponent<ProductController>().index == PlayerPrefs.GetInt("PickedHat"))
+			bool isPicked = product.GetComponent<ProductController>().index == PlayerPrefs.GetInt("PickedHat");
+			if (isPicked)
             {
-				product.color = enabledColor;
-				product.GetComponent<Image>().sprite = selectedProducts[product.gameObject.GetComponent<ProductController>().index];
+				Transform productImgTransform = product.transform.GetChild(0);
+				Image productImg = productImgTransform.GetComponent<Image>();
+				productImg.color = enabledColor;
+				
+				// productImg.sprite = selectedProducts[product.GetComponent<ProductController>().index];
+				product.GetComponent<Image>().color = selectedColor;
+
 			}
+			Transform productPriceLabelTransform = product.transform.GetChild(1);
+			Text productPriceLabel = productPriceLabelTransform.GetComponent<Text>();
 			if (PlayerPrefs.HasKey("Hat_" + product.GetComponent<ProductController>().index))
 			{
-				product.color = enabledColor;
+				Transform productImgTransform = product.transform.GetChild(0);
+				Image productImg = productImgTransform.GetComponent<Image>();
+				productImg.color = enabledColor;
 			}
+			else
+            {
+				ProductController productController = product.GetComponent<ProductController>();
+				int price = productController.price;
+				string rawPrice = price.ToString();
+				productPriceLabel.text = rawPrice;
+			}
+
 		}
 
 		LoadSkin();
@@ -537,6 +569,10 @@ public class NetworkController : PunBehaviour
 				LoadSkin();
 
 				buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Pick";
+
+				Transform productPriceLabelTransform = products[activeProductIndex].transform.GetChild(1);
+				Text productPriceLabel = productPriceLabelTransform.GetComponent<Text>();
+				productPriceLabel.text = "sold";
 
 			}
 			else

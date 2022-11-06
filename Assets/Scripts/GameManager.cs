@@ -862,14 +862,22 @@ public class GameManager : PunBehaviour
 
     public void LoadSkin ()
     {
-        // localPirate.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0] = productHats[PlayerPrefs.GetInt("PickedHat")];
 
+        int skinIndex = PlayerPrefs.GetInt("PickedHat");
         SkinnedMeshRenderer bodyRenderer = localPirate.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
         Material[] materials = bodyRenderer.materials;
         List<Material> playerMaterials = productHats;
-        Material playerMaterial = playerMaterials[PlayerPrefs.GetInt("PickedHat")];
+        Material playerMaterial = playerMaterials[skinIndex];
         materials[0] = playerMaterial;
         bodyRenderer.materials = materials;
+        if (isStandardMode)
+        {
+            object[] networkData = new object[] { localPirate.networkIndex, skinIndex };
+            PhotonNetwork.RaiseEvent(184, networkData, true, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.Others
+            });
+        }
 
     }
 

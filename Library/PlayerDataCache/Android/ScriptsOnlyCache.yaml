@@ -368,17 +368,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15642}
     - Class: 114
-      Script: {instanceID: 15680}
+      Script: {instanceID: 15678}
     - Class: 114
-      Script: {instanceID: 15706}
+      Script: {instanceID: 15682}
     - Class: 114
-      Script: {instanceID: 15780}
+      Script: {instanceID: 15708}
     - Class: 114
-      Script: {instanceID: 15828}
+      Script: {instanceID: 15782}
     - Class: 114
-      Script: {instanceID: 15834}
+      Script: {instanceID: 15830}
     - Class: 114
-      Script: {instanceID: 18844}
+      Script: {instanceID: 15836}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 119
@@ -521,7 +521,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15616}
     - Class: 114
-      Script: {instanceID: 15680}
+      Script: {instanceID: 15682}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 119
@@ -727,7 +727,7 @@ ScriptsOnlyBuild:
     className: BannerPlaceholder
   - hash:
       serializedVersion: 2
-      Hash: c97021f4900e1ad8e25845eddf39f1fa
+      Hash: da66ff09600173eafc9febaeb6ad3da5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NetworkController
@@ -2863,6 +2863,12 @@ ScriptsOnlyBuild:
     className: FreeCamera
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SkinController
+  - hash:
+      serializedVersion: 2
       Hash: 9dac16f3efc511835ac976dfae55f580
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -2957,12 +2963,6 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp-firstpass.dll
     namespaceName: UnityStandardAssets.Utility
     className: AutoMobileShaderSwitch
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: SkinController
   platform: 13
   scenePathNames:
   - Assets/Scenes/Lobby.unity
