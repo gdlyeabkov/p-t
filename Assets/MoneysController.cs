@@ -7,6 +7,7 @@ public class MoneysController : MonoBehaviour
 {
 
     public Text moneysLabel;
+    public NetworkController networkController;
 
     void Start()
     {
@@ -14,11 +15,22 @@ public class MoneysController : MonoBehaviour
         bool isNotMoneys = !isMoneysExists;
         if (isNotMoneys)
         {
-            PlayerPrefs.SetInt("Moneys", 0);
+            if (networkController.isDebug)
+            {
+                PlayerPrefs.SetInt("Moneys", 150);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("Moneys", 0);
+            }
         }
+        GetMoneys();
+    }
+
+    public void GetMoneys ()
+    {
         int moneys = PlayerPrefs.GetInt("Moneys");
         string parsedMoneys = moneys.ToString();
-        Debug.Log("parsedMoneys: " + parsedMoneys);
         moneysLabel.text = parsedMoneys;
     }
 

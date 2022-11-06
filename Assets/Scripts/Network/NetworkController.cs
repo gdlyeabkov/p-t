@@ -26,6 +26,20 @@ public class NetworkController : PunBehaviour
 	public InputField nickNameField;
 	public Button joinRoomBtn;
 	public Button createRoomBtn;
+	public GameObject shop;
+	public List<Image> products;
+	public Color disabledColor;
+	public Color enabledColor;
+	public Button buyBtn;
+	public MoneysController moneysController;
+	public int activeProductIndex = -1;
+	public List<Sprite> selectedProducts;
+	public List<Sprite> unselectedProducts;
+    public AudioClip successSound;
+	public AudioClip wrongSound;
+	public GameObject skin;
+	public List<Material> productHats;
+	public bool isDebug;
 
 	public void Start()
 	{
@@ -34,6 +48,7 @@ public class NetworkController : PunBehaviour
 		PlayerPrefs.DeleteKey("Mode");
 		ConnectToPhoton();
 		LoadNickName();
+		LoadProducts();
 		PhotonNetwork.OnEventCall += OnEvent;
 	}
 
@@ -434,6 +449,121 @@ public class NetworkController : PunBehaviour
 			PhotonNetwork.player.NickName = nickName;
 			nickNameField.text = nickName;
 		}
+	}
+
+	public void OpenShop()
+	{
+		buyBtn.interactable = false;
+		shop.SetActive(true);
+	}
+
+	public void CloseShop()
+	{
+		shop.SetActive(false);
+	}
+
+	public void SelectProduct(int index)
+	{
+		foreach (Image product in products)
+        {
+			product.GetComponent<Image>().sprite = unselectedProducts[product.gameObject.GetComponent<ProductController>().index];
+			product.GetComponent<Image>().color = disabledColor;
+			if (PlayerPrefs.GetInt("Hat_" + product.gameObject.GetComponent<ProductController>().index) == 1)
+            {
+				product.GetComponent<Image>().color = enabledColor;
+			}
+		}
+		products[index].GetComponent<Image>().color = enabledColor;
+		string rawIndex = index.ToString();
+		bool isPick = PlayerPrefs.GetInt("Hat_" + rawIndex) == 1;
+		if (isPick)
+        {
+			buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Pick";
+		}
+		else
+		{
+			buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Buy";
+		}
+		activeProductIndex = index;
+		buyBtn.interactable = true;
+		
+		products[activeProductIndex].sprite = selectedProducts[activeProductIndex];
+	}
+
+	public void LoadProducts ()
+    {
+		bool isFirstHatExists = PlayerPrefs.HasKey("Hat_0");
+		bool isFirstHatNotExists = !isFirstHatExists;
+		if (isFirstHatNotExists)
+        {
+			PlayerPrefs.SetInt("Hat_0", 1);
+		}
+		bool isPickedHatExists = PlayerPrefs.HasKey("PickedHat");
+		bool isPickedHatNotExists = !isPickedHatExists;
+		if (isPickedHatNotExists)
+		{
+			PlayerPrefs.SetInt("PickedHat", 0);
+		}
+		foreach (Image product in products)
+        {
+			if (product.GetComponent<ProductController>().index == PlayerPrefs.GetInt("PickedHat"))
+            {
+				product.color = enabledColor;
+				product.GetComponent<Image>().sprite = selectedProducts[product.gameObject.GetComponent<ProductController>().index];
+			}
+			if (PlayerPrefs.HasKey("Hat_" + product.GetComponent<ProductController>().index))
+			{
+				product.color = enabledColor;
+			}
+		}
+
+		LoadSkin();
+
+	}
+
+	public void BuyProduct ()
+    {
+		if (buyBtn.transform.GetChild(0).GetComponent<Text>().text == "Buy")
+        {
+			if (PlayerPrefs.GetInt("Moneys") >= products[activeProductIndex].GetComponent<ProductController>().price)
+            {
+				PlayerPrefs.SetInt("Moneys", PlayerPrefs.GetInt("Moneys") - products[activeProductIndex].GetComponent<ProductController>().price);
+				PlayerPrefs.SetInt("Hat_" + activeProductIndex, 1);
+				PlayerPrefs.SetInt("PickedHat", activeProductIndex);
+				moneysController.GetMoneys();
+				GetComponent<AudioSource>().clip = successSound;
+				GetComponent<AudioSource>().Play();
+
+				LoadSkin();
+
+				buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Pick";
+
+			}
+			else
+            {
+				GetComponent<AudioSource>().clip = wrongSound;
+				GetComponent<AudioSource>().Play();
+			}
+		}
+		else
+        {
+			PlayerPrefs.SetInt("PickedHat", activeProductIndex);
+			GetComponent<AudioSource>().clip = successSound;
+			GetComponent<AudioSource>().Play();
+
+			LoadSkin();
+
+		}
+	}
+
+	public void LoadSkin()
+	{
+		SkinnedMeshRenderer bodyRenderer = skin.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
+		Material[] materials = bodyRenderer.materials;
+		List<Material> playerMaterials = productHats;
+		Material playerMaterial = playerMaterials[PlayerPrefs.GetInt("PickedHat")];
+		materials[0] = playerMaterial;
+		bodyRenderer.materials = materials;
 	}
 
 }

@@ -83,6 +83,8 @@ public class PirateController : MonoBehaviour
             Transform head = neck.GetChild(0);
             StartCoroutine(SetPlayerCamera());
 
+            gameManager.LoadSkin();
+
         }
 
         Transform pirateTransform = gameObject.transform;

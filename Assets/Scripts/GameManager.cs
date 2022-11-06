@@ -62,6 +62,9 @@ public class GameManager : PunBehaviour
     public Sprite attackSaberSprite;
     public Sprite attackPistolSprite;
     public Material fogSkyBox;
+    public List<Material> productHats;
+    public GameObject water;
+    public bool isDebug;
 
     void Start()
     {
@@ -110,7 +113,11 @@ public class GameManager : PunBehaviour
                 }
                 GenerateShovel();
 
-                GenerateFog();
+                bool isProd = !isDebug;
+                if (isProd)
+                {
+                    GenerateFog();
+                }
 
             }
             int countPaints = Random.Range(0, 5);
@@ -186,7 +193,11 @@ public class GameManager : PunBehaviour
             }
             GenerateShovel();
 
-            GenerateFog();
+            bool isProd = !isDebug;
+            if (isProd)
+            {
+                GenerateFog();
+            }
 
             int countPaints = Random.Range(0, 5);
             for (int i = 0; i < countPaints; i++)
@@ -844,7 +855,21 @@ public class GameManager : PunBehaviour
             RenderSettings.fog = true;
             RenderSettings.fogDensity = 0.3f;
             RenderSettings.skybox = fogSkyBox;
+            water.SetActive(false);
         }
+    }
+
+    public void LoadSkin ()
+    {
+        // localPirate.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>().materials[0] = productHats[PlayerPrefs.GetInt("PickedHat")];
+
+        SkinnedMeshRenderer bodyRenderer = localPirate.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
+        Material[] materials = bodyRenderer.materials;
+        List<Material> playerMaterials = productHats;
+        Material playerMaterial = playerMaterials[PlayerPrefs.GetInt("PickedHat")];
+        materials[0] = playerMaterial;
+        bodyRenderer.materials = materials;
+
     }
 
 }
