@@ -22,6 +22,7 @@ ScriptsOnlyBuild:
     - IdleRunJump
     - JumpAndRunMovement
     - MaterialPerOwner
+    - MoneysController
     - MoveByKeys
     - NetworkCharacter
     - NetworkController
@@ -40,12 +41,15 @@ ScriptsOnlyBuild:
     - PickupCamera
     - PickupController
     - PirateController
+    - PistolController
     - PlayerDiamond
+    - ProductController
     - RPGMovement
     - RoomController
     - ServerSettings
     - ShovelController
     - ShowInfoOfPlayer
+    - SkinController
     - ThirdPersonCamera
     - ThirdPersonController
     - ThirdPersonNetwork
@@ -150,6 +154,8 @@ ScriptsOnlyBuild:
     - Class: 50
       Script: {instanceID: 0}
     - Class: 54
+      Script: {instanceID: 0}
+    - Class: 60
       Script: {instanceID: 0}
     - Class: 61
       Script: {instanceID: 0}
@@ -278,93 +284,101 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13500}
     - Class: 114
-      Script: {instanceID: 13594}
+      Script: {instanceID: 13506}
     - Class: 114
-      Script: {instanceID: 13604}
+      Script: {instanceID: 13596}
     - Class: 114
-      Script: {instanceID: 13782}
+      Script: {instanceID: 13606}
     - Class: 114
-      Script: {instanceID: 13816}
+      Script: {instanceID: 13784}
     - Class: 114
-      Script: {instanceID: 13854}
+      Script: {instanceID: 13818}
     - Class: 114
-      Script: {instanceID: 13956}
+      Script: {instanceID: 13856}
     - Class: 114
-      Script: {instanceID: 13964}
+      Script: {instanceID: 13958}
     - Class: 114
-      Script: {instanceID: 14068}
+      Script: {instanceID: 13966}
     - Class: 114
-      Script: {instanceID: 14138}
+      Script: {instanceID: 14070}
     - Class: 114
-      Script: {instanceID: 14156}
+      Script: {instanceID: 14140}
     - Class: 114
       Script: {instanceID: 14158}
     - Class: 114
-      Script: {instanceID: 14210}
+      Script: {instanceID: 14160}
     - Class: 114
-      Script: {instanceID: 14232}
+      Script: {instanceID: 14212}
     - Class: 114
-      Script: {instanceID: 14396}
+      Script: {instanceID: 14234}
     - Class: 114
-      Script: {instanceID: 14430}
+      Script: {instanceID: 14398}
     - Class: 114
-      Script: {instanceID: 14438}
+      Script: {instanceID: 14432}
     - Class: 114
-      Script: {instanceID: 14470}
+      Script: {instanceID: 14440}
     - Class: 114
-      Script: {instanceID: 14524}
+      Script: {instanceID: 14472}
     - Class: 114
-      Script: {instanceID: 14542}
+      Script: {instanceID: 14526}
     - Class: 114
-      Script: {instanceID: 14558}
+      Script: {instanceID: 14544}
     - Class: 114
-      Script: {instanceID: 14568}
+      Script: {instanceID: 14560}
     - Class: 114
-      Script: {instanceID: 14738}
+      Script: {instanceID: 14570}
+    - Class: 114
+      Script: {instanceID: 14648}
     - Class: 114
       Script: {instanceID: 14742}
     - Class: 114
-      Script: {instanceID: 14820}
+      Script: {instanceID: 14746}
     - Class: 114
-      Script: {instanceID: 14828}
+      Script: {instanceID: 14824}
     - Class: 114
-      Script: {instanceID: 14872}
+      Script: {instanceID: 14832}
     - Class: 114
-      Script: {instanceID: 14894}
+      Script: {instanceID: 14876}
     - Class: 114
-      Script: {instanceID: 14920}
+      Script: {instanceID: 14898}
     - Class: 114
-      Script: {instanceID: 15188}
+      Script: {instanceID: 14924}
     - Class: 114
-      Script: {instanceID: 15268}
+      Script: {instanceID: 15192}
     - Class: 114
-      Script: {instanceID: 15304}
+      Script: {instanceID: 15272}
     - Class: 114
-      Script: {instanceID: 15332}
+      Script: {instanceID: 15308}
     - Class: 114
-      Script: {instanceID: 15360}
+      Script: {instanceID: 15336}
     - Class: 114
-      Script: {instanceID: 15384}
+      Script: {instanceID: 15364}
     - Class: 114
-      Script: {instanceID: 15402}
+      Script: {instanceID: 15388}
     - Class: 114
-      Script: {instanceID: 15414}
+      Script: {instanceID: 15406}
     - Class: 114
-      Script: {instanceID: 15520}
+      Script: {instanceID: 15418}
     - Class: 114
-      Script: {instanceID: 15632}
+      Script: {instanceID: 15524}
     - Class: 114
-      Script: {instanceID: 15636}
+      Script: {instanceID: 15572}
     - Class: 114
-      Script: {instanceID: 15674}
+      Script: {instanceID: 15638}
     - Class: 114
-      Script: {instanceID: 15700}
+      Script: {instanceID: 15642}
     - Class: 114
-      Script: {instanceID: 15774}
+      Script: {instanceID: 15680}
     - Class: 114
-      Script: {instanceID: 15822}
+      Script: {instanceID: 15706}
+    - Class: 114
+      Script: {instanceID: 15780}
     - Class: 114
       Script: {instanceID: 15828}
+    - Class: 114
+      Script: {instanceID: 15834}
+    - Class: 114
+      Script: {instanceID: 18844}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 119
@@ -434,8 +448,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 83
       Script: {instanceID: 0}
-    - Class: 89
-      Script: {instanceID: 0}
     - Class: 91
       Script: {instanceID: 0}
     - Class: 95
@@ -481,33 +493,35 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13500}
     - Class: 114
-      Script: {instanceID: 13540}
+      Script: {instanceID: 13542}
     - Class: 114
-      Script: {instanceID: 13816}
+      Script: {instanceID: 13818}
     - Class: 114
-      Script: {instanceID: 13956}
+      Script: {instanceID: 13958}
     - Class: 114
-      Script: {instanceID: 13968}
+      Script: {instanceID: 13970}
     - Class: 114
-      Script: {instanceID: 14156}
+      Script: {instanceID: 14158}
     - Class: 114
-      Script: {instanceID: 14352}
+      Script: {instanceID: 14354}
     - Class: 114
-      Script: {instanceID: 14368}
+      Script: {instanceID: 14370}
     - Class: 114
-      Script: {instanceID: 14470}
+      Script: {instanceID: 14472}
     - Class: 114
-      Script: {instanceID: 14668}
+      Script: {instanceID: 14648}
     - Class: 114
-      Script: {instanceID: 14742}
+      Script: {instanceID: 14672}
     - Class: 114
-      Script: {instanceID: 15332}
+      Script: {instanceID: 14746}
     - Class: 114
-      Script: {instanceID: 15520}
+      Script: {instanceID: 15336}
     - Class: 114
-      Script: {instanceID: 15610}
+      Script: {instanceID: 15524}
     - Class: 114
-      Script: {instanceID: 15674}
+      Script: {instanceID: 15616}
+    - Class: 114
+      Script: {instanceID: 15680}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 119
@@ -713,7 +727,7 @@ ScriptsOnlyBuild:
     className: BannerPlaceholder
   - hash:
       serializedVersion: 2
-      Hash: ea81ddff7c86c99c3355bed8805ebda3
+      Hash: c97021f4900e1ad8e25845eddf39f1fa
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NetworkController
@@ -1655,7 +1669,7 @@ ScriptsOnlyBuild:
     className: InstantiateCube
   - hash:
       serializedVersion: 2
-      Hash: 40b06a84c97dd87e711db847a319a4ca
+      Hash: e5aa5fbfb260962fe628e4184d4ac0b0
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1737,6 +1751,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp-firstpass.dll
     namespaceName: UnityStandardAssets.Vehicles.Aeroplane
     className: LandingGear
+  - hash:
+      serializedVersion: 2
+      Hash: 3361312d7c8eae8f4b934500e0a56f73
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ProductController
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -2015,7 +2035,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerFoldout
   - hash:
       serializedVersion: 2
-      Hash: 277d24a0844715d86d93f15b06e313d8
+      Hash: 3d304c4b0e37b099a91d489c0c4d4605
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PirateController
@@ -2331,6 +2351,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: UnityStandardAssets.SceneUtils
     className: PlaceTargetWithMouse
+  - hash:
+      serializedVersion: 2
+      Hash: 2f33c97c0f6e50c4f646b0ef2fb1d613
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PistolController
   - hash:
       serializedVersion: 2
       Hash: 0dfb412441a20e4dfb801e21b703aa68
@@ -2771,6 +2797,12 @@ ScriptsOnlyBuild:
     className: Outline
   - hash:
       serializedVersion: 2
+      Hash: e08962ef43458b167cfbde9df2e0ba34
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: MoneysController
+  - hash:
+      serializedVersion: 2
       Hash: 5dea360fb0b147724ac344e6f399c2f3
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -2925,8 +2957,14 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp-firstpass.dll
     namespaceName: UnityStandardAssets.Utility
     className: AutoMobileShaderSwitch
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SkinController
   platform: 13
   scenePathNames:
   - Assets/Scenes/Lobby.unity
   - Assets/Scenes/Main.unity
-  playerPath: C:/unity_builds/caramba_online/android/build(random_room_connect).apk
+  playerPath: C:/unity_builds/caramba_online/android/build(dev).apk

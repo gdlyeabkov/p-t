@@ -581,7 +581,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 307181945}
-  m_LocalRotation: {x: 0.7009093, y: -0.0000007974192, z: 0.00000078362183, w: 0.7132504}
+  m_LocalRotation: {x: 0.7009093, y: 0.0000007974215, z: -0.000000783624, w: 0.7132504}
   m_LocalPosition: {x: 0, y: 175, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2192,7 +2192,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.7009093, y: -0.0000007974192, z: 0.00000078362183, w: 0.7132504}
+  m_LocalRotation: {x: 0.7009093, y: 0.0000007974215, z: -0.000000783624, w: 0.7132504}
   m_LocalPosition: {x: 0, y: 175, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -2871,7 +2871,7 @@ MonoBehaviour:
   pistolCursor: -1
   attackBtn: {fileID: 990699910}
   attackSaberSprite: {fileID: 21300000, guid: 5265cad7d4c26a74591b14d6af32288c, type: 3}
-  attackPistolSprite: {fileID: 21300000, guid: 1b5dfc9c762f17d48a7a34b1252640de, type: 3}
+  attackPistolSprite: {fileID: 21300000, guid: c65d2920dd9de2f4e892a209a9c7c4f9, type: 3}
   fogSkyBox: {fileID: 2100000, guid: 194f4f7b672a9394ea3f66eb95cdb0f5, type: 2}
   productHats:
   - {fileID: -640063867121917104, guid: 728f2f2d2363c3e4ab360f3e98e4bf00, type: 3}
@@ -2879,6 +2879,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: dd00b256ce0446442bddb4db7ab3312d, type: 2}
   water: {fileID: 1002703780}
   isDebug: 1
+  shotSound: {fileID: 8300000, guid: a18777bf35c9d814ab7c28434d9ec277, type: 3}
 --- !u!4 &1108205869
 Transform:
   m_ObjectHideFlags: 0

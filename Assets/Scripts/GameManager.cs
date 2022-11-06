@@ -65,6 +65,7 @@ public class GameManager : PunBehaviour
     public List<Material> productHats;
     public GameObject water;
     public bool isDebug;
+    public AudioClip shotSound;
 
     void Start()
     {

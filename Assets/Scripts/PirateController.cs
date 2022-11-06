@@ -2554,6 +2554,11 @@ public class PirateController : MonoBehaviour
 
     public void Shoot()
     {
+
+        AudioClip shotSound = gameManager.shotSound;
+        GetComponent<AudioSource>().clip = shotSound;
+        GetComponent<AudioSource>().Play();
+
         Rigidbody body = null;
         RaycastHit hit;
         Vector3 direction = transform.TransformDirection(Vector3.forward) * 350f;
