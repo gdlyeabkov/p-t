@@ -151,8 +151,8 @@ public class GameManager : PunBehaviour
                     Transform respawnPoint = respawnPoints[i];
                     randomPosition = respawnPoint.position;
                     Quaternion baseRotation = Quaternion.identity;
-                    // GameObject pirate = PhotonNetwork.Instantiate("animated_pirate", randomPosition, baseRotation, 0);
-                    GameObject pirate = PhotonNetwork.Instantiate("shooted_grabbed_pirate", randomPosition, baseRotation, 0);
+                    // GameObject pirate = PhotonNetwork.Instantiate("shooted_grabbed_pirate", randomPosition, baseRotation, 0);
+                    GameObject pirate = PhotonNetwork.Instantiate("skinned_pirate", randomPosition, baseRotation, 0);
                 }
 
                 CreateNetworkBots();
@@ -880,12 +880,15 @@ public class GameManager : PunBehaviour
     {
 
         int skinIndex = PlayerPrefs.GetInt("PickedHat");
-        SkinnedMeshRenderer bodyRenderer = localPirate.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
+        /*SkinnedMeshRenderer bodyRenderer = localPirate.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
         Material[] materials = bodyRenderer.materials;
         List<Material> playerMaterials = productHats;
         Material playerMaterial = playerMaterials[skinIndex];
         materials[0] = playerMaterial;
-        bodyRenderer.materials = materials;
+        bodyRenderer.materials = materials;*/
+        List<GameObject> hats = localPirate.hats;
+        GameObject hat = hats[skinIndex];
+        hat.SetActive(true);
         if (isStandardMode)
         {
             object[] networkData = new object[] { localPirate.networkIndex, skinIndex };

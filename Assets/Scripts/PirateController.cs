@@ -44,6 +44,7 @@ public class PirateController : MonoBehaviour
     private Coroutine answersCoroutine;
     public float ratio = 1f;
     public bool isHavePistol = false;
+    public List<GameObject> hats;
 
     void Start()
     {
@@ -1030,12 +1031,8 @@ public class PirateController : MonoBehaviour
                 bool isLocalPirate = index == localIndex;
                 if (isLocalPirate)
                 {
-                    SkinnedMeshRenderer bodyRenderer = transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
-                    Material[] materials = bodyRenderer.materials;
-                    List<Material> playerMaterials = gameManager.productHats;
-                    Material playerMaterial = playerMaterials[skin];
-                    materials[0] = playerMaterial;
-                    bodyRenderer.materials = materials;
+                    GameObject hat = hats[skin];
+                    hat.SetActive(true);
                 }
             }
             catch (System.InvalidCastException)
