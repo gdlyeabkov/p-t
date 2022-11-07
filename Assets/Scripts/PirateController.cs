@@ -83,7 +83,7 @@ public class PirateController : MonoBehaviour
             Transform head = neck.GetChild(0);
             StartCoroutine(SetPlayerCamera());
 
-            gameManager.LoadSkin();
+            // gameManager.LoadSkin();
 
         }
 
@@ -2294,6 +2294,8 @@ public class PirateController : MonoBehaviour
             Vector3 randomPosition = respawnPoint.position;
             localBot.GetComponent<NavMeshAgent>().nextPosition = randomPosition;
         }
+
+        gameManager.LoadSkin();
 
     }
 

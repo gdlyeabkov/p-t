@@ -317,6 +317,7 @@ public class GameManager : PunBehaviour
     {
         bool isGameOverEvent = eventCode == 196;
         bool isPirateAnimationEvent = eventCode == 194;
+        bool isFogEvent = eventCode == 183;
         if (isGameOverEvent)
         {
             try
@@ -413,6 +414,13 @@ public class GameManager : PunBehaviour
                 string photonError = "Не могу передать photon данные";
                 Debug.Log(photonError);
             }
+        }
+        else if (isFogEvent)
+        {
+            RenderSettings.fog = true;
+            RenderSettings.fogDensity = 0.3f;
+            RenderSettings.skybox = fogSkyBox;
+            water.SetActive(false);
         }
     }
 
@@ -857,6 +865,14 @@ public class GameManager : PunBehaviour
             RenderSettings.fogDensity = 0.3f;
             RenderSettings.skybox = fogSkyBox;
             water.SetActive(false);
+            if (isStandardMode)
+            {
+                object[] networkData = new object[] { };
+                PhotonNetwork.RaiseEvent(183, networkData, true, new RaiseEventOptions
+                {
+                    Receivers = ReceiverGroup.Others
+                });
+            }
         }
     }
 
