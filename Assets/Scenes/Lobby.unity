@@ -6319,7 +6319,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 9d84e9892ae63e544a2f45f67a8f7afd, type: 2}
   - {fileID: 2100000, guid: dbdcda427f71b62429bfa78722fe9486, type: 2}
   - {fileID: 2100000, guid: dd00b256ce0446442bddb4db7ab3312d, type: 2}
-  isDebug: 0
+  isDebug: 1
   selectedColor: {r: 0.2901961, g: 0.73333335, b: 0.78431374, a: 1}
   unselectedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1961700050

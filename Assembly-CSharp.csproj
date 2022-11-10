@@ -222,6 +222,7 @@
      <Compile Include="Assets\Scripts\BoatController.cs" />
      <Compile Include="Assets\Scripts\BotController.cs" />
      <Compile Include="Assets\Scripts\CameraTracker.cs" />
+     <Compile Include="Assets\Scripts\CompasController.cs" />
      <Compile Include="Assets\Scripts\CrossController.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Network\NetworkController.cs" />
