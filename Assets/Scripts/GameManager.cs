@@ -151,8 +151,8 @@ public class GameManager : PunBehaviour
                     Transform respawnPoint = respawnPoints[i];
                     randomPosition = respawnPoint.position;
                     Quaternion baseRotation = Quaternion.identity;
-                    // GameObject pirate = PhotonNetwork.Instantiate("shooted_grabbed_pirate", randomPosition, baseRotation, 0);
-                    GameObject pirate = PhotonNetwork.Instantiate("skinned_pirate", randomPosition, baseRotation, 0);
+                    // GameObject pirate = PhotonNetwork.Instantiate("skinned_pirate", randomPosition, baseRotation, 0);
+                    GameObject pirate = PhotonNetwork.Instantiate("skinned_pirate_original", randomPosition, baseRotation, 0);
                 }
 
                 CreateNetworkBots();

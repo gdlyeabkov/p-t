@@ -1,0 +1,154 @@
+fileFormatVersion: 2
+guid: ea6e8bac93e2da34c81969aef7f87908
+ModelImporter:
+  serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      74: -8175496467035152462
+    second: Armature.001|Armature.001|Armature.001|Attack|Armature.001|Attack
+  - first:
+      74: 8105341532533030805
+    second: Armature.001|Armature.001|Armature.001|Dig|Armature.001|Dig
+  - first:
+      74: 7399048941278613462
+    second: Armature.001|Armature.001|Armature.001|Grab_Idle|Armature.001|Grab_Idle
+  - first:
+      74: 5811090768382184749
+    second: Armature.001|Armature.001|Armature.001|Grab_Walk|Armature.001|Grab_Walk
+  - first:
+      74: -1635795170123336110
+    second: Armature.001|Armature.001|Armature.001|Idle|Armature.001|Idle
+  - first:
+      74: 3531723955459338995
+    second: Armature.001|Armature.001|Armature.001|Loose|Armature.001|Loose
+  - first:
+      74: 5312486194641960220
+    second: Armature.001|Armature.001|Armature.001|Paint|Armature.001|Paint
+  - first:
+      74: 1818146226296565506
+    second: Armature.001|Armature.001|Armature.001|Pull|Armature.001|Pull
+  - first:
+      74: -5565149064254986311
+    second: Armature.001|Armature.001|Armature.001|Victory|Armature.001|Victory
+  - first:
+      74: -8011184999860119336
+    second: Armature.001|Armature.001|Armature.001|Walk|Armature.001|Shoot
+  - first:
+      74: -1340398103216166481
+    second: Armature.001|Armature.001|Armature.001|Walk|Armature.001|Walk
+  - first:
+      74: -2733394004612025818
+    second: Armature.001|Cube|Cube|CubeAction|Cube|CubeAction
+  - first:
+      74: 957558299408500014
+    second: Armature.001|Cube|Cube|CubeAction|Cube|CubeAction.001
+  - first:
+      74: 783417488840380668
+    second: Armature.001|Cube|Cube|CubeAction|Cube|CubeAction.002
+  - first:
+      74: -7333836351383876407
+    second: Armature.001|Cube|Cube|CubeAction|Cube|CubeAction.003
+  - first:
+      74: -8044294841358570684
+    second: viking_helmet|Cube|Cube|CubeAction|Cube|CubeAction
+  - first:
+      74: -2858728671530412576
+    second: viking_helmet|Cube|Cube|CubeAction|Cube|CubeAction.001
+  - first:
+      74: -5463517129187972467
+    second: viking_helmet|Cube|Cube|CubeAction|Cube|CubeAction.002
+  - first:
+      74: -6317850475006717582
+    second: viking_helmet|Cube|Cube|CubeAction|Cube|CubeAction.003
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

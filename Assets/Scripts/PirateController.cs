@@ -2274,7 +2274,8 @@ public class PirateController : MonoBehaviour
     public IEnumerator SetPlayerCamera()
     {
         yield return new WaitForSeconds(5f);
-        Transform head = transform.GetChild(6);
+        // Transform head = transform.GetChild(6);
+        Transform head = transform.GetChild(7);
         gameManager.viewCamera.Follow = head;
         gameManager.viewCamera.LookAt = head;
         gameManager.isInit = true;

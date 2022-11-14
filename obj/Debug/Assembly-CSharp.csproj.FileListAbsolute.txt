@@ -303,3 +303,7 @@ C:\unity_projects\CarambaOnline\obj\Debug\Assembly-CSharp.csproj.CoreCompileInpu
 C:\unity_projects\CarambaOnline\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\unity_projects\CarambaOnline\obj\Debug\Assembly-CSharp.dll
 C:\unity_projects\CarambaOnline\obj\Debug\Assembly-CSharp.pdb
+C:\unity_projects\CarambaOnline\Temp\bin\Debug\UnityEditor.iOS.Extensions.Common.dll
+C:\unity_projects\CarambaOnline\Temp\bin\Debug\UnityEditor.iOS.Extensions.Xcode.dll
+C:\unity_projects\CarambaOnline\Temp\bin\Debug\UnityEditor.iOS.Extensions.Xcode.pdb
+C:\unity_projects\CarambaOnline\Temp\bin\Debug\UnityEditor.iOS.Extensions.Common.pdb
