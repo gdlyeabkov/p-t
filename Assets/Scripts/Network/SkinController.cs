@@ -6,6 +6,7 @@ public class SkinController : MonoBehaviour
 {
 
     Vector3 lastMousePos;
+    public List<GameObject> hats;
 
     void OnMouseDrag()
     {

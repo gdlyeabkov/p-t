@@ -1463,6 +1463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58aa094f314ba654397ada2d1960e953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hats: []
 --- !u!1 &226707277
 GameObject:
   m_ObjectHideFlags: 0
@@ -2355,6 +2356,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
+      objectReference: {fileID: 4835078630258379571, guid: ea6e8bac93e2da34c81969aef7f87908,
+        type: 3}
+    - target: {fileID: 8255388446494372661, guid: 63960770b65a5184784c6f45687f48fd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
       objectReference: {fileID: 2100000, guid: b3eeaf2c3ffa3be40afb0363098a65be, type: 2}
     - target: {fileID: 8491616755648095383, guid: 63960770b65a5184784c6f45687f48fd,
         type: 3}
@@ -2521,6 +2528,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58aa094f314ba654397ada2d1960e953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hats:
+  - {fileID: 1861471186}
+  - {fileID: 526107430}
+  - {fileID: 526107429}
+--- !u!1 &526107429 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4924261820969680008, guid: 63960770b65a5184784c6f45687f48fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 526107424}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &526107430 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 980878146827109955, guid: 63960770b65a5184784c6f45687f48fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 526107424}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &537127272
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6558,6 +6581,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1841843638}
   m_CullTransparentMesh: 0
+--- !u!1 &1861471186 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2056993808979589401, guid: 63960770b65a5184784c6f45687f48fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 526107424}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1864562028
 GameObject:
   m_ObjectHideFlags: 0
@@ -6741,7 +6770,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6914e886acc21e74b9ea4867e889491b, type: 3}
   successSound: {fileID: 8300000, guid: a76252273f64d69479df44adf5d1679a, type: 3}
   wrongSound: {fileID: 8300000, guid: 77c6f38360982a742ba534e13cdf25e4, type: 3}
-  skin: {fileID: 210666446}
+  skin: {fileID: 526107426}
   productHats:
   - {fileID: 2100000, guid: 9d84e9892ae63e544a2f45f67a8f7afd, type: 2}
   - {fileID: 2100000, guid: dbdcda427f71b62429bfa78722fe9486, type: 2}

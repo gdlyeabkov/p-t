@@ -880,12 +880,6 @@ public class GameManager : PunBehaviour
     {
 
         int skinIndex = PlayerPrefs.GetInt("PickedHat");
-        /*SkinnedMeshRenderer bodyRenderer = localPirate.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
-        Material[] materials = bodyRenderer.materials;
-        List<Material> playerMaterials = productHats;
-        Material playerMaterial = playerMaterials[skinIndex];
-        materials[0] = playerMaterial;
-        bodyRenderer.materials = materials;*/
         List<GameObject> hats = localPirate.hats;
         GameObject hat = hats[skinIndex];
         hat.SetActive(true);

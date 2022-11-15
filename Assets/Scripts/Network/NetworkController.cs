@@ -594,12 +594,20 @@ public class NetworkController : PunBehaviour
 
 	public void LoadSkin()
 	{
-		SkinnedMeshRenderer bodyRenderer = skin.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
+		/*SkinnedMeshRenderer bodyRenderer = skin.transform.GetChild(1).gameObject.GetComponent<SkinnedMeshRenderer>();
 		Material[] materials = bodyRenderer.materials;
 		List<Material> playerMaterials = productHats;
 		Material playerMaterial = playerMaterials[PlayerPrefs.GetInt("PickedHat")];
 		materials[0] = playerMaterial;
-		bodyRenderer.materials = materials;
+		bodyRenderer.materials = materials;*/
+		int skinIndex = PlayerPrefs.GetInt("PickedHat");
+		List<GameObject> hats = skin.GetComponent<SkinController>().hats;
+		foreach (GameObject localHat in hats)
+        {
+			localHat.SetActive(false);
+		}
+		GameObject hat = hats[skinIndex];
+		hat.SetActive(true);
 	}
 
 }
