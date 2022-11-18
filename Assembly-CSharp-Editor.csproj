@@ -62,6 +62,9 @@
      <Compile Include="Assets\Joystick Pack\Scripts\Editor\JoystickEditor.cs" />
      <Compile Include="Assets\Joystick Pack\Scripts\Editor\VariableJoystickEditor.cs" />
      <Compile Include="Assets\LowPolyWater_Pack\Scripts\Editor\GeneratePlane.cs" />
+     <Compile Include="Assets\MaterialIcons\Editor\MaterialIconEditor.cs" />
+     <Compile Include="Assets\MaterialIcons\Editor\MaterialIconSelectionWindow.cs" />
+     <Compile Include="Assets\MaterialIcons\Editor\MenuOptions.cs" />
      <Compile Include="Assets\Photon Unity Networking\Demos\DemoHub\Editor\PunStartup.cs" />
      <Compile Include="Assets\Photon Unity Networking\Editor\PhotonNetwork\AccountService.cs" />
      <Compile Include="Assets\Photon Unity Networking\Editor\PhotonNetwork\CullAreaEditor.cs" />

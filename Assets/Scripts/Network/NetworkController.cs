@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon;
+using Google.MaterialDesign.Icons;
 
 public class NetworkController : PunBehaviour
 {
@@ -492,10 +493,12 @@ public class NetworkController : PunBehaviour
 		if (isPick)
         {
 			buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Pick";
+			buyBtn.transform.GetChild(1).GetComponent<MaterialIcon>().iconUnicode = "e3ae";
 		}
 		else
 		{
 			buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Buy";
+			buyBtn.transform.GetChild(1).GetComponent<MaterialIcon>().iconUnicode = "e227";
 		}
 		buyBtn.interactable = true;
 
@@ -545,6 +548,10 @@ public class NetworkController : PunBehaviour
 				int price = productController.price;
 				string rawPrice = price.ToString();
 				productPriceLabel.text = rawPrice;
+
+				Transform productPriceIconTransform = products[activeProductIndex].transform.GetChild(2);
+				productPriceIconTransform.gameObject.SetActive(false);
+
 			}
 
 		}
@@ -569,10 +576,14 @@ public class NetworkController : PunBehaviour
 				LoadSkin();
 
 				buyBtn.transform.GetChild(0).GetComponent<Text>().text = "Pick";
+				buyBtn.transform.GetChild(1).GetComponent<MaterialIcon>().iconUnicode = "e3ae";
 
 				Transform productPriceLabelTransform = products[activeProductIndex].transform.GetChild(1);
 				Text productPriceLabel = productPriceLabelTransform.GetComponent<Text>();
-				productPriceLabel.text = "sold";
+				productPriceLabel.text = "";
+
+				Transform productPriceIconTransform = products[activeProductIndex].transform.GetChild(2);
+				productPriceIconTransform.gameObject.SetActive(true);
 
 			}
 			else

@@ -64,6 +64,7 @@
      <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FloatingJoystick.cs" />
      <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
      <Compile Include="Assets\LowPolyWater_Pack\Scripts\LowPolyWater.cs" />
+     <Compile Include="Assets\MaterialIcons\MaterialIcon.cs" />
      <Compile Include="Assets\MoneysController.cs" />
      <Compile Include="Assets\Photon Unity Networking\Demos\Demo2DJumpAndRunWithPhysics\Scripts\Demo2DJumpAndRun.cs" />
      <Compile Include="Assets\Photon Unity Networking\Demos\Demo2DJumpAndRunWithPhysics\Scripts\JumpAndRunMovement.cs" />
@@ -240,6 +241,7 @@
      <Compile Include="Assets\SimpleCumulus\Demo\Scripts\Skybox\SkyboxChanger.cs" />
      <Compile Include="Assets\SimpleCumulus\Demo\Scripts\Skybox\SkyboxRotator.cs" />
      <Compile Include="Assets\Unity\ConstraintSamples\Scripts\mParent.cs" />
+     <None Include="Assets\MaterialIcons\readme.txt" />
      <None Include="Assets\Photon Unity Networking\Demos\DemoRockPaperScissors\Assets\OpenSans\Apache License.txt" />
      <None Include="Assets\Photon Unity Networking\changelog.txt" />
      <None Include="Assets\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />
