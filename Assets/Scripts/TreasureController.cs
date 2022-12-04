@@ -16,4 +16,16 @@ public class TreasureController : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        GameObject detectedObject = other.gameObject;
+        string objectTag = detectedObject.tag;
+        bool isPlayer = objectTag == "Player";
+        if (isPlayer)
+        {
+            
+        }
+    }
+
 }

@@ -3457,8 +3457,8 @@ MonoBehaviour:
   isMiniGame: 0
   miniGameCursor: 0
   isShovelFound: 0
-  leftHandController: {fileID: 0}
-  rightHandController: {fileID: 0}
+  leftHandController: {fileID: 9051466825511459679}
+  rightHandController: {fileID: 6964760230155759144}
   foundedShovel: {fileID: 0}
   cameraTarget: {fileID: 7085435571361183836}
   answers: 
@@ -3473,6 +3473,8 @@ MonoBehaviour:
   - {fileID: 2056993808979589401}
   - {fileID: 980878146827109955}
   - {fileID: 4924261820969680008}
+  isTreasureFound: 0
+  treasureDetectRadius: 0.7
 --- !u!1 &7654400672746315551
 GameObject:
   m_ObjectHideFlags: 0

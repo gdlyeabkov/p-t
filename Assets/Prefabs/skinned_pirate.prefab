@@ -2162,6 +2162,8 @@ MonoBehaviour:
   - {fileID: 4675902172044738797}
   - {fileID: 2062957022828186252}
   - {fileID: 1040100158695922898}
+  isTreasureFound: 0
+  treasureDetectRadius: 0.7
 --- !u!1 &4027481692158819296
 GameObject:
   m_ObjectHideFlags: 0

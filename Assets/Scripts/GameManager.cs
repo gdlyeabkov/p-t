@@ -608,7 +608,7 @@ public class GameManager : PunBehaviour
         if (!isInit)
         {
             agent.Warp(destination);
-        }
+        }     
         pirateController.destination = destination;
     }
 
