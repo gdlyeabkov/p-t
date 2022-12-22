@@ -2246,6 +2246,8 @@ GameObject:
   - component: {fileID: 7000558697090443981}
   - component: {fileID: 8662143939280124802}
   - component: {fileID: 441786519822537531}
+  - component: {fileID: 8409805577077765435}
+  - component: {fileID: 1735057737731879662}
   m_Layer: 0
   m_Name: treasure_chest_closed
   m_TagString: Untagged
@@ -2315,6 +2317,35 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &8409805577077765435
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5339101879051479189}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4360479, y: 0.3022959, z: 0.46089593}
+  m_Center: {x: -0.21826166, y: 1.7026112, z: 0.051562086}
+--- !u!54 &1735057737731879662
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5339101879051479189}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5405551072723786367
 GameObject:
   m_ObjectHideFlags: 0

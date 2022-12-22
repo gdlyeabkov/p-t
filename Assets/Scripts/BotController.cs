@@ -183,4 +183,74 @@ public class BotController : MonoBehaviour
         }
     }
 
+    /*
+    Работает, но можно через GameManager
+    public void Update()
+    {
+        Camera mainCamera = Camera.main;
+        GameObject rawMainCamera = mainCamera.gameObject;
+        CameraTracker cameraTracker = rawMainCamera.GetComponent<CameraTracker>();
+        GameManager gameManager = cameraTracker.gameManager;
+        GameObject treasureInst = gameManager.treasureInst;
+        bool isTreasureExists = treasureInst != null;
+        if (isTreasureExists)
+        {
+            SpringJoint joint = treasureInst.GetComponent<SpringJoint>();
+            Rigidbody treasureBody = joint.connectedBody;
+            bool isTreasureFree = treasureBody == null;
+            if (isTreasureFree)
+            {
+                Debug.LogWarning("isTreasureFree: " + isTreasureFree);
+                PirateController pirateController = transform.GetChild(0).GetComponent<PirateController>();
+                Transform agentTarget = pirateController.agentTarget;
+                bool isPickTreasure = agentTarget == treasureInst.transform;
+                if (isPickTreasure)
+                {
+                    Debug.LogWarning("isPickTreasure: " + isPickTreasure);
+                    Collider[] subjects = Physics.OverlapSphere(transform.position, 0.7f);
+                    bool isTreasureDetected = false;
+                    // bool isTreasureDetected = GetComponent<NavMeshAgent>().remainingDistance <= 0.7f;
+                    foreach (Collider subject in subjects)
+                    {
+                        GameObject someSubject = subject.gameObject;
+                        string someSubjectTag = someSubject.tag;
+                        bool isTreasure = someSubjectTag == "Treasure";
+                        if (isTreasure)
+                        {
+                            isTreasureDetected = true;
+                            break;
+                        }
+                    }
+                    if (isTreasureDetected)
+                    {
+                        Debug.LogWarning("isTreasureDetected: " + isTreasureDetected);
+                        Rigidbody pirateBody = GetComponent<Rigidbody>();
+                        treasureInst.GetComponent<SpringJoint>().connectedBody = pirateBody;
+                        pirateController.GetComponent<Animator>().SetBool("isGrab", true);
+                        Transform pirateTransform = pirateController.transform;
+                        Transform armature = pirateTransform.GetChild(0);
+                        Transform hips = armature.GetChild(0);
+                        Transform spine = hips.GetChild(2);
+                        Transform spine1 = spine.GetChild(0);
+                        Transform spine2 = spine1.GetChild(0);
+                        Transform rightSholder = spine2.GetChild(2);
+                        Transform rightArm = rightSholder.GetChild(0);
+                        Transform rightForeArm = rightArm.GetChild(0);
+                        Transform rightHand = rightForeArm.GetChild(0);
+                        Transform treasureTransform = rightHand.GetChild(2);
+                        GameObject treasure = treasureTransform.gameObject;
+                        treasure.SetActive(true);
+                        treasureInst.transform.position = pirateBody.position;
+                        treasureInst.SetActive(false);
+                        treasureInst.GetComponent<MeshRenderer>().enabled = false;
+                        pirateController.GetComponent<Animator>().Play("Grab_Idle");
+                        List<GameObject> boats = gameManager.boats;
+                        pirateController.agentTarget = boats[pirateController.localIndex].transform;
+                        pirateController.destination = boats[pirateController.localIndex].transform.position;
+                    }
+                }
+            }
+        }
+    }*/
+
 }

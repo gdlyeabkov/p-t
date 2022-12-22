@@ -1364,14 +1364,7 @@ public class PirateController : MonoBehaviour
                                         gameManager.treasureInst.GetComponent<MeshRenderer>().enabled = false;
                                         GetComponent<Animator>().Play("Grab_Idle");
                                     }
-                                    /*else if (Physics.Raycast(Camera.main.transform.position, direction, out hit, 350f))
-                                    {
-                                        if (hit.collider.GetComponent<TreasureController>() != null)
-                                        {
-                                            gameManager.treasureInst.GetComponent<SpringJoint>().connectedBody = pirateBody;
-                                            GetComponent<Animator>().SetBool("isGrab", true);
-                                        }
-                                    }*/
+                                    
                                 }
                             } 
                         }
@@ -2237,6 +2230,8 @@ public class PirateController : MonoBehaviour
                                 GameObject treasure = treasureTransform.gameObject;
                                 treasure.SetActive(false);
 
+                                gameManager.GiveOrder(colliderObject);
+
                             }
                         }
 
@@ -2349,6 +2344,10 @@ public class PirateController : MonoBehaviour
                     colliderObject.transform.GetChild(i).gameObject.SetActive(false);
                 }
             }
+            else
+            {
+                colliderObject.transform.GetChild(i).gameObject.SetActive(true);
+            }
         }
         yield return new WaitForSeconds(10f);
         colliderObject.GetComponent<PirateController>().StopAllCoroutines();
@@ -2370,6 +2369,10 @@ public class PirateController : MonoBehaviour
                 {
                     colliderObject.transform.GetChild(i).gameObject.SetActive(true);
                 }
+            }
+            else
+            {
+                colliderObject.transform.GetChild(i).gameObject.SetActive(true);
             }
         }
     }

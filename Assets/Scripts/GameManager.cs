@@ -66,6 +66,7 @@ public class GameManager : PunBehaviour
     public GameObject water;
     public bool isDebug;
     public AudioClip shotSound;
+    public float treasureDetectRadius = 0.7f;
 
     void Start()
     {
@@ -92,7 +93,6 @@ public class GameManager : PunBehaviour
                 float coordY = -0.9f;
                 float randomCoordZ = 0f;
                 Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-                // float randomRotation = Random.Range(-4.5f, 4.5f);
                 float randomRotation = Random.Range(-4.0f, 4.0f);
                 Vector3 islandSphereTransformPosition = islandSphereTransform.position;
                 Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
@@ -172,7 +172,6 @@ public class GameManager : PunBehaviour
             float coordY = -0.9f;
             float randomCoordZ = 0f;
             Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-            // float randomRotation = Random.Range(-4.5f, 4.5f);
             float randomRotation = Random.Range(-4.0f, 4.0f);
             Vector3 islandSphereTransformPosition = islandSphereTransform.position;
             Vector3 crossRotationAxes = new Vector3(1f, 0f, 1f);
@@ -303,7 +302,6 @@ public class GameManager : PunBehaviour
         }
         PaintController paintController = paintGo.GetComponent<PaintController>();
         paintController.isOwner = true;
-        // float randomRotation = Random.Range(-5f, 5f);
         float randomRotation = Random.Range(-4.0f, 4.0f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         Vector3 paintRotationAxes = new Vector3(1f, 0f, 1f);
@@ -452,7 +450,6 @@ public class GameManager : PunBehaviour
             shovel = Instantiate(shovelPrefab, shovelPosition, shovelRotation);
         }
 
-        // float randomRotation = Random.Range(-5f, 5f);
         float randomRotation = Random.Range(-4.0f, 4.0f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         Vector3 shovelRotationAxes = new Vector3(1f, 1f, 0f);
@@ -508,48 +505,145 @@ public class GameManager : PunBehaviour
         GameObject pirate = pirateTransform.gameObject;
         PirateController pirateController = pirate.GetComponent<PirateController>();
         NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
-        float target = Random.Range(0, 4);
+        float target = Random.Range(0, 5);
         Vector3 destination = Vector3.zero;
         bool isCaptureCross = target == 0;
         bool isCapturePaint = target == 1;
         bool isAttack = target == 2;
         bool isCapturePistol = target == 3;
-        if (isCaptureCross)
+        bool isPickTreasure = target == 4;
+        bool isTreasureOpened = treasureInst != null;
+        bool isTreasureNotOpened = !isTreasureOpened;
+        SpringJoint treasureJoint = null;
+        Rigidbody treasureJointBody = null;
+        if (isTreasureOpened) {
+            treasureJoint = treasureInst.GetComponent<SpringJoint>();
+            treasureJointBody = treasureJoint.connectedBody;
+        }
+        Rigidbody botBody = pirateWrap.GetComponent<Rigidbody>();
+        bool isLastMission = treasureJointBody == botBody;
+        bool isNotLastMission = !isLastMission;
+        bool isLastChanse = isTreasureOpened && isNotLastMission;
+        bool isCanToggleOrder = isTreasureNotOpened || isLastChanse;
+        if (isCanToggleOrder)
         {
-            bool isHaveShovel = pirateController.isHaveShovel;
-            bool isShovelExists = shovel != null;
-            if (isHaveShovel)
+            if (isCaptureCross)
             {
-                Transform agentTarget = cross.transform;
-                destination = agentTarget.position;
-                pirateController.agentTarget = agentTarget;
+                bool isHaveShovel = pirateController.isHaveShovel;
+                bool isShovelExists = shovel != null;
+                if (isHaveShovel)
+                {
+                    Transform agentTarget = cross.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
+                }
+                else if (isShovelExists)
+                {
+                    Transform agentTarget = shovel.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
+                }
+                else if (treasureInst != null)
+                {
+                    SpringJoint joint = treasureInst.GetComponent<SpringJoint>();
+                    Rigidbody treasureOwnerBody = joint.connectedBody;
+                    bool isTreasureFree = treasureOwnerBody == null;
+                    if (isTreasureFree)
+                    {
+                        Transform agentTarget = treasureInst.transform;
+                        destination = agentTarget.position;
+                        pirateController.agentTarget = agentTarget;
+                    }
+                }
+                else
+                {
+                    Transform agentTarget = localPirate.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
+                }
             }
-            else if (isShovelExists)
+            else if (isCapturePaint)
             {
-                Transform agentTarget = shovel.transform;
-                destination = agentTarget.position;
-                pirateController.agentTarget = agentTarget;
+                int countPaints = paints.Count;
+                bool isHavePaints = countPaints >= 1;
+                if (isHavePaints)
+                {
+                    GameObject somePaint = paints[0];
+                    bool isPaintExists = somePaint != null;
+                    if (isPaintExists)
+                    {
+                        Transform agentTarget = somePaint.transform;
+                        destination = agentTarget.position;
+                        pirateController.agentTarget = agentTarget;
+                    }
+                    else
+                    {
+                        Transform agentTarget = localPirate.transform;
+                        destination = agentTarget.position;
+                        pirateController.agentTarget = agentTarget;
+                    }
+                }
+                else
+                {
+                    Transform agentTarget = localPirate.transform;
+                    destination = agentTarget.position;
+                    pirateController.agentTarget = agentTarget;
+                }
             }
-            else
+            else if (isAttack)
             {
                 Transform agentTarget = localPirate.transform;
                 destination = agentTarget.position;
                 pirateController.agentTarget = agentTarget;
             }
-        }
-        else if (isCapturePaint)
-        {
-            int countPaints = paints.Count;
-            bool isHavePaints = countPaints >= 1;
-            if (isHavePaints)
+            else if (isCapturePistol)
             {
-                GameObject somePaint = paints[0];
-                bool isPaintExists = somePaint != null;
-                if (isPaintExists)
+                int countPistols = pistols.Count;
+                bool isHavePistols = countPistols >= 1;
+                if (isHavePistols)
                 {
-                    Transform agentTarget = somePaint.transform;
+                    GameObject somePistol = pistols[0];
+                    bool isPistolExists = somePistol != null;
+                    if (isPistolExists)
+                    {
+                        Transform agentTarget = somePistol.transform;
+                        destination = agentTarget.position;
+                        pirateController.agentTarget = agentTarget;
+                    }
+                    else
+                    {
+                        Transform agentTarget = localPirate.transform;
+                        destination = agentTarget.position;
+                        pirateController.agentTarget = agentTarget;
+                    }
+                }
+                else
+                {
+                    Transform agentTarget = localPirate.transform;
                     destination = agentTarget.position;
                     pirateController.agentTarget = agentTarget;
+                }
+            }
+            else if (isPickTreasure)
+            {
+                bool isTreasureExists = treasureInst != null;
+                if (isTreasureExists)
+                {
+                    SpringJoint joint = treasureInst.GetComponent<SpringJoint>();
+                    Rigidbody pirateBody = joint.connectedBody;
+                    bool isTreasureFree = pirateBody == null;
+                    if (isTreasureFree)
+                    {
+                        Transform agentTarget = treasureInst.transform;
+                        destination = agentTarget.position;
+                        pirateController.agentTarget = agentTarget;
+                    }
+                    else
+                    {
+                        Transform agentTarget = localPirate.transform;
+                        destination = agentTarget.position;
+                        pirateController.agentTarget = agentTarget;
+                    }
                 }
                 else
                 {
@@ -564,46 +658,6 @@ public class GameManager : PunBehaviour
                 destination = agentTarget.position;
                 pirateController.agentTarget = agentTarget;
             }
-        }
-        else if (isAttack)
-        {
-            Transform agentTarget = localPirate.transform;
-            destination = agentTarget.position;
-            pirateController.agentTarget = agentTarget;
-        }
-        else if (isCapturePistol)
-        {
-            int countPistols = pistols.Count;
-            bool isHavePistols = countPistols >= 1;
-            if (isHavePistols)
-            {
-                GameObject somePistol = pistols[0];
-                bool isPistolExists = somePistol != null;
-                if (isPistolExists)
-                {
-                    Transform agentTarget = somePistol.transform;
-                    destination = agentTarget.position;
-                    pirateController.agentTarget = agentTarget;
-                }
-                else
-                {
-                    Transform agentTarget = localPirate.transform;
-                    destination = agentTarget.position;
-                    pirateController.agentTarget = agentTarget;
-                }
-            }
-            else
-            {
-                Transform agentTarget = localPirate.transform;
-                destination = agentTarget.position;
-                pirateController.agentTarget = agentTarget;
-            }
-        }
-        else
-        {
-            Transform agentTarget = localPirate.transform;
-            destination = agentTarget.position;
-            pirateController.agentTarget = agentTarget;
         }
         if (!isInit)
         {
@@ -685,7 +739,6 @@ public class GameManager : PunBehaviour
                 Transform agentTarget = pirateController.agentTarget;
                 bool isTargetExists = agentTarget != null;
                 bool isOnNavMesh = agent.isOnNavMesh;
-                // bool isUpdateBot = isTargetExists && isOnNavMesh;
                 bool isUpdateBot = (isTargetExists && isOnNavMesh) || (pirateController.networkIndex != 0);
                 if (isUpdateBot)
                 {
@@ -709,15 +762,69 @@ public class GameManager : PunBehaviour
                             {
                                 pirate.transform.rotation = lookRotation;
                             }
+
+                            bool isTreasureExists = treasureInst != null;
+                            if (isTreasureExists)
+                            {
+                                SpringJoint joint = treasureInst.GetComponent<SpringJoint>();
+                                Rigidbody treasureBody = joint.connectedBody;
+                                bool isTreasureFree = treasureBody == null;
+                                if (isTreasureFree)
+                                {
+                                    bool isPickTreasure = agentTarget == treasureInst.transform;
+                                    if (isPickTreasure)
+                                    {
+                                        Collider[] subjects = Physics.OverlapSphere(agent.transform.position, treasureDetectRadius);
+                                        bool isTreasureDetected = false;
+                                        foreach (Collider subject in subjects)
+                                        {
+                                            GameObject someSubject = subject.gameObject;
+                                            string someSubjectTag = someSubject.tag;
+                                            bool isTreasure = someSubjectTag == "Treasure";
+                                            if (isTreasure)
+                                            {
+                                                isTreasureDetected = true;
+                                                break;
+                                            }
+                                        }
+                                        if (isTreasureDetected)
+                                        {
+                                            Rigidbody pirateBody = pirateWrap.GetComponent<Rigidbody>();
+                                            treasureInst.GetComponent<SpringJoint>().connectedBody = pirateBody;
+                                            pirateController.GetComponent<Animator>().SetBool("isGrab", true);
+                                            Transform armature = pirateTransform.GetChild(0);
+                                            Transform hips = armature.GetChild(0);
+                                            Transform spine = hips.GetChild(2);
+                                            Transform spine1 = spine.GetChild(0);
+                                            Transform spine2 = spine1.GetChild(0);
+                                            Transform rightSholder = spine2.GetChild(2);
+                                            Transform rightArm = rightSholder.GetChild(0);
+                                            Transform rightForeArm = rightArm.GetChild(0);
+                                            Transform rightHand = rightForeArm.GetChild(0);
+                                            Transform treasureTransform = rightHand.GetChild(2);
+                                            GameObject treasure = treasureTransform.gameObject;
+                                            treasure.SetActive(true);
+                                            treasureInst.transform.position = pirateBody.position;
+                                            treasureInst.SetActive(false);
+                                            treasureInst.GetComponent<MeshRenderer>().enabled = false;
+                                            pirateController.GetComponent<Animator>().Play("Grab_Idle");
+                                            pirateController.agentTarget = boats[pirateController.localIndex].transform;
+                                            pirateController.destination = boats[pirateController.localIndex].transform.position;
+
+                                            pirateController.isTreasureFound = true;
+
+                                        }
+                                    }
+                                }
+                            }
+
                         }
                     }
 
-                    // pirate.GetComponent<Animator>().Play("Walk");
                     if (!animatorStateInfo.IsName("Pull") && !animatorStateInfo.IsName("Attack") && !animatorStateInfo.IsName("Dig") && !animatorStateInfo.IsName("Paint"))
                     {
                         if (agent.speed > 0f)
                         {
-                            // pirateAnimator.Play("Walk");
                             if (treasureInst != null)
                             {
                                 if (treasureInst.GetComponent<SpringJoint>().connectedBody == pirateController.transform.parent.gameObject.GetComponent<Rigidbody>())
@@ -753,7 +860,6 @@ public class GameManager : PunBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-            // someTreasure.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
     }
 
@@ -768,7 +874,6 @@ public class GameManager : PunBehaviour
         float coordY = -0.9f;
         float randomCoordZ = 0f;
         Vector3 crossPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
-        // float randomRotation = Random.Range(-5, 5);
         float randomRotation = Random.Range(-4.0f, 4.0f);
         Vector3 islandSphereTransformPosition = islandSphereTransform.position;
         cross.transform.RotateAround(islandSphereTransformPosition, new Vector3(1f, 0f, 1f), randomRotation);
@@ -798,7 +903,6 @@ public class GameManager : PunBehaviour
             Transform respawnPoint = respawnPoints[1];
             randomPosition = respawnPoint.position;
             baseRotation = Quaternion.identity;
-            // GameObject pirateWrap = PhotonNetwork.Instantiate("bot", randomPosition, baseRotation, 0);
             GameObject pirateWrap = PhotonNetwork.Instantiate("bot_2.0", randomPosition, baseRotation, 0);
             NavMeshAgent agent = pirateWrap.GetComponent<NavMeshAgent>();
             agent.speed = 0.1f;
@@ -809,12 +913,10 @@ public class GameManager : PunBehaviour
 
     public IEnumerator SyncShovelPlacement (float randomRotation)
     {
-        // yield return new WaitForSeconds(10f);
         yield return new WaitForSeconds(5f);
         object[] networkData = new object[] { randomRotation };
         PhotonNetwork.RaiseEvent(190, networkData, true, new RaiseEventOptions
         {
-            // Receivers = ReceiverGroup.All
             Receivers = ReceiverGroup.Others
         });
     }
