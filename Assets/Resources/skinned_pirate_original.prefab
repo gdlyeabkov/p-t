@@ -149,10 +149,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1735057737731879662, guid: 63960770b65a5184784c6f45687f48fd,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735057737731879662, guid: 63960770b65a5184784c6f45687f48fd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735057737731879662, guid: 63960770b65a5184784c6f45687f48fd,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735057737731879662, guid: 63960770b65a5184784c6f45687f48fd,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
     - target: {fileID: 7562070162708550454, guid: 63960770b65a5184784c6f45687f48fd,
         type: 3}
       propertyPath: m_Name
-      value: skinned_pirate_original Variant
+      value: skinned_pirate_original
       objectReference: {fileID: 0}
     - target: {fileID: 8491616755648095383, guid: 63960770b65a5184784c6f45687f48fd,
         type: 3}

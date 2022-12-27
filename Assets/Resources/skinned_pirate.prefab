@@ -149,10 +149,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1618903774693708129, guid: c8bfbb2b16261474e98d00da439639a7,
+        type: 3}
+      propertyPath: m_TagString
+      value: Treasure
+      objectReference: {fileID: 0}
     - target: {fileID: 3791487760762759874, guid: c8bfbb2b16261474e98d00da439639a7,
         type: 3}
       propertyPath: m_Name
-      value: skinned_pirate Variant
+      value: skinned_pirate
       objectReference: {fileID: 0}
     - target: {fileID: 5167631763092791978, guid: c8bfbb2b16261474e98d00da439639a7,
         type: 3}
