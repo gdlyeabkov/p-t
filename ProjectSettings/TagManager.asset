@@ -10,6 +10,7 @@ TagManager:
   - Island
   - Treasure
   - Pistol
+  - Parot
   layers:
   - Default
   - TransparentFX

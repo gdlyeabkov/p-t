@@ -376,6 +376,7 @@ public class PirateController : MonoBehaviour
         bool isShovel = detectedObjectTag == "Shovel";
         bool isPistol = detectedObjectTag == "Pistol";
         bool isTreasure = detectedObjectTag == "Treasure";
+        bool isParot = detectedObjectTag == "Parot";
         if (isCross)
         {
             isCrossFound = true;
@@ -452,6 +453,36 @@ public class PirateController : MonoBehaviour
         else if (isTreasure)
         {
             isTreasureFound = true;
+        }
+        else if (isParot)
+        {
+            ParotController parotController = detectedObject.GetComponent<ParotController>();
+            int parotIndex = parotController.localIndex;
+            if (isStandardMode)
+            {
+                object[] networkData = new object[] { parotIndex };
+                PhotonNetwork.RaiseEvent(182, networkData, true, new RaiseEventOptions
+                {
+                    Receivers = ReceiverGroup.All
+                });
+            }
+            else
+            {
+                Destroy(detectedObject);
+            }
+            Transform botTransform = transform.parent;
+            bool isBot = botTransform != null;
+            Transform detectedObjectTransform = detectedObject.transform;
+            bool isMissionComplete = agentTarget == detectedObjectTransform;
+            bool isStop = isBot && isMissionComplete;
+            if (isStop)
+            {
+                GameObject bot = botTransform.gameObject;
+                gameManager.GiveOrder(bot);
+            }
+
+            gameManager.FlyAParot();
+
         }
     }
 

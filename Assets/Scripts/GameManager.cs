@@ -67,6 +67,9 @@ public class GameManager : PunBehaviour
     public bool isDebug;
     public AudioClip shotSound;
     public float treasureDetectRadius = 0.7f;
+    public List<GameObject> parots;
+    public GameObject parotPrefab;
+    public GameObject parotShadowPrefab;
 
     void Start()
     {
@@ -126,11 +129,17 @@ public class GameManager : PunBehaviour
             {
                 StartCoroutine(GeneratePaint());
             }
-
+            
             int countPistols = Random.Range(0, 5);
             for (int i = 0; i < 5; i++)
             {
                 StartCoroutine(GeneratePistol());
+            }
+
+            int countParots = Random.Range(0, 5);
+            for (int i = 0; i < countParots; i++)
+            {
+                StartCoroutine(GenerateParot());
             }
 
             if (isHost)
@@ -219,6 +228,12 @@ public class GameManager : PunBehaviour
             for (int i = 0; i < 5; i++)
             {
                 StartCoroutine(GeneratePistol());
+            }
+
+            int countParots = Random.Range(0, 5);
+            for (int i = 0; i < countParots; i++)
+            {
+                StartCoroutine(GenerateParot());
             }
 
         }
@@ -994,6 +1009,56 @@ public class GameManager : PunBehaviour
             });
         }
 
+    }
+
+    public IEnumerator GenerateParot()
+    {
+        yield return new WaitForSeconds(5f);
+        float randomCoordX = 0f;
+        float coordY = -0.9f;
+        float randomCoordZ = 0f;
+        Vector3 randomPosition = new Vector3(randomCoordX, coordY, randomCoordZ);
+        Quaternion parotRotation = Quaternion.Euler(270f, 0f, 0f);
+        GameObject parotGo = null;
+        if (isStandardMode)
+        {
+            parotGo = PhotonNetwork.Instantiate("parot", randomPosition, parotRotation, 0);
+        }
+        else
+        {
+            parotGo = Instantiate(parotPrefab, randomPosition, parotRotation);
+        }
+        ParotController parotController = parotGo.GetComponent<ParotController>();
+        parotController.isOwner = true;
+        float randomRotation = Random.Range(-4.0f, 4.0f);
+        Vector3 islandSphereTransformPosition = islandSphereTransform.position;
+        Vector3 parotRotationAxes = new Vector3(1f, 0f, 1f);
+        parotGo.transform.RotateAround(islandSphereTransformPosition, parotRotationAxes, randomRotation);
+
+        parots.Add(parotGo);
+
+    }
+
+    public void FlyAParot()
+    {
+        if (isStandardMode)
+        {
+            GameObject parotShadowInst = PhotonNetwork.Instantiate("parot_shadow_prefab", localPirate.transform.position, Quaternion.Euler(90f, 0f, 0f), 0);
+            bool isHost = PhotonNetwork.isMasterClient;
+            if (isHost)
+            {
+                ParotShadowController parotShadowController = parotShadowInst.GetComponent<ParotShadowController>();
+                parotShadowController.gameManager = this;
+                parotShadowController.Fly();
+            }
+        }
+        else
+        {
+            GameObject parotShadowInst = Instantiate(parotShadowPrefab, localPirate.transform.position, Quaternion.Euler(90f, 0f, 0f));
+            ParotShadowController parotShadowController = parotShadowInst.GetComponent<ParotShadowController>();
+            parotShadowController.gameManager = this;
+            parotShadowController.Fly();
+        }
     }
 
 }
