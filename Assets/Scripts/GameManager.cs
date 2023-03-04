@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using Photon;
 using Cinemachine;
-
+ 
 public class GameManager : PunBehaviour
 {
 
@@ -1054,7 +1054,9 @@ public class GameManager : PunBehaviour
         }
         else
         {
-            GameObject parotShadowInst = Instantiate(parotShadowPrefab, localPirate.transform.position, Quaternion.Euler(90f, 0f, 0f));
+            // GameObject parotShadowInst = Instantiate(parotShadowPrefab, localPirate.transform.position + new Vector3(0f, 10f, 0f), Quaternion.Euler(90f, 0f, 0f));
+            GameObject parotShadowInst = Instantiate(parotShadowPrefab, localPirate.transform.position + new Vector3(0f, 2.5f, 0f), Quaternion.Euler(90f, 0f, 0f));
+            // GameObject parotShadowInst = Instantiate(parotShadowPrefab, localPirate.transform.position, localPirate.transform.rotation);
             ParotShadowController parotShadowController = parotShadowInst.GetComponent<ParotShadowController>();
             parotShadowController.gameManager = this;
             parotShadowController.Fly();
